@@ -1,3 +1,3 @@
 @echo off
-start pipenv run backend.bat
-pipenv run frontend.bat
+start backend.bat
+frontend.bat
