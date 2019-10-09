@@ -1,11 +1,11 @@
-// frontend/src/App.js
+// frontend/src/AppTest.js
 
     import React, { Component } from "react";
-    import Modal from "./components/Modal";
+    import Modal from "./components/ModalTest";
     import axios from "axios";
-	import './App.css';
+	import './AppTest.css';
 
-    class App extends Component {
+    class AppTest extends Component {
       constructor(props) {
         super(props);
         this.state = {
@@ -117,7 +117,7 @@
       render() {
         return (
           <main className="content">
-            <h1 className="text-white text-uppercase text-center my-4">Todo app</h1>
+            <h1 className="text-white text-uppercase text-center my-4">Todo AppTest</h1>
             <div className="row ">
               <div className="col-md-6 col-sm-10 mx-auto p-0">
                 <div className="card p-3">
@@ -144,4 +144,4 @@
         );
       }
     }
-    export default App;
+    export default AppTest;

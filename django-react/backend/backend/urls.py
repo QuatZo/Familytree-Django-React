@@ -20,8 +20,9 @@ from familytree import views
 
 router = routers.DefaultRouter()
 router.register(r'familytrees', views.FamilytreeView, 'familytree')
+router.register(r'familytreepersons', views.FamilytreePersonView, 'familytreeperson')
 
 urlpatterns = [
-	path('admin/', admin.site.urls),
-	path('api/', include(router.urls))  
+    path('admin/', admin.site.urls),
+    path('api/', include(router.urls))
 ]
