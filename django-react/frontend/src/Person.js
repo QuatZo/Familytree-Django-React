@@ -3,6 +3,7 @@
     import React, { Component } from "react";
     import Modal from "./components/PersonModal";
     import axios from "axios";
+    import Draggable from 'react-draggable';
 	  import './Person.css';
 
     class Person extends Component {
@@ -29,21 +30,26 @@
       };
       renderItems = () => {
         const newItems = this.state.personList;
+        // swobodne poruszanie - usuń grida z handlerów 
+        const dragHandlers = {onStart: this.onStart, onStop: this.onStop, grid: [20, 20]};
         return newItems.map(item => (
+          <Draggable {...dragHandlers}>
           <div
             //id={"person"}
             //className="list-group-item d-flex justify-content-between align-items-center"
-            className={"person"}
+            className={"person border rounded"}
             // Nad tym sie kiedys pomysli
             //onMouseEnter={() => this.renderButtons()}
           >
-            <img src="https://live.staticflickr.com/7038/6944665187_b8cd703bc2.jpg" />
+            <img src="https://live.staticflickr.com/7038/6944665187_b8cd703bc2.jpg" 
+            className = "img-thumbnail"
+            alt = "Error not found"/>
             <div
               className={`name`}
               last_name={item.first_name}
             >
-              {item.last_name}
-            </div>
+              {item.first_name + ' ' + item.last_name }
+            </div> 
             <div
               className={'buttons'}
             >
@@ -62,6 +68,7 @@
               </button>
             </div>
           </div>
+          </Draggable>
         ));
       };
       toggle = () => {

@@ -24,10 +24,9 @@
 .person{
   display: inline-block;
   margin: 5px;
-  border: 1px solid black;
-  border-radius: 5px;
   width: 15%;
   position: relative;
+  padding: 5px;
 }
 
 .person img{
