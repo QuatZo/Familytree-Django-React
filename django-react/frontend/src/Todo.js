@@ -1,11 +1,11 @@
-// frontend/src/AppTest.js
+// frontend/src/Todo.js
 
     import React, { Component } from "react";
-    import Modal from "./components/ModalTest";
+    import Modal from "./components/Modal";
     import axios from "axios";
-	import './AppTest.css';
+	  import './Todo.css';
 
-    class AppTest extends Component {
+    class Todo extends Component {
       constructor(props) {
         super(props);
         this.state = {
@@ -116,8 +116,9 @@
       };
       render() {
         return (
-          <main className="content">
-            <h1 className="text-white text-uppercase text-center my-4">Todo AppTest</h1>
+          <React.Fragment>
+          <div className="contentTodo">
+            <h1 className="text-white text-uppercase text-center my-4">Todo Todo</h1>
             <div className="row ">
               <div className="col-md-6 col-sm-10 mx-auto p-0">
                 <div className="card p-3">
@@ -140,8 +141,9 @@
                 onSave={this.handleSubmit}
               />
             ) : null}
-          </main>
+          </div>
+          </React.Fragment>
         );
       }
     }
-    export default AppTest;
+    export default Todo;
