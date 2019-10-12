@@ -22,13 +22,6 @@
       }
       handleChange = e => {
         let { name, value } = e.target;
-        // Doesn't work, needed DateTime Field
-        //if (e.target.name === "birth_date") {
-        //  if(e.target.value.length === 10){
-        //    console.log(Date.parse(e.target.value));
-        //    e.target.value = Date.parse(e.target.value);
-        //  }
-        // }
         const activeItem = { ...this.state.activeItem, [name]: value };
         this.setState({ activeItem });
       };
@@ -46,7 +39,7 @@
                     name="first_name"
                     value={this.state.activeItem.first_name}
                     onChange={this.handleChange}
-                    placeholder="Mordo"
+                    placeholder="First Name"
                   />
                 </FormGroup>
                 <FormGroup>
@@ -56,7 +49,7 @@
                     name="last_name"
                     value={this.state.activeItem.last_name}
                     onChange={this.handleChange}
-                    placeholder="Mordeczko"
+                    placeholder="Last Name"
                   />
                 </FormGroup>
                 <FormGroup>
@@ -68,6 +61,19 @@
                     onChange={this.handleChange}
                     placeholder="Tu bedzie wybieranie daty, kiedys..."
                   />
+                </FormGroup>
+                <FormGroup>
+                  <Label for="status_choices">Status of life</Label>
+                  <select
+                    className="form-control"
+                    name = "status_choices"
+                    value={this.state.activeItem.status_choices}
+                    onChange={this.handleChange}
+                  >
+                    <option value="living">Living</option>
+                    <option value="deceased">Deceased</option>
+                    <option value="unknown">Unknown</option>
+                  </select>
                 </FormGroup>
               </Form>
             </ModalBody>
