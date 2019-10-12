@@ -16,16 +16,16 @@ class FamilytreePerson(models.Model):
     last_name = models.CharField(max_length=50)
     birth_date = models.DateField(auto_now=True)
     
-    LIVING = 'LIV'
-    DECEASED = 'DEAD'
-    UNKNOWN = 'UN'
+    living = 'Living'
+    deceased = 'Deceased'
+    unknown = 'Unknown'
     
-    status_choices = [(LIVING, 'Living'),(DECEASED,'Deceased'),(UNKNOWN,'Unknown')]
+    status_choices = [(living, 'living'),(deceased,'deceased'),(unknown,'unknown')]
     
-    status_choices = models.CharField(max_length = 2,choices =status_choices, default = LIVING)
+    status_choices = models.CharField(max_length = 2,choices = status_choices, default = living)
 
     def _str_(self):
         return self.first_name + " " + self.last_name
     
     def has_date_of_dead(self):
-        return self.status_of_life in (self.DECEASED)
+        return self.status_of_life in (self.status_choices)

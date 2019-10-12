@@ -6,16 +6,13 @@
     import Draggable from 'react-draggable';
     import Select from 'react-select';
     import './Person.css';
+    const Choices = [
+      {value: 'living', label: 'Living'},
+      {value: 'deceased', label: 'Deceased'},
+      {value: 'unknown', label: 'Unknown'}
+    ]
 
-        const Choices = {
-            LIVING: 'Living',
-            DECEASED: 'Deceased',
-            UNKNOWN: 'Unknown', 
-         }
-    class Person extends Component {
-        
-        
-            
+    class Person extends Component {    
       constructor(props) {
         super(props);
         this.state = {
@@ -112,7 +109,7 @@
           .then(res => this.refreshList());
       };
       createItem = () => {
-        const item = { first_name: "", last_name: "", birth_date: Date().now };
+        const item = { first_name: "", last_name: "", birth_date: Date().now};
         this.setState({ activeItem: item, modal: !this.state.modal });
       };
       editItem = item => {

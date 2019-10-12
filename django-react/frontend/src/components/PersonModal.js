@@ -1,6 +1,7 @@
 // frontend/src/components/PersonModal.js
 
     import React, { Component } from "react";
+    import Select from 'react-select';
     import {
       Button,
       Modal,
@@ -12,6 +13,9 @@
       Input,
       Label
     } from "reactstrap";
+    import Choices from '../Person';
+
+    
 
     export default class CustomModal extends Component {
       constructor(props) {
@@ -70,13 +74,14 @@
                   />
                 </FormGroup>
             <FormGroup>
-                  <Label for="status_choices">Status of life </Label>
-                  <select>
-                    name="State of life"
-                    <option value="Living">LIVING</option>
-                    <option value="Deceased">DECEASED</option>
-                    <option selected value="Unknown">UNKNOWN</option>
-                  </select>
+                  <Label for="status_choices">Status of life</Label>
+                  <Select
+                    onChange={this.handleChange}
+                    options={Choices}
+                    placeholder="Czy Ty kurwa zyjesz szmato jebana czy nie?"
+                    clearable={false}
+                    //onClose={this.closeSelect}
+                    value={this.state.activeItem.status_choices} />
                 </FormGroup>
               </Form>
             </ModalBody>
