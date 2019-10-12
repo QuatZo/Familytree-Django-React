@@ -16,9 +16,9 @@ class FamilytreePerson(models.Model):
     last_name = models.CharField(max_length=50)
     birth_date = models.DateField(auto_now=True)
     
-    living = 'Living'
-    deceased = 'Deceased'
-    unknown = 'Unknown'
+    living = 'living'
+    deceased = 'deceased'
+    unknown = 'unknown'
     
     status_choices = [(living, 'living'),(deceased,'deceased'),(unknown,'unknown')]
     

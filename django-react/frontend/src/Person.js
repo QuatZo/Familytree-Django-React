@@ -4,8 +4,8 @@
     import Modal from "./components/PersonModal";
     import axios from "axios";
     import Draggable from 'react-draggable';
-    import Select from 'react-select';
     import './Person.css';
+    
     const Choices = [
       {value: 'living', label: 'Living'},
       {value: 'deceased', label: 'Deceased'},
@@ -21,21 +21,11 @@
             first_name: "",
             last_name: "",
             birth_date: Date.now(),
-            status_choices:  Choices.status_of_life
+            status_choices:  Choices.values[0]
           },
           personList: []
         };
-      }
-        
-      /*<Field model = models.status_choices">
-     <select>
-       <option value="Living">LIVING</option>
-       <option value="Deceased">DECEASED</option>
-       <option value="Unknown">UNKNOWN</option>
-     </select>
-     </Field>
-     */
-          
+      }          
       componentDidMount() {
         this.refreshList();
       }
@@ -47,13 +37,11 @@
       };
       renderItems = () => {
         const newItems = this.state.personList;
-        // swobodne poruszanie - usuń grida z handlerów 
+        // swobodne poruszanie -> usuń grida z handlerów 
         const dragHandlers = {onStart: this.onStart, onStop: this.onStop, grid: [20, 20]};
         return newItems.map(item => (
           <Draggable {...dragHandlers}>
           <div
-            //id={"person"}
-            //className="list-group-item d-flex justify-content-between align-items-center"
             className={"person border rounded"}
             // Nad tym sie kiedys pomysli
             //onMouseEnter={() => this.renderButtons()}
@@ -109,7 +97,7 @@
           .then(res => this.refreshList());
       };
       createItem = () => {
-        const item = { first_name: "", last_name: "", birth_date: Date().now};
+        const item = { first_name: "", last_name: "", birth_date: Date().now, status_choices: Choices.values[0]};
         this.setState({ activeItem: item, modal: !this.state.modal });
       };
       editItem = item => {
@@ -130,31 +118,6 @@
                   onSave={this.handleSubmit}
                 />
               ) : null}
-              {/* 
-              <div className="row ">
-                <div className="col-md-6 col-sm-10 mx-auto p-0">
-                  <div className="card p-3">
-                    <div className="">
-                      <button onClick={this.createItem} className="btn btn-primary">
-                        Create Person
-                      </button>
-                    </div>
-                    <ul className="list-group list-group-flush">
-                      
-                    </ul>
-                  </div>
-                </div>
-              </div> 
-              */}
-              {/*
-              {this.state.modal ? (
-                <Modal
-                  activeItem={this.state.activeItem}
-                  toggle={this.toggle}
-                  onSave={this.handleSubmit}
-                />
-              ) : null}
-              */}
             </div>
           </React.Fragment>
         );
