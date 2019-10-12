@@ -69,6 +69,15 @@
                     placeholder="Tu bedzie wybieranie daty, kiedys..."
                   />
                 </FormGroup>
+            <FormGroup>
+                  <Label for="status_choices">Status of life </Label>
+                  <select>
+                    name="State of life"
+                    <option value="Living">LIVING</option>
+                    <option value="Deceased">DECEASED</option>
+                    <option selected value="Unknown">UNKNOWN</option>
+                  </select>
+                </FormGroup>
               </Form>
             </ModalBody>
             <ModalFooter>

@@ -11,4 +11,4 @@ class FamilytreeSerializer(serializers.ModelSerializer):
 class FamilytreePersonSerializer(serializers.ModelSerializer):
     class Meta:
         model = FamilytreePerson
-        fields = ('id', 'first_name', 'last_name', 'birth_date')
+        fields = ('id', 'first_name', 'last_name', 'birth_date', 'status_choices')

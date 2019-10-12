@@ -15,6 +15,17 @@ class FamilytreePerson(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     birth_date = models.DateField(auto_now=True)
+    
+    LIVING = 'LIV'
+    DECEASED = 'DEAD'
+    UNKNOWN = 'UN'
+    
+    status_choices = [(LIVING, 'Living'),(DECEASED,'Deceased'),(UNKNOWN,'Unknown')]
+    
+    status_choices = models.CharField(max_length = 2,choices =status_choices, default = LIVING)
 
     def _str_(self):
         return self.first_name + " " + self.last_name
+    
+    def has_date_of_dead(self):
+        return self.status_of_life in (self.DECEASED)

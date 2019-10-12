@@ -4,9 +4,18 @@
     import Modal from "./components/PersonModal";
     import axios from "axios";
     import Draggable from 'react-draggable';
-	  import './Person.css';
+    import Select from 'react-select';
+    import './Person.css';
 
+        const Choices = {
+            LIVING: 'Living',
+            DECEASED: 'Deceased',
+            UNKNOWN: 'Unknown', 
+         }
     class Person extends Component {
+        
+        
+            
       constructor(props) {
         super(props);
         this.state = {
@@ -14,11 +23,22 @@
           activeItem: {
             first_name: "",
             last_name: "",
-            birth_date: Date.now()
+            birth_date: Date.now(),
+            status_choices:  Choices.status_of_life
           },
           personList: []
         };
       }
+        
+      /*<Field model = models.status_choices">
+     <select>
+       <option value="Living">LIVING</option>
+       <option value="Deceased">DECEASED</option>
+       <option value="Unknown">UNKNOWN</option>
+     </select>
+     </Field>
+     */
+          
       componentDidMount() {
         this.refreshList();
       }
