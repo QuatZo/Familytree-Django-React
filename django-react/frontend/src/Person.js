@@ -21,9 +21,10 @@
             first_name: "",
             last_name: "",
             birth_date: Date.now(),
-            status_choices:  Choices.values[0]
+            status_choices:  Choices.values[0],
           },
-          personList: []
+          personList: [],
+          activePersons: []
         };
       }          
       componentDidMount() {
@@ -35,6 +36,19 @@
           .then(res => this.setState({ personList: res.data }))
           .catch(err => console.log(err));
       };
+      setActive(id) {
+        var array = [...this.state.activePersons]
+          if(array.includes(id)){
+            var index = array.indexOf(id);
+            array.splice(index, 1);
+          }
+          else{
+            array.push(id);
+          }
+          if(array.length > 2)
+              array.splice(0, 1);
+          this.setState({activeClasses: array});
+      }
       renderItems = () => {
         const newItems = this.state.personList;
         // swobodne poruszanie -> usuń grida z handlerów 
@@ -42,9 +56,8 @@
         return newItems.map(item => (
           <Draggable {...dragHandlers}>
           <div
-            className={"person border rounded"}
-            // Nad tym sie kiedys pomysli
-            //onMouseEnter={() => this.renderButtons()}
+            className={"person id_" + item.id + " " + (this.state.activePersons.includes(item.id)?"active":"inactive") +  " border rounded"}
+            onClick={() => this.setActive(item.id)}
           >
             <img src="https://live.staticflickr.com/7038/6944665187_b8cd703bc2.jpg" 
             className = "img-thumbnail"

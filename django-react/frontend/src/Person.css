@@ -29,6 +29,10 @@
   padding: 5px;
 }
 
+.active{
+  border-color: green !important;
+}
+
 .person img{
   width: 100%;
 }
