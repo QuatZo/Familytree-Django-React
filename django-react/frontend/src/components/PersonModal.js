@@ -1,6 +1,8 @@
 // frontend/src/components/PersonModal.js
 
     import React, { Component } from "react";
+    import DatePicker from "react-datepicker";
+    
     import {
       Button,
       Modal,
@@ -20,11 +22,18 @@
           activeItem: this.props.activeItem
         };
       }
-      handleChange = e => {
+      handleChange = (e) => {
         let { name, value } = e.target;
-        const activeItem = { ...this.state.activeItem, [name]: value };
+        const activeItem = { ...this.state.activeItem, [name]: value};
         this.setState({ activeItem });
       };
+      handleChange1 = date => {
+        const activeItem = { ...this.state.activeItem, ["birth_date"]: (new Date(date)).toISOString().slice(0, 10)};
+        console.log(activeItem);
+        this.setState({activeItem});
+        console.log(this.state);
+      };
+
       render() {
         const { toggle, onSave } = this.props;
         return (
@@ -53,14 +62,12 @@
                   />
                 </FormGroup>
                 <FormGroup>
-                  <Label for="birth_date">Birth Date</Label>
-                  <Input
-                    type="text"
+                  <Label for="birth_date">Birth Date</Label><br />
+                  <DatePicker 
+                  className="form-control"
                     name="birth_date"
                     value={this.state.activeItem.birth_date}
-                    onChange={this.handleChange}
-                    placeholder="Tu bedzie wybieranie daty, kiedys..."
-                  />
+                    onChange={ this.handleChange1} />
                 </FormGroup>
                 <FormGroup>
                   <Label for="status_choices">Status of life</Label>

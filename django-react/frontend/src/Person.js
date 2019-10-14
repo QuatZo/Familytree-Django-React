@@ -4,7 +4,9 @@
     import Modal from "./components/PersonModal";
     import axios from "axios";
     import Draggable from 'react-draggable';
+    
     import './Person.css';
+    import 'react-datepicker/dist/react-datepicker.css';
     
     const Choices = [
       {value: 'living', label: 'Living'},
@@ -26,7 +28,8 @@
           activeItem: {
             first_name: "",
             last_name: "",
-            birth_date: Date.now(),
+            //birth_date: Date.now(),
+            birth_date: new Date(),
             status_choices:  Choices.values[0],
             sex_choices:  SexChoices.values[0],
           },
@@ -117,7 +120,7 @@
           .then(res => this.refreshList());
       };
       createItem = () => {
-        const item = { first_name: "", last_name: "", birth_date: Date().now, status_choices: Choices.values[0], sex_choices: SexChoices.values[0]};
+        const item = { first_name: "", last_name: "", birth_date: new Date(), status_choices: Choices.values[0], sex_choices: SexChoices.values[0]};
         this.setState({ activeItem: item, modal: !this.state.modal });
       };
       editItem = item => {
