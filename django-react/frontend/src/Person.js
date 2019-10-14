@@ -12,6 +12,12 @@
       {value: 'unknown', label: 'Unknown'}
     ]
 
+    const SexChoices = [
+      {value: 'male', label: 'Male'},
+      {value: 'female', label: 'Female'},
+      {value: 'other', label: 'Other'}
+    ]
+
     class Person extends Component {    
       constructor(props) {
         super(props);
@@ -22,6 +28,7 @@
             last_name: "",
             birth_date: Date.now(),
             status_choices:  Choices.values[0],
+            sex_choices:  SexChoices.values[0],
           },
           personList: [],
           activePersons: []
@@ -110,7 +117,7 @@
           .then(res => this.refreshList());
       };
       createItem = () => {
-        const item = { first_name: "", last_name: "", birth_date: Date().now, status_choices: Choices.values[0]};
+        const item = { first_name: "", last_name: "", birth_date: Date().now, status_choices: Choices.values[0], sex_choices: SexChoices.values[0]};
         this.setState({ activeItem: item, modal: !this.state.modal });
       };
       editItem = item => {

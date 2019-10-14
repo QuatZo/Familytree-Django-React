@@ -75,6 +75,29 @@
                     <option value="unknown">Unknown</option>
                   </select>
                 </FormGroup>
+                <FormGroup>
+                  <Label for="sex_choices">Sex</Label>
+                  <select
+                    className="form-control"
+                    name = "sex_choices"
+                    value={this.state.activeItem.sex_choices}
+                    onChange={this.handleChange}
+                  >
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                  </select>
+                </FormGroup>
+                <FormGroup>
+                  <Label for="birthplace">Birthplace</Label>
+                  <Input
+                    type="text"
+                    name="birthplace"
+                    value={this.state.activeItem.birthplace}
+                    onChange={this.handleChange}
+                    placeholder=""
+                  />
+                </FormGroup>
               </Form>
             </ModalBody>
             <ModalFooter>
