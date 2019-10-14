@@ -37,7 +37,7 @@
           .catch(err => console.log(err));
       };
       setActive(id) {
-        var array = [...this.state.activePersons]
+        var array = [...this.state.activePersons];
           if(array.includes(id)){
             var index = array.indexOf(id);
             array.splice(index, 1);
@@ -47,7 +47,7 @@
           }
           if(array.length > 2)
               array.splice(0, 1);
-          this.setState({activeClasses: array});
+          this.setState({activePersons: array});
       }
       renderItems = () => {
         const newItems = this.state.personList;
