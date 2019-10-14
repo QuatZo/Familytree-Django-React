@@ -15,6 +15,7 @@
 12. npm add bootstrap reactstrap
 13. npm add axios
 14. npm install react-draggable
-15. npm start 
+15. npm install react-datepicker --save
+16. npm start 
 
 Jesli wszystko dziala, wylacz i uruchom ***run.bat***
