@@ -1,4 +1,5 @@
 from django.db import models
+import datetime
 
 
 # Create your models here
@@ -14,8 +15,8 @@ class Familytree(models.Model):
 class FamilytreePerson(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    birth_date = models.DateField(auto_now=True)
-    birthplace = models.CharField(max_length=50, null=True)
+    birth_date = models.CharField(max_length=10, blank=True, default='')
+    birth_place = models.CharField(max_length=50, blank=True, default='')
     
     living = 'living'
     deceased = 'deceased'
@@ -33,6 +34,3 @@ class FamilytreePerson(models.Model):
 
     def _str_(self):
         return self.first_name + " " + self.last_name 
-    
-    def has_date_of_dead(self):
-        return self.status_of_life in (self.status_choices)

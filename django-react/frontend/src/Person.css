@@ -40,15 +40,7 @@
 .name{
   width: 100%;
 }
-/*
-.buttons{
-  visibility: hidden;
-}
 
-.buttons:hover{
-  visibility: visible;
-  position: absolute;
-  bottom: 0;
-  right: 0;
+.error {
+  border: 1px solid red;
 }
-*/

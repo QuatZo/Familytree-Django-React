@@ -19,7 +19,11 @@
       constructor(props) {
         super(props);
         this.state = {
-          activeItem: this.props.activeItem
+          activeItem: this.props.activeItem,
+          touched: {
+            first_name: false,
+            last_name: false,
+          },
         };
       }
       handleChange = (e) => {
@@ -34,8 +38,22 @@
         console.log(this.state);
       };
 
+      validate(first_name, last_name){
+        return{
+          first_name: first_name.length === 0,
+          last_name: last_name.length === 0
+        }
+      }
+      handleBlur = (field) => (evt) => {
+        this.setState({
+          touched: { ...this.state.touched, [field]: true },
+        });
+      }
+
       render() {
         const { toggle, onSave } = this.props;
+        const errors = this.validate(this.state.activeItem.first_name, this.state.activeItem.last_name);
+        const isEnabled = !Object.keys(errors).some(x => errors[x]);
         return (
           <Modal isOpen={true} toggle={toggle}>
             <ModalHeader toggle={toggle}> Person </ModalHeader>
@@ -46,6 +64,8 @@
                   <Input
                     type="text"
                     name="first_name"
+                    className={errors.first_name?"error":""}
+                    onBlur={this.handleBlur('first_name')}
                     value={this.state.activeItem.first_name}
                     onChange={this.handleChange}
                     placeholder="First Name"
@@ -56,6 +76,8 @@
                   <Input
                     type="text"
                     name="last_name"
+                    className={errors.last_name?"error":""}
+                    onBlur={this.handleBlur('last_name')}
                     value={this.state.activeItem.last_name}
                     onChange={this.handleChange}
                     placeholder="Last Name"
@@ -96,19 +118,19 @@
                   </select>
                 </FormGroup>
                 <FormGroup>
-                  <Label for="birthplace">Birthplace</Label>
+                  <Label for="birth_place">Birthplace</Label>
                   <Input
                     type="text"
-                    name="birthplace"
-                    value={this.state.activeItem.birthplace}
+                    name="birth_place"
+                    value={this.state.activeItem.birth_place}
                     onChange={this.handleChange}
-                    placeholder=""
+                    placeholder="Place of birth"
                   />
                 </FormGroup>
               </Form>
             </ModalBody>
             <ModalFooter>
-              <Button color="success" onClick={() => onSave(this.state.activeItem)}>
+              <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem)}>
                 Save
               </Button>
             </ModalFooter>

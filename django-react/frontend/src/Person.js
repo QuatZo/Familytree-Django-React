@@ -28,10 +28,10 @@
           activeItem: {
             first_name: "",
             last_name: "",
-            //birth_date: Date.now(),
-            birth_date: new Date(),
+            birth_date: "",
             status_choices:  Choices.values[0],
             sex_choices:  SexChoices.values[0],
+            birth_place: ""
           },
           personList: [],
           activePersons: []
@@ -120,7 +120,7 @@
           .then(res => this.refreshList());
       };
       createItem = () => {
-        const item = { first_name: "", last_name: "", birth_date: new Date(), status_choices: Choices.values[0], sex_choices: SexChoices.values[0]};
+        const item = { first_name: "", last_name: "", birth_date: "", status_choices: Choices.values[0], sex_choices: SexChoices.values[0], birth_place: ""};
         this.setState({ activeItem: item, modal: !this.state.modal });
       };
       editItem = item => {
