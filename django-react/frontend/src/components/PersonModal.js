@@ -31,17 +31,14 @@
         const activeItem = { ...this.state.activeItem, [name]: value};
         this.setState({ activeItem });
       };
-      handleChange1 = date => {
+      handleChangeDate = date => {
         const activeItem = { ...this.state.activeItem, ["birth_date"]: (new Date(date)).toISOString().slice(0, 10)};
-        console.log(activeItem);
         this.setState({activeItem});
-        console.log(this.state);
       };
-
       validate(first_name, last_name){
         return{
-          first_name: first_name.length === 0,
-          last_name: last_name.length === 0
+          first_name: first_name.trim().length === 0,
+          last_name: last_name.trim().length === 0
         }
       }
       handleBlur = (field) => (evt) => {
@@ -49,7 +46,6 @@
           touched: { ...this.state.touched, [field]: true },
         });
       }
-
       render() {
         const { toggle, onSave } = this.props;
         const errors = this.validate(this.state.activeItem.first_name, this.state.activeItem.last_name);
@@ -89,7 +85,7 @@
                   className="form-control"
                     name="birth_date"
                     value={this.state.activeItem.birth_date}
-                    onChange={ this.handleChange1} />
+                    onChange={ this.handleChangeDate} />
                 </FormGroup>
                 <FormGroup>
                   <Label for="status_choices">Status of life</Label>

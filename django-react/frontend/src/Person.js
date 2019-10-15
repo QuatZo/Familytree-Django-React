@@ -1,9 +1,10 @@
 // frontend/src/Person.js
 
     import React, { Component } from "react";
-    import Modal from "./components/PersonModal";
+    import ModalPerson from "./components/PersonModal";
     import axios from "axios";
     import Draggable from 'react-draggable';
+    import ModalRelationship from "./components/RelationshipModal";
     
     import './Person.css';
     import 'react-datepicker/dist/react-datepicker.css';
@@ -57,6 +58,8 @@
           }
           if(array.length > 2)
               array.splice(0, 1);
+          if(array.length === 2)
+            this.toggleRelationship();
           this.setState({activePersons: array});
       }
       renderItems = () => {
@@ -102,6 +105,9 @@
       toggle = () => {
         this.setState({ modal: !this.state.modal });
       };
+      toggleRelationship = () => {
+        this.setState({ ModalRelationship: !this.state.ModalRelationship });
+      };
       handleSubmit = item => {
         this.toggle();
         if (item.id) {
@@ -135,10 +141,18 @@
             <div className="contentPerson">
               {this.renderItems()}
               {this.state.modal ? (
-                <Modal
+                <ModalPerson
                   activeItem={this.state.activeItem}
                   toggle={this.toggle}
                   onSave={this.handleSubmit}
+                />
+              ) : null}
+              {this.state.ModalRelationship ? (
+                <ModalRelationship
+                  personList={this.state.personList}
+                  activePersons={this.state.activePersons}
+                  toggle={this.toggleRelationship}
+                  onSave={this.handleSubmitRelationship}
                 />
               ) : null}
             </div>
