@@ -34,3 +34,14 @@ class FamilytreePerson(models.Model):
 
     def _str_(self):
         return self.first_name + " " + self.last_name 
+
+class FamilytreeRelationship(models.Model):
+    id_1 = models.CharField(max_length=50)
+    id_2 = models.CharField(max_length=50)
+
+    male = 'male'
+    female = 'female'
+    other = 'other'
+
+    relationships = [(male, 'male'),(female, 'female'),(other, 'other')]
+    relationships = models.CharField(max_length = 2,choices = relationships, default = other)

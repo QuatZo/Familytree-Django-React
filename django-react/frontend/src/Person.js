@@ -8,6 +8,7 @@
     
     import './Person.css';
     import 'react-datepicker/dist/react-datepicker.css';
+import { relativeTimeRounding } from "moment";
     
     const Choices = [
       {value: 'living', label: 'Living'},
@@ -118,6 +119,18 @@
         }
         axios
           .post("http://localhost:8000/api/familytreepersons/", item)
+          .then(res => this.refreshList());
+      };
+      handleSubmitRelationship = item => {
+        this.toggleRelationship();
+        if (item.id) {
+          axios
+            .put(`http://localhost:8000/api/familytreerelationship/${item.id}/`, item)
+            .then(res => this.refreshList());
+          return;
+        }
+        axios
+          .post("http://localhost:8000/api/familytreerelationship/", item)
           .then(res => this.refreshList());
       };
       handleDelete = item => {

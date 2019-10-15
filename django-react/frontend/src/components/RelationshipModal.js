@@ -10,6 +10,7 @@
       ModalFooter,
       Form,
       FormGroup,
+      Input,
       Label
     } from "reactstrap";
 
@@ -45,6 +46,22 @@
             <ModalHeader toggle={toggle}> Relationship</ModalHeader>
             <ModalBody>
               <Form>
+              <FormGroup>
+                  <Input
+                    type="text"
+                    name="id_1"
+                    className='invisible'
+                    value={this.state.activePersons[0]}
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Input
+                    type="text"
+                    name="id_2"
+                    className='invisible'
+                    value={this.state.activePersons[1]}
+                  />
+                </FormGroup>
                 <FormGroup>
                   <Label for="status_choices">What's the relation between {this.getPerson(this.state.activePersons[0])} and {this.getPerson(this.state.activePersons[1])}</Label>
                   <select
