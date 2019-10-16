@@ -39,9 +39,9 @@ class FamilytreeRelationship(models.Model):
     id_1 = models.CharField(max_length=50)
     id_2 = models.CharField(max_length=50)
 
-    male = 'male'
-    female = 'female'
-    other = 'other'
+    father = 'father'
+    mother = 'mother'
+    brother_sister = 'brother/sister'
 
-    relationships = [(male, 'male'),(female, 'female'),(other, 'other')]
-    relationships = models.CharField(max_length = 2,choices = relationships, default = other)
+    relationships = [(father, 'father'),(mother, 'mother'),(brother_sister, 'brother/sister')]
+    relationships = models.CharField(max_length = 2,choices = relationships, default = father)

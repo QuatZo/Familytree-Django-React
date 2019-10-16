@@ -44,11 +44,3 @@
 .error {
   border: 1px solid red;
 }
-
-.invisible{
-  visibility:hidden;
-  margin: 0%;
-  height: 0;
-  width: 0;
-  padding: 0;
-}
