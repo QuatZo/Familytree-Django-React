@@ -9,7 +9,7 @@
     import './Person.css';
     import 'react-datepicker/dist/react-datepicker.css';
     
-    const Choices = [
+    const StatusChoices = [
       {value: 'living', label: 'Living'},
       {value: 'deceased', label: 'Deceased'},
       {value: 'unknown', label: 'Unknown'}
@@ -21,6 +21,12 @@
       {value: 'other', label: 'Other'}
     ]
 
+    const RelationshipsChoices = [
+      {value: 'father', label: 'Father'},
+      {value: 'mother', label: 'Mother'},
+      {value: 'brother/sister', label: 'Brother/Sister'}
+    ]
+
     class Person extends Component {    
       constructor(props) {
         super(props);
@@ -30,9 +36,10 @@
             first_name: "",
             last_name: "",
             birth_date: "",
-            status_choices:  Choices.values[0],
+            status_choices:  StatusChoices.values[0],
             sex_choices:  SexChoices.values[0],
-            birth_place: ""
+            birth_place: "",
+            relationship_choices: RelationshipsChoices.values[0]
           },
           personList: [],
           activePersons: []
@@ -109,6 +116,7 @@
         this.setState({ ModalRelationship: !this.state.ModalRelationship });
       };
       handleSubmit = item => {
+        console.log(item);
         this.toggle();
         if (item.id) {
           axios
@@ -120,18 +128,32 @@
           .post("http://localhost:8000/api/familytreepersons/", item)
           .then(res => this.refreshList());
       };
+      handleSubmitRelationship = item => {
+        console.log(item.id_1);
+        this.toggleRelationship();
+        if (item.id) {
+          axios
+            .put(`http://localhost:8000/api/familytreerelationship/${item.id}/`, item)
+            .then(res => this.refreshList());
+          return;
+        }
+        axios
+          .post("http://localhost:8000/api/familytreerelationship/", item)
+          .then(res => this.refreshList());
+      };
       handleDelete = item => {
         axios
           .delete(`http://localhost:8000/api/familytreepersons/${item.id}`)
           .then(res => this.refreshList());
       };
       createItem = () => {
-        const item = { first_name: "", last_name: "", birth_date: "", status_choices: Choices.values[0], sex_choices: SexChoices.values[0], birth_place: ""};
+        const item = { first_name: "", last_name: "", birth_date: "", status_choices: StatusChoices.values[0], sex_choices: SexChoices.values[0], birth_place: ""};
         this.setState({ activeItem: item, modal: !this.state.modal });
       };
       editItem = item => {
         this.setState({ activeItem: item, modal: !this.state.modal });
-      };
+      }; 
+
       render() {
         return (
           <React.Fragment>

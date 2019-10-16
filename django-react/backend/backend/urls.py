@@ -21,6 +21,7 @@ from familytree import views
 router = routers.DefaultRouter()
 router.register(r'familytrees', views.FamilytreeView, 'familytree')
 router.register(r'familytreepersons', views.FamilytreePersonView, 'familytreeperson')
+router.register(r'familytreerelationship', views.FamilytreeRelationshipView, 'familytreerelationship')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
