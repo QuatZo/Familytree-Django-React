@@ -8,6 +8,7 @@
     
     import './Person.css';
     import 'react-datepicker/dist/react-datepicker.css';
+    import { SteppedLineTo } from 'react-lineto';
     
     const StatusChoices = [
       {value: 'living', label: 'Living'},
@@ -54,6 +55,16 @@
           .then(res => this.setState({ personList: res.data }))
           .catch(err => console.log(err));
       };
+      /* 
+      getRelationship(){
+        axios
+          .get("http://localhost:8000/api/familytreerelationship/")
+          .then(function (response) {
+            console.log(response.data);
+            return response.data;
+          })
+      } 
+      */
       setActive(id) {
         var array = [...this.state.activePersons];
           if(array.includes(id)){
@@ -65,8 +76,15 @@
           }
           if(array.length > 2)
               array.splice(0, 1);
-          if(array.length === 2)
-            this.toggleRelationship();
+          if(array.length === 2){
+            /* 
+            console.log(this.getRelationship())
+            this.getRelationship().map(item => {
+              if(!array.includes(item.id_1) || !array.includes(item.id_2) ) 
+              */
+                this.toggleRelationship();
+            //})
+          }
           this.setState({activePersons: array});
       }
       renderItems = () => {
@@ -74,7 +92,7 @@
         // swobodne poruszanie -> usuń grida z handlerów 
         const dragHandlers = {onStart: this.onStart, onStop: this.onStop, grid: [20, 20]};
         return newItems.map(item => (
-          <Draggable {...dragHandlers}>
+          <Draggable cancel="img, button" {...dragHandlers}>
           <div
             className={"person id_" + item.id + " " + (this.state.activePersons.includes(item.id)?"active":"inactive") +  " border rounded"}
             onClick={() => this.setActive(item.id)}
@@ -95,7 +113,6 @@
                 onClick={() => this.editItem(item)}
                 className="btn btn-secondary mr-2"
               >
-                {" "}
                 Edit{" "}
               </button>
               <button
@@ -162,6 +179,28 @@
             </button>
             <div className="contentPerson">
               {this.renderItems()}
+              {/* 
+              <SteppedLineTo from="person id_22 active border rounded react-draggable react-draggable-dragged" to="person id_25 active border rounded react-draggable react-draggable-dragged" orientation="v" zIndex={-1}/>
+              <SteppedLineTo from="person id_22 active border rounded react-draggable react-draggable-dragged" to="person id_25 inactive border rounded react-draggable react-draggable-dragged" orientation="v" zIndex={-1} />
+              <SteppedLineTo from="person id_22 active border rounded react-draggable react-draggable-dragged" to="person id_25 active border rounded react-draggable" orientation="v" zIndex={-1} />
+              <SteppedLineTo from="person id_22 active border rounded react-draggable react-draggable-dragged" to="person id_25 inactive border rounded react-draggable" orientation="v" zIndex={-1} />
+              
+              <SteppedLineTo from="person id_22 inactive border rounded react-draggable react-draggable-dragged" to="person id_25 active border rounded react-draggable react-draggable-dragged" orientation="v" zIndex={-1} />
+              <SteppedLineTo from="person id_22 inactive border rounded react-draggable react-draggable-dragged" to="person id_25 inactive border rounded react-draggable react-draggable-dragged" orientation="v" zIndex={-1} />
+              <SteppedLineTo from="person id_22 inactive border rounded react-draggable react-draggable-dragged" to="person id_25 active border rounded react-draggable" orientation="v" zIndex={-1} />
+              <SteppedLineTo from="person id_22 inactive border rounded react-draggable react-draggable-dragged" to="person id_25 inactive border rounded react-draggable" orientation="v" zIndex={-1} />
+              
+              <SteppedLineTo from="person id_22 active border rounded react-draggable react-draggable-dragged" to="person id_25 active border rounded react-draggable react-draggable-dragged" orientation="v" zIndex={-1} />
+              <SteppedLineTo from="person id_22 active border rounded react-draggable react-draggable-dragged" to="person id_25 inactive border rounded react-draggable react-draggable-dragged" orientation="v" zIndex={-1} />
+              <SteppedLineTo from="person id_22 active border rounded react-draggable react-draggable-dragged" to="person id_25 active border rounded react-draggable" orientation="v" zIndex={-1} />
+              <SteppedLineTo from="person id_22 active border rounded react-draggable react-draggable-dragged" to="person id_25 inactive border rounded react-draggable" orientation="v" zIndex={-1} />
+              
+              <SteppedLineTo from="person id_22 inactive border rounded react-draggable" to="person id_25 active border rounded react-draggable react-draggable-dragged" orientation="v" zIndex={-1} />
+              <SteppedLineTo from="person id_22 inactive border rounded react-draggable" to="person id_25 inactive border rounded react-draggable react-draggable-dragged" orientation="v" zIndex={-1} />
+              <SteppedLineTo from="person id_22 inactive border rounded react-draggable" to="person id_25 active border rounded react-draggable" orientation="v" zIndex={-1} />
+              <SteppedLineTo from="person id_22 inactive border rounded react-draggable" to="person id_25 inactive border rounded react-draggable" orientation="v" zIndex={-1} /> 
+              */}
+              
               {this.state.modal ? (
                 <ModalPerson
                   activeItem={this.state.activeItem}

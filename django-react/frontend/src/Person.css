@@ -27,14 +27,17 @@
   width: 15%;
   position: relative;
   padding: 5px;
+  background: #262626;
+  color: white;
 }
 
 .active{
-  border-color: green !important;
+  border-color: #66ff66 !important;
 }
 
 .person img{
   width: 100%;
+  border-color: #484848;
 }
 
 .name{
