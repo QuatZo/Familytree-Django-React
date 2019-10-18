@@ -55,16 +55,15 @@
           .then(res => this.setState({ personList: res.data }))
           .catch(err => console.log(err));
       };
-      /* 
+      
       getRelationship(){
-        axios
+        return axios
           .get("http://localhost:8000/api/familytreerelationship/")
-          .then(function (response) {
-            console.log(response.data);
-            return response.data;
-          })
+          .then(res => {
+            return res.data;
+          });
       } 
-      */
+      
       setActive(id) {
         var array = [...this.state.activePersons];
           if(array.includes(id)){
@@ -77,13 +76,19 @@
           if(array.length > 2)
               array.splice(0, 1);
           if(array.length === 2){
-            /* 
-            console.log(this.getRelationship())
-            this.getRelationship().map(item => {
-              if(!array.includes(item.id_1) || !array.includes(item.id_2) ) 
-              */
-                this.toggleRelationship();
-            //})
+            var exists = false;
+            this.getRelationship().then(data => {
+              console.log(data);
+              data.map(item => {
+                console.log(item);
+              if(array.includes(parseInt(item.id_1)) && array.includes(parseInt(item.id_2))) 
+                exists=true;
+                
+              console.log(exists)
+            })
+            if(!exists) this.toggleRelationship();
+            // else - tu bedzie modal z usuwaniem/edycja relacji 
+            });
           }
           this.setState({activePersons: array});
       }
