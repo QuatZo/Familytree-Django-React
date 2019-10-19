@@ -1,4 +1,7 @@
 // frontend/src/Person.js
+/*eslint no-useless-computed-key: 0*/
+/*eslint array-callback-return: 0*/
+
     import React, { Component } from "react";
     import ModalPerson from "./components/PersonModal";
     import axios from "axios";
@@ -8,7 +11,7 @@
     import './Person.css';
     import 'react-datepicker/dist/react-datepicker.css';
 
-    // https://www.npmjs.com/package/react-svg-pathline -- wazne
+    // https://www.npmjs.com/package/react-svg-pathline -- important
     
     const StatusChoices = [
       {value: 'living', label: 'Living'},
@@ -44,7 +47,8 @@
           },
           personList: [],
           activePersons: [],
-          draggedPoint: {screen: {x: 0, y: 0}, div: {x: 0, y: 0}, actual: {x: 0, y: 0}}
+          draggedPoint: {screen: {x: 0, y: 0}, div: {x: 0, y: 0}, actual: {x: 0, y: 0}},
+          personClassCoordinates: []
         };
       }          
       componentDidMount() {
@@ -80,11 +84,11 @@
             var exists = false;
             this.getRelationship().then(data => {
               data.map(item => {
-              if(array.includes(parseInt(item.id_1)) && array.includes(parseInt(item.id_2))) 
-                exists=true;
+              if(array.includes(parseInt(item.id_1)) && array.includes(parseInt(item.id_2)))
+                exists = true;
             })
             if(!exists) this.toggleRelationship();
-            // else - tu bedzie modal z usuwaniem/edycja relacji 
+            // else - delete/edit relationship OR if above toggle 
             });
           }
           this.setState({activePersons: array});
@@ -103,12 +107,13 @@
 
       renderItems = () => {
         const newItems = this.state.personList;
-        // swobodne poruszanie -> usuń grida z handlerów 
+        // free movement -> delete grid from handlers
         const dragHandlers = {onStart: this.onStart, onStop: this.onStop, grid: [20, 20]};
         return newItems.map(item => (
-          <Draggable cancel="img, button" {...dragHandlers}>
+          <Draggable cancel="img, button" {...dragHandlers} key={item.id}>
           <div
-            onLoad={this.contentLoad.bind(this)}
+            id={item.id}
+            onLoad={this.renderRelationships.bind(this)}
             onMouseMove={this.coordinates.bind(this)}
             className={"person id_" + item.id + " " + (this.state.activePersons.includes(item.id)?"active":"inactive") +  " border rounded"}
             onClick={() => this.setActive(item.id)}
@@ -185,10 +190,26 @@
         this.setState({ activeItem: item, modal: !this.state.modal });
       }; 
 
-      contentLoad(e){
-        console.log(e.nativeEvent.path);
+      renderRelationships(e){
+        var array = [...this.state.personClassCoordinates];
+        var idPerson = -1;
+        e.nativeEvent.path.map(item =>{
+          if(!isNaN(parseInt(item.id))){
+            idPerson = item.id;
+          }
+        })
+        var persons = Array.from(document.querySelectorAll("div.person"));
+        for(var i = 0; i < persons.length; i++){
+          var person = document.getElementById(persons[i].classList[1].split("_").pop());
+          if(person.id === idPerson){
+            var personCoordinates = person.getBoundingClientRect();
+            array.push({id: idPerson, 
+              screen: {x: personCoordinates.left + personCoordinates.width / 2, y: personCoordinates.top + personCoordinates.height / 2}
+            })
+          }
+        }
+        this.setState({personClassCoordinates: array});
       }
-      
       render() {
         return (
           <React.Fragment>

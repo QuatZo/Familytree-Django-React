@@ -10,7 +10,6 @@
       ModalFooter,
       Form,
       FormGroup,
-      Input,
       Label
     } from "reactstrap";
 
