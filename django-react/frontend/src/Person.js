@@ -10,8 +10,7 @@
     
     import './Person.css';
     import 'react-datepicker/dist/react-datepicker.css';
-
-    // https://www.npmjs.com/package/react-svg-pathline -- important
+    import {PathLine} from 'react-svg-pathline'
     
     const StatusChoices = [
       {value: 'living', label: 'Living'},
@@ -48,11 +47,13 @@
           personList: [],
           activePersons: [],
           draggedPoint: {screen: {x: 0, y: 0}, div: {x: 0, y: 0}, actual: {x: 0, y: 0}},
-          personClassCoordinates: []
+          personClassCoordinates: [],
+          Posts: [],
         };
       }          
       componentDidMount() {
         this.refreshList();
+        setTimeout(() => requestAnimationFrame(() => this.renderRelationships()), 100);
       }
       refreshList = () => {
         axios
@@ -61,12 +62,10 @@
           .catch(err => console.log(err));
       };
       
-      getRelationship(){
-        return axios
-          .get("http://localhost:8000/api/familytreerelationship/")
-          .then(res => {
-            return res.data;
-          });
+      async getRelationships(){
+        const res = await axios
+          .get("http://localhost:8000/api/familytreerelationship/");
+        return res.data;
       } 
       
       setActive(id) {
@@ -82,7 +81,7 @@
               array.splice(0, 1);
           if(array.length === 2){
             var exists = false;
-            this.getRelationship().then(data => {
+            this.getRelationships().then(data => {
               data.map(item => {
               if(array.includes(parseInt(item.id_1)) && array.includes(parseInt(item.id_2)))
                 exists = true;
@@ -94,7 +93,7 @@
           this.setState({activePersons: array});
       }
 
-      coordinates(e){
+      coordinates(e) {
         var scr = {x: e.nativeEvent.x, y: e.nativeEvent.y}
         var act = {x: e.nativeEvent.layerX, y: e.nativeEvent.layerY}
         e.nativeEvent.path.map(item =>{
@@ -113,7 +112,7 @@
           <Draggable cancel="img, button" {...dragHandlers} key={item.id}>
           <div
             id={item.id}
-            onLoad={this.renderRelationships.bind(this)}
+            onLoad={this.getPersonCoordinates.bind(this)}
             onMouseMove={this.coordinates.bind(this)}
             className={"person id_" + item.id + " " + (this.state.activePersons.includes(item.id)?"active":"inactive") +  " border rounded"}
             onClick={() => this.setActive(item.id)}
@@ -189,8 +188,8 @@
       editItem = item => {
         this.setState({ activeItem: item, modal: !this.state.modal });
       }; 
-
-      renderRelationships(e){
+      
+      getPersonCoordinates(e){
         var array = [...this.state.personClassCoordinates];
         var idPerson = -1;
         e.nativeEvent.path.map(item =>{
@@ -210,6 +209,41 @@
         }
         this.setState({personClassCoordinates: array});
       }
+
+      renderRelationships = () => {
+        var final = [];
+        this.getRelationships().then(data => {
+          data.map(relationship => {
+            var foot = [];
+            console.log("All Person;s coords:");
+            console.log(this.state.personClassCoordinates);
+            this.state.personClassCoordinates.map(person => {
+              console.log("Relationship between persons: ");
+              console.log(relationship);
+              console.log("Specific person's coordinates: ");
+              console.log(person);
+              if(relationship.id_1 === person.id || relationship.id_2 === person.id){
+                foot.push(person);
+              }
+            });
+            console.log("Person's ID w/ coords: ");
+            console.log(foot)
+            final.push({x1: foot[0].screen.x, y1: foot[0].screen.y, x2: foot[1].screen.x, y2: foot[1].screen.y})
+          });
+        });
+        console.log("Final table with persons, their ID's & coords: ");
+        console.log(final);
+
+        this.setState({
+          Posts: (
+            final.map(item => (
+              <svg id={item.id_1 + "_" + item.id_2}> 
+                <PathLine points={[{ x: 0, y: 0 }, { x: 125, y: 0 }, { x: 125, y: 125 }, { x: 250, y: 125 }]} stroke="red" strokeWidth="3" fill="none" r={10} />
+              </svg>)
+            )),
+        }) 
+      }
+
       render() {
         return (
           <React.Fragment>
@@ -218,6 +252,7 @@
             </button>
             <div className="contentPerson">
               {this.renderItems()}
+              {this.state.Posts}
               {this.state.modal ? (
                 <ModalPerson
                   activeItem={this.state.activeItem}
