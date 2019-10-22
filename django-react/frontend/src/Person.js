@@ -53,7 +53,7 @@
       }          
       componentDidMount() {
         this.refreshList();
-        setTimeout(() => requestAnimationFrame(() => this.renderRelationships()), 100);
+        setTimeout(() => requestAnimationFrame(() => this.renderRelationships()), );
       }
       refreshList = () => {
         axios
@@ -210,32 +210,39 @@
         this.setState({personClassCoordinates: array});
       }
 
+      functTemp(item){
+        console.log([{ x: item.x1, y: item.y1 }, { x: (item.x1+item.x2)/2, y: item.y1 }, { x: (item.x2+item.x1)/2, y: (item.y2+item.y1)/2 }, { x: item.x2, y: item.y2 } ]);
+      }
+
       renderRelationships = () => {
-        try{
           var final = [];
+          var foot = [];
           this.getRelationships().then(data => {
             data.map(relationship => {
-              var foot = [];
+              
               this.state.personClassCoordinates.map(person => {
                 if(relationship.id_1 === person.id || relationship.id_2 === person.id){
                   foot.push(person);
                 }
               });
-              final.push({x1: foot[0].screen.x, y1: foot[0].screen.y, x2: foot[1].screen.x, y2: foot[1].screen.y})
             });
+          }).then(data => {
+            console.log(foot);
+            for (var i = 0; i<foot.length; i+=2){
+              final.push({x1: foot[i].screen.x, y1: foot[i].screen.y, x2: foot[i+1].screen.x, y2: foot[i+1].screen.y});
+            }
+            console.log(final);
+            this.setState({
+              relationships: (final.map(item => (
+                <svg id={item.id_1 + "_" + item.id_2}> 
+                  {this.functTemp(item)}
+                  <path d={"M " + item.x1 + " " + item.y1 + " " + "l " + item.x2 + " "+ item.y2} stroke="red" strokeWidth="3" fill="none" />
+                  </svg>)
+              )
+            )});
           });
   
-          this.setState({
-            relationships: (final.map(item => (
-              <svg id={item.id_1 + "_" + item.id_2}> 
-                <PathLine points={[{ x: 0, y: 0 }, { x: 125, y: 0 }, { x: 125, y: 125 }, { x: 250, y: 125 }]} stroke="red" strokeWidth="3" fill="none" r={10} />
-              </svg>)
-            )
-          )});
-        }
-        catch(TypeError){
-          this.renderRelationships();
-        }
+          
       }
 
       render() {

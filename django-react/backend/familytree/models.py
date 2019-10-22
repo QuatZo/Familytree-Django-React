@@ -30,7 +30,7 @@ class FamilytreePerson(models.Model):
     other = 'other'
 
     sex_choices = [(male, 'male'),(female, 'female'),(other, 'other')]
-    sex_choices = models.CharField(max_length = 2,choices = sex_choices, default = other)
+    sex_choices = models.CharField(max_length = 35,choices = sex_choices, default = other)
 
     def _str_(self):
         return self.first_name + " " + self.last_name 
@@ -44,4 +44,4 @@ class FamilytreeRelationship(models.Model):
     brother_sister = 'brother/sister'
 
     relationships = [(father, 'father'),(mother, 'mother'),(brother_sister, 'brother/sister')]
-    relationships = models.CharField(max_length = 2,choices = relationships, default = father)
+    relationships = models.CharField(max_length = 35,choices = relationships, default = father)
