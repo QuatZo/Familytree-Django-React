@@ -48,7 +48,7 @@
           activePersons: [],
           draggedPoint: {screen: {x: 0, y: 0}, div: {x: 0, y: 0}, actual: {x: 0, y: 0}},
           personClassCoordinates: [],
-          Posts: [],
+          relationships: [],
         };
       }          
       componentDidMount() {
@@ -211,37 +211,31 @@
       }
 
       renderRelationships = () => {
-        var final = [];
-        this.getRelationships().then(data => {
-          data.map(relationship => {
-            var foot = [];
-            console.log("All Person;s coords:");
-            console.log(this.state.personClassCoordinates);
-            this.state.personClassCoordinates.map(person => {
-              console.log("Relationship between persons: ");
-              console.log(relationship);
-              console.log("Specific person's coordinates: ");
-              console.log(person);
-              if(relationship.id_1 === person.id || relationship.id_2 === person.id){
-                foot.push(person);
-              }
+        try{
+          var final = [];
+          this.getRelationships().then(data => {
+            data.map(relationship => {
+              var foot = [];
+              this.state.personClassCoordinates.map(person => {
+                if(relationship.id_1 === person.id || relationship.id_2 === person.id){
+                  foot.push(person);
+                }
+              });
+              final.push({x1: foot[0].screen.x, y1: foot[0].screen.y, x2: foot[1].screen.x, y2: foot[1].screen.y})
             });
-            console.log("Person's ID w/ coords: ");
-            console.log(foot)
-            final.push({x1: foot[0].screen.x, y1: foot[0].screen.y, x2: foot[1].screen.x, y2: foot[1].screen.y})
           });
-        });
-        console.log("Final table with persons, their ID's & coords: ");
-        console.log(final);
-
-        this.setState({
-          Posts: (
-            final.map(item => (
+  
+          this.setState({
+            relationships: (final.map(item => (
               <svg id={item.id_1 + "_" + item.id_2}> 
                 <PathLine points={[{ x: 0, y: 0 }, { x: 125, y: 0 }, { x: 125, y: 125 }, { x: 250, y: 125 }]} stroke="red" strokeWidth="3" fill="none" r={10} />
               </svg>)
-            )),
-        }) 
+            )
+          )});
+        }
+        catch(TypeError){
+          this.renderRelationships();
+        }
       }
 
       render() {
@@ -252,7 +246,7 @@
             </button>
             <div className="contentPerson">
               {this.renderItems()}
-              {this.state.Posts}
+              {this.state.relationships}
               {this.state.modal ? (
                 <ModalPerson
                   activeItem={this.state.activeItem}
