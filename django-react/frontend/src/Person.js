@@ -10,7 +10,6 @@
     
     import './Person.css';
     import 'react-datepicker/dist/react-datepicker.css';
-    import {PathLine} from 'react-svg-pathline'
     
     const StatusChoices = [
       {value: 'living', label: 'Living'},
@@ -46,14 +45,14 @@
           },
           personList: [],
           activePersons: [],
-          draggedPoint: {screen: {x: 0, y: 0}, div: {x: 0, y: 0}, actual: {x: 0, y: 0}},
+          draggedPoint: {id: -1, screen: {x: 0, y: 0}, div: {x: 0, y: 0}, actual: {x: 0, y: 0}},
           personClassCoordinates: [],
           relationships: [],
         };
       }          
       componentDidMount() {
         this.refreshList();
-        setTimeout(() => requestAnimationFrame(() => this.renderRelationships()), );
+        setTimeout(() => requestAnimationFrame(() => this.renderRelationships()), 1000);
       }
       refreshList = () => {
         axios
@@ -99,9 +98,15 @@
         e.nativeEvent.path.map(item =>{
           if(item.className !== undefined && item.className.includes("person")){
             var dv = {x: item.clientWidth + item.clientTop, y: item.clientHeight + item.clientLeft}
-            this.setState({draggedPoint: {screen: scr, div: dv, actual: act}})
+            this.setState({draggedPoint: {id: item.id, screen: scr, div: dv, actual: act}})
+            //for(var i = 0; i < this.state.personClassCoordinates.length; i++){
+            //  if (this.state.personClassCoordinates[i].id == item.id){
+            //    this.state.personClassCoordinates[i].screen = {x: scr.x, y: scr.y}
+            //  }
+            //}
           }
         })
+        //console.log(this.state.personClassCoordinates);
       }
 
       renderItems = () => {
@@ -114,6 +119,7 @@
             id={item.id}
             onLoad={this.getPersonCoordinates.bind(this)}
             onMouseMove={this.coordinates.bind(this)}
+            onDrag={this.getPersonCoordinates.bind(this)}
             className={"person id_" + item.id + " " + (this.state.activePersons.includes(item.id)?"active":"inactive") +  " border rounded"}
             onClick={() => this.setActive(item.id)}
           >
@@ -209,11 +215,6 @@
         }
         this.setState({personClassCoordinates: array});
       }
-
-      functTemp(item){
-        console.log([{ x: item.x1, y: item.y1 }, { x: (item.x1+item.x2)/2, y: item.y1 }, { x: (item.x2+item.x1)/2, y: (item.y2+item.y1)/2 }, { x: item.x2, y: item.y2 } ]);
-      }
-
       renderRelationships = () => {
           var final = [];
           var foot = [];
@@ -227,22 +228,18 @@
               });
             });
           }).then(data => {
-            console.log(foot);
             for (var i = 0; i<foot.length; i+=2){
               final.push({x1: foot[i].screen.x, y1: foot[i].screen.y, x2: foot[i+1].screen.x, y2: foot[i+1].screen.y});
             }
-            console.log(final);
             this.setState({
               relationships: (final.map(item => (
-                <svg id={item.id_1 + "_" + item.id_2}> 
-                  {this.functTemp(item)}
-                  <path d={"M " + item.x1 + " " + item.y1 + " " + "l " + item.x2 + " "+ item.y2} stroke="red" strokeWidth="3" fill="none" />
-                  </svg>)
+                <svg height="1080" width="1920">
+                  <path d={"M" + Math.round(item.x1) + " " + Math.round(item.y1) + " L" + Math.round(item.x2) + " " + Math.round(item.y2)} stroke="red" strokeWidth="3" />
+                </svg>
+                )
               )
             )});
           });
-  
-          
       }
 
       render() {
