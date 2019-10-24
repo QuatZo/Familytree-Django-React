@@ -10,24 +10,6 @@
     
     import './Person.css';
     import 'react-datepicker/dist/react-datepicker.css';
-    
-    const StatusChoices = [
-      {value: 'living', label: 'Living'},
-      {value: 'deceased', label: 'Deceased'},
-      {value: 'unknown', label: 'Unknown'}
-    ]
-
-    const SexChoices = [
-      {value: 'male', label: 'Male'},
-      {value: 'female', label: 'Female'},
-      {value: 'other', label: 'Other'}
-    ]
-
-    const RelationshipsChoices = [
-      {value: 'father', label: 'Father'},
-      {value: 'mother', label: 'Mother'},
-      {value: 'brother/sister', label: 'Brother/Sister'}
-    ]
 
     class Person extends Component {    
       constructor(props) {
@@ -38,10 +20,10 @@
             first_name: "",
             last_name: "",
             birth_date: "",
-            status_choices:  StatusChoices.values[0],
-            sex_choices:  SexChoices.values[0],
+            status_choices:  'living',
+            sex_choices:  'male',
             birth_place: "",
-            relationship_choices: RelationshipsChoices.values[0]
+            relationship_choices: 'father'
           },
           personList: [],
           activePersons: [],
@@ -95,7 +77,7 @@
 
       isActive(id){
         for(var i = 0; i < this.state.activePersons.length; i++){
-          if(id == this.state.activePersons[i]){ return true;}
+          if(id === this.state.activePersons[i]){ return true;}
         }
         return false;
       }
@@ -109,14 +91,16 @@
             var dv = {x: item.clientWidth + item.clientTop, y: item.clientHeight + item.clientLeft}
             this.setState({draggedPoint: {id: item.id, screen: scr, div: dv, actual: act}})
             for(var i = 0; i < this.state.personClassCoordinates.length; i++){
-              if (this.state.personClassCoordinates[i].id == item.id){
+              if (this.state.personClassCoordinates[i].id === item.id){
                 this.state.personClassCoordinates[i].screen = {x: scr.x, y: scr.y}
               }
             }
           }
         })
 
-        if(this.isActive(idPerson)){this.renderRelationships();}
+        //if(this.isActive(idPerson)){
+          this.renderRelationships();
+        //}
       }
 
       renderItems = () => {
@@ -198,7 +182,7 @@
           .then(res => this.refreshList());
       };
       createItem = () => {
-        const item = { first_name: "", last_name: "", birth_date: "", status_choices: StatusChoices.values[0], sex_choices: SexChoices.values[0], birth_place: ""};
+        const item = { first_name: "", last_name: "", birth_date: "", status_choices: 'living', sex_choices: 'male', birth_place: ""};
         this.setState({ activeItem: item, modal: !this.state.modal });
       };
       editItem = item => {
