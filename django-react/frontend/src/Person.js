@@ -92,21 +92,31 @@
           this.setState({activePersons: array});
       }
 
+
+      isActive(id){
+        for(var i = 0; i < this.state.activePersons.length; i++){
+          if(id == this.state.activePersons[i]){ return true;}
+        }
+        return false;
+      }
       coordinates(e) {
         var scr = {x: e.nativeEvent.x, y: e.nativeEvent.y}
         var act = {x: e.nativeEvent.layerX, y: e.nativeEvent.layerY}
+        var idPerson = -1;
         e.nativeEvent.path.map(item =>{
           if(item.className !== undefined && item.className.includes("person")){
+            idPerson = item.id;
             var dv = {x: item.clientWidth + item.clientTop, y: item.clientHeight + item.clientLeft}
             this.setState({draggedPoint: {id: item.id, screen: scr, div: dv, actual: act}})
-            //for(var i = 0; i < this.state.personClassCoordinates.length; i++){
-            //  if (this.state.personClassCoordinates[i].id == item.id){
-            //    this.state.personClassCoordinates[i].screen = {x: scr.x, y: scr.y}
-            //  }
-            //}
+            for(var i = 0; i < this.state.personClassCoordinates.length; i++){
+              if (this.state.personClassCoordinates[i].id == item.id){
+                this.state.personClassCoordinates[i].screen = {x: scr.x, y: scr.y}
+              }
+            }
           }
         })
-        //console.log(this.state.personClassCoordinates);
+
+        if(this.isActive(idPerson)){this.renderRelationships();}
       }
 
       renderItems = () => {
