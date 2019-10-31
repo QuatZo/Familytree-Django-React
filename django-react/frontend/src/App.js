@@ -2,7 +2,7 @@
 
     import React, { Component } from "react";
 	  import './App.css';
-    import Person from "./Person";
+    import Familytree from "./Familytree";
     import Todo from "./Todo";
 
     class App extends Component {
@@ -14,7 +14,7 @@
       render() {
         return (
           <div>
-            <Person />
+            <Familytree />
             <Todo />
           </div>
         );
