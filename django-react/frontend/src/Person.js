@@ -29,12 +29,12 @@
         if (item.id) {
           axios
             .put(`http://localhost:8000/api/familytreepersons/${item.id}/`, item)
-            .then(() => this.props.refreshList());
+            .then(() => this.props.refresh());
           return;
         }
         axios
           .post("http://localhost:8000/api/familytreepersons/", item)
-          .then(() => this.props.refreshList());
+          .then(() => this.props.refresh());
       };
 
       toggle = () => {
@@ -44,15 +44,15 @@
       render() {
         // free movement -> delete grid from handlers
         const dragHandlers = {onStart: this.onStart, onStop: this.onStop, grid: [20, 20]};
-        return (
+        return [
           <Draggable cancel="button" {...dragHandlers} key={this.state.person.id}>
           <div
             id={this.state.person.id}
-            //onLoad={this.getPersonCoordinates.bind(this)}
-            //onMouseMove={this.coordinates.bind(this)}
-            //onDrag={this.getPersonCoordinates.bind(this)}
+            onLoad={this.props.getPersonCoordinates}
+            onMouseMove={this.props.coordinates}
+            onDrag={this.props.getPersonCoordinates}
             className={"person id_" + this.state.person.id + " " + (this.state.activePersons.includes(this.state.person.id)?"active":"inactive") +  " border rounded"}
-            //onClick={() => this.setActive(this.state.person.id)}
+            //onClick={() => this.props.setActive(this.state.person.id)}
           >
             <img src="https://live.staticflickr.com/7038/6944665187_b8cd703bc2.jpg" 
             draggable="false"
@@ -89,7 +89,7 @@
               onSave={this.handleSubmit}
             />
           ) : null
-        );
+        ];
       }
     }
     export default App;

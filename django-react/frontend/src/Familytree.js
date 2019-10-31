@@ -30,11 +30,13 @@
           personClassCoordinates: [],
           relationships: [],
         };
-      }          
+      }        
+
       componentDidMount() {
         this.refreshList();
         setTimeout(() => requestAnimationFrame(() => this.renderRelationships()), 1000);
       }
+
       refreshList = () => {
         axios
           .get("http://localhost:8000/api/familytreepersons/")
@@ -73,12 +75,6 @@
           this.setState({activePersons: array});
       }
 
-      isActive(id){
-        for(var i = 0; i < this.state.activePersons.length; i++){
-          if(id === this.state.activePersons[i]){ return true;}
-        }
-        return false;
-      }
       coordinates(e) {
         var scr = {x: e.nativeEvent.x, y: e.nativeEvent.y}
         var act = {x: e.nativeEvent.layerX, y: e.nativeEvent.layerY}
@@ -95,26 +91,27 @@
             }
           }
         })
-
-        // not working, rn prevents relationship from updating
-        if(this.isActive(idPerson)){
-          this.renderRelationships();
-        }
       }
 
       renderItems = () => {
         const newItems = this.state.personList;
         return newItems.map(item => (
           <Person 
-          person={item}
-          activePersons={this.state.activePersons}
-          refreshList={this.refreshList()}
+            person={item}
+            activePersons={this.state.activePersons}
+            getPersonCoordinates={this.getPersonCoordinates.bind(this)}
+            coordinates={this.coordinates.bind(this)}
+            activePersons={this.state.activePersons}
+            refresh={this.refreshList}
+            setActive={this.setActive}
           />
         ));
       };
+
       toggleRelationship = () => {
         this.setState({ ModalRelationship: !this.state.ModalRelationship });
       };
+
       handleSubmitRelationship = item => {
         this.toggleRelationship();
         if (item.id) {
@@ -196,7 +193,6 @@
               {this.state.ModalRelationship ? (
                 <ModalRelationship
                   personList={this.state.personList}
-                  activePersons={this.state.activePersons}
                   toggle={this.toggleRelationship}
                   onSave={this.handleSubmitRelationship}
                 />
