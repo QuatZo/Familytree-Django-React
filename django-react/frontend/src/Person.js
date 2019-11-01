@@ -5,6 +5,7 @@
     import ModalPerson from "./components/PersonModal"
     import axios from "axios";
 	  //import './Person.css';
+    import './Familytree.css';
 
     class App extends Component {
       constructor(props) {
@@ -14,7 +15,6 @@
           viewCompleted: this.props.viewCompleted,
           activeItem: this.props.activeItem,
           personList: this.props.personList,
-          activePersons: this.props.activePersons,
           draggedPoint: this.props.draggedPoint,
           personClassCoordinates: this.props.personClassCoordinates,
           relationships: this.props.relationships,
@@ -41,18 +41,25 @@
         this.setState({ modal: !this.state.modal });
       };
 
+      handleDelete = item => {
+        axios
+          .delete(`http://localhost:8000/api/familytreepersons/${item.id}`)
+          .then(res => this.props.refresh());
+      };
+
       render() {
         // free movement -> delete grid from handlers
         const dragHandlers = {onStart: this.onStart, onStop: this.onStop, grid: [20, 20]};
-        return [
+        return (
+          <React.Fragment>
           <Draggable cancel="button" {...dragHandlers} key={this.state.person.id}>
           <div
             id={this.state.person.id}
             onLoad={this.props.getPersonCoordinates}
             onMouseMove={this.props.coordinates}
             onDrag={this.props.getPersonCoordinates}
-            className={"person id_" + this.state.person.id + " " + (this.state.activePersons.includes(this.state.person.id)?"active":"inactive") +  " border rounded"}
-            //onClick={() => this.props.setActive(this.state.person.id)}
+            className={"person id_" + this.state.person.id + " " + (this.props.activePersons.includes(this.state.person.id)?"active":"inactive") +  " border rounded"}
+            onClick={() => this.props.setActivePerson(this.state.person.id)}
           >
             <img src="https://live.staticflickr.com/7038/6944665187_b8cd703bc2.jpg" 
             draggable="false"
@@ -81,15 +88,16 @@
               </button>
             </div>
           </div>
-          </Draggable>,
-          this.state.modal ? (
+          </Draggable>
+          {this.state.modal ? (
             <ModalPerson
               activeItem={this.state.person}
               toggle={this.toggle}
               onSave={this.handleSubmit}
             />
-          ) : null
-        ];
+          ) : null}
+          </React.Fragment>
+        );
       }
     }
     export default App;

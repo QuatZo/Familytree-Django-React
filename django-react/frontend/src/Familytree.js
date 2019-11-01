@@ -92,10 +92,8 @@
       coordinates(e) {
         var scr = {x: e.nativeEvent.x, y: e.nativeEvent.y}
         var act = {x: e.nativeEvent.layerX, y: e.nativeEvent.layerY}
-        var idPerson = -1;
         e.nativeEvent.path.map(item =>{
           if(item.className !== undefined && item.className.includes("person")){
-            idPerson = item.id;
             var dv = {x: item.clientWidth + item.clientTop, y: item.clientHeight + item.clientLeft}
             this.setState({draggedPoint: {id: item.id, screen: scr, div: dv, actual: act}})
             for(var i = 0; i < this.state.personClassCoordinates.length; i++){
@@ -115,8 +113,8 @@
             activePersons={this.state.activePersons}
             getPersonCoordinates={this.getPersonCoordinates.bind(this)}
             coordinates={this.coordinates.bind(this)}
-            refresh={this.refreshList}
-            setActive={this.setActive}
+            refresh={this.refreshList.bind(this)}
+            setActivePerson={this.setActive.bind(this)}
           />
         ));
       };
@@ -141,12 +139,7 @@
           .post("http://localhost:8000/api/familytreerelationship/", item)
           .then(res => this.refreshList());
       };
-      handleDelete = item => {
-        axios
-          .delete(`http://localhost:8000/api/familytreepersons/${item.id}`)
-          .then(res => this.refreshList());
-      };
-
+      
       createItem = () => {
         const item = { first_name: "", last_name: "", birth_date: "", status_choices: 'living', sex_choices: 'male', birth_place: ""};
         this.setState({ activeItem: item, modal: !this.state.modal });
@@ -219,6 +212,7 @@
               {this.state.ModalRelationship ? (
                 <ModalRelationship
                   personList={this.state.personList}
+                  activePersons={this.state.activePersons}
                   toggle={this.toggleRelationship}
                   onSave={this.handleSubmitRelationship}
                 />
