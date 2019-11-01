@@ -6,6 +6,7 @@
     import axios from "axios";
     import Person from "./Person";
     import ModalRelationship from "./components/RelationshipModal";
+    import ModalPerson from "./components/PersonModal";
     
     import './Familytree.css';
     import 'react-datepicker/dist/react-datepicker.css';
@@ -30,7 +31,20 @@
           personClassCoordinates: [],
           relationships: [],
         };
-      }        
+      }  
+
+      handleSubmit = item => {
+        this.toggle();
+        if (item.id) {
+          axios
+            .put(`http://localhost:8000/api/familytreepersons/${item.id}/`, item)
+            .then(() => this.refreshList());
+          return;
+        }
+        axios
+          .post("http://localhost:8000/api/familytreepersons/", item)
+          .then(() => this.refreshList());
+      };
 
       componentDidMount() {
         this.refreshList();
@@ -101,11 +115,14 @@
             activePersons={this.state.activePersons}
             getPersonCoordinates={this.getPersonCoordinates.bind(this)}
             coordinates={this.coordinates.bind(this)}
-            activePersons={this.state.activePersons}
             refresh={this.refreshList}
             setActive={this.setActive}
           />
         ));
+      };
+
+      toggle = () => {
+        this.setState({ modal: !this.state.modal });
       };
 
       toggleRelationship = () => {
@@ -129,6 +146,7 @@
           .delete(`http://localhost:8000/api/familytreepersons/${item.id}`)
           .then(res => this.refreshList());
       };
+
       createItem = () => {
         const item = { first_name: "", last_name: "", birth_date: "", status_choices: 'living', sex_choices: 'male', birth_place: ""};
         this.setState({ activeItem: item, modal: !this.state.modal });
@@ -154,6 +172,7 @@
         }
         this.setState({personClassCoordinates: array});
       }
+
       renderRelationships = () => {
           var final = [];
           var foot = [];
@@ -190,6 +209,13 @@
             <div className="contentPerson">
               {this.renderItems()}
               {this.state.relationships}
+              {this.state.modal ? (
+                <ModalPerson
+                 activeItem={this.state.activeItem}
+                 toggle={this.toggle}
+                 onSave={this.handleSubmit}
+                />
+              ) : null}
               {this.state.ModalRelationship ? (
                 <ModalRelationship
                   personList={this.state.personList}
