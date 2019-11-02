@@ -11,7 +11,6 @@
       constructor(props) {
         super(props);
         this.state = {
-          person: this.props.person,
           viewCompleted: this.props.viewCompleted,
           activeItem: this.props.activeItem,
           personList: this.props.personList,
@@ -52,14 +51,14 @@
         const dragHandlers = {onStart: this.onStart, onStop: this.onStop, grid: [20, 20]};
         return (
           <React.Fragment>
-          <Draggable cancel="button" {...dragHandlers} key={this.state.person.id}>
+          <Draggable cancel="button" {...dragHandlers} key={this.props.person.id}>
           <div
-            id={this.state.person.id}
+            id={this.props.person.id}
             onLoad={this.props.getPersonCoordinates}
             onMouseMove={this.props.coordinates}
             onDrag={this.props.getPersonCoordinates}
-            className={"person id_" + this.state.person.id + " " + (this.props.activePersons.includes(this.state.person.id)?"active":"inactive") +  " border rounded"}
-            onClick={() => this.props.setActivePerson(this.state.person.id)}
+            className={"person id_" + this.props.person.id + " " + (this.props.activePersons.includes(this.props.person.id)?"active":"inactive") +  " border rounded"}
+            onClick={() => this.props.setActivePerson(this.props.person.id)}
           >
             <img src="https://live.staticflickr.com/7038/6944665187_b8cd703bc2.jpg" 
             draggable="false"
@@ -67,21 +66,21 @@
             alt = "Error not found"/>
             <div
               className={`name`}
-              first_name={this.state.person.first_name}
+              first_name={this.props.person.first_name}
             >
-              {this.state.person.first_name + ' ' + this.state.person.last_name}
+              {this.props.person.first_name + ' ' + this.props.person.last_name}
             </div> 
             <div
               className={'buttons'}
             >
               <button
-                onClick={() => this.editItem(this.state.person)}
+                onClick={() => this.editItem(this.props.person)}
                 className="btn btn-secondary mr-2"
               >
                 Edit{" "}
               </button>
               <button
-                onClick={() => this.handleDelete(this.state.person)}
+                onClick={() => this.handleDelete(this.props.person)}
                 className="btn btn-danger"
               >
                 Delete{" "}
@@ -91,7 +90,7 @@
           </Draggable>
           {this.state.modal ? (
             <ModalPerson
-              activeItem={this.state.person}
+              activeItem={this.props.person}
               toggle={this.toggle}
               onSave={this.handleSubmit}
             />
