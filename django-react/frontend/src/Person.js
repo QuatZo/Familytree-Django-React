@@ -11,14 +11,10 @@
       constructor(props) {
         super(props);
         this.state = {
-          viewCompleted: this.props.viewCompleted,
           activeItem: this.props.activeItem,
-          personList: this.props.personList,
-          draggedPoint: this.props.draggedPoint,
-          personClassCoordinates: this.props.personClassCoordinates,
-          relationships: this.props.relationships,
         };
       }
+
       editItem = item => {
         this.setState({ activeItem: item, modal: !this.state.modal });
       };
@@ -43,58 +39,63 @@
       handleDelete = item => {
         axios
           .delete(`http://localhost:8000/api/familytreepersons/${item.id}`)
-          .then(res => this.props.refresh());
+          .then(() => this.props.refresh());
       };
+
+      renderRelationship = item => {
+        this.props.getPersonCoordinates(item)
+        this.props.renderRelationships()
+      }
 
       render() {
         // free movement -> delete grid from handlers
         const dragHandlers = {onStart: this.onStart, onStop: this.onStop, grid: [20, 20]};
         return (
           <React.Fragment>
-          <Draggable cancel="button" {...dragHandlers} key={this.props.person.id}>
-          <div
-            id={this.props.person.id}
-            onLoad={this.props.getPersonCoordinates}
-            onMouseMove={this.props.coordinates}
-            onDrag={this.props.getPersonCoordinates}
-            className={"person id_" + this.props.person.id + " " + (this.props.activePersons.includes(this.props.person.id)?"active":"inactive") +  " border rounded"}
-            onClick={() => this.props.setActivePerson(this.props.person.id)}
-          >
-            <img src="https://live.staticflickr.com/7038/6944665187_b8cd703bc2.jpg" 
-            draggable="false"
-            className = "img-thumbnail"
-            alt = "Error not found"/>
+            <Draggable cancel="button" {...dragHandlers} key={this.props.person.id}>
             <div
-              className={`name`}
-              first_name={this.props.person.first_name}
+              id={this.props.person.id}
+              onLoad={this.renderRelationship}
+              onMouseMove={this.props.coordinates}
+              onDrag={this.renderRelationship}
+              className={"person id_" + this.props.person.id + " " + (this.props.activePersons.includes(this.props.person.id)?"active":"inactive") +  " border rounded"}
+              onClick={() => this.props.setActivePerson(this.props.person.id)}
             >
-              {this.props.person.first_name + ' ' + this.props.person.last_name}
-            </div> 
-            <div
-              className={'buttons'}
-            >
-              <button
-                onClick={() => this.editItem(this.props.person)}
-                className="btn btn-secondary mr-2"
+              <img src="https://live.staticflickr.com/7038/6944665187_b8cd703bc2.jpg" 
+              draggable="false"
+              className = "img-thumbnail"
+              alt = "Error not found"/>
+              <div
+                className={`name`}
+                first_name={this.props.person.first_name}
               >
-                Edit{" "}
-              </button>
-              <button
-                onClick={() => this.handleDelete(this.props.person)}
-                className="btn btn-danger"
+                {this.props.person.first_name + ' ' + this.props.person.last_name}
+              </div> 
+              <div
+                className={'buttons'}
               >
-                Delete{" "}
-              </button>
+                <button
+                  onClick={() => this.editItem(this.props.person)}
+                  className="btn btn-secondary mr-2"
+                >
+                  Edit{" "}
+                </button>
+                <button
+                  onClick={() => this.handleDelete(this.props.person)}
+                  className="btn btn-danger"
+                >
+                  Delete{" "}
+                </button>
+              </div>
             </div>
-          </div>
-          </Draggable>
-          {this.state.modal ? (
-            <ModalPerson
-              activeItem={this.props.person}
-              toggle={this.toggle}
-              onSave={this.handleSubmit}
-            />
-          ) : null}
+            </Draggable>
+            {this.state.modal ? (
+              <ModalPerson
+                activeItem={this.props.person}
+                toggle={this.toggle}
+                onSave={this.handleSubmit}
+              />
+            ) : null}
           </React.Fragment>
         );
       }

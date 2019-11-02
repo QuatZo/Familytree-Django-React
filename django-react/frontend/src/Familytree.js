@@ -48,7 +48,7 @@
 
       componentDidMount() {
         this.refreshList();
-        setTimeout(() => requestAnimationFrame(() => this.renderRelationships()), 1000);
+        setInterval(() => requestAnimationFrame(() => this.renderRelationships()), 1000);
       }
 
       refreshList = () => {
@@ -90,8 +90,8 @@
       }
 
       coordinates(e) {
-        var scr = {x: e.nativeEvent.x, y: e.nativeEvent.y}
-        var act = {x: e.nativeEvent.layerX, y: e.nativeEvent.layerY}
+        var scr = {x: e.nativeEvent.x, y: e.nativeEvent.y};
+        var act = {x: e.nativeEvent.layerX, y: e.nativeEvent.layerY};
         e.nativeEvent.path.map(item =>{
           if(item.className !== undefined && item.className.includes("person")){
             var dv = {x: item.clientWidth + item.clientTop, y: item.clientHeight + item.clientLeft}
@@ -112,6 +112,7 @@
             person={item}
             activePersons={this.state.activePersons}
             getPersonCoordinates={this.getPersonCoordinates.bind(this)}
+            renderRelationships={this.renderRelationships.bind(this)}
             coordinates={this.coordinates.bind(this)}
             refresh={this.refreshList.bind(this)}
             setActivePerson={this.setActive.bind(this)}
@@ -132,12 +133,12 @@
         if (item.id) {
           axios
             .put(`http://localhost:8000/api/familytreerelationship/${item.id}/`, item)
-            .then(res => this.refreshList());
+            .then(() => this.renderRelationships());
           return;
         }
         axios
           .post("http://localhost:8000/api/familytreerelationship/", item)
-          .then(res => this.refreshList());
+          .then(() => this.renderRelationships());
       };
       
       createItem = () => {
@@ -171,7 +172,6 @@
           var foot = [];
           this.getRelationships().then(data => {
             data.map(relationship => {
-              
               this.state.personClassCoordinates.map(person => {
                 if(relationship.id_1 === person.id || relationship.id_2 === person.id){
                   foot.push(person);
