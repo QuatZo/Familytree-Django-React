@@ -90,6 +90,7 @@
       }
 
       coordinates(e) {
+        console.log(e.nativeEvent);
         var scr = {x: e.nativeEvent.x, y: e.nativeEvent.y};
         var act = {x: e.nativeEvent.layerX, y: e.nativeEvent.layerY};
         e.nativeEvent.path.map(item =>{
@@ -178,14 +179,21 @@
                 }
               });
             });
-          }).then(data => {
+          }).then(() => {
             for (var i = 0; i<foot.length; i+=2){
               final.push({x1: foot[i].screen.x, y1: foot[i].screen.y, x2: foot[i+1].screen.x, y2: foot[i+1].screen.y});
             }
             this.setState({
               relationships: (final.map(item => (
                 <svg height="1080" width="1920">
-                  <path d={"M" + Math.round(item.x1) + " " + Math.round(item.y1) + " L" + Math.round(item.x2) + " " + Math.round(item.y2)} stroke="red" strokeWidth="3" />
+                  <polyline 
+                  points={Math.round(item.x1) + " " + Math.round(item.y1) +
+                  ", " + Math.round(item.x1) + " " + Math.round((Math.round(item.y1) + Math.round(item.y2))/2) +
+                  ", " + Math.round(item.x2) + " " + Math.round((Math.round(item.y1) + Math.round(item.y2))/2) +
+                  ", " + Math.round(item.x2) + " " + Math.round(item.y2)} 
+                  stroke="red" 
+                  strokeWidth="3" 
+                  fill="none"/>
                 </svg>
                 )
               )
