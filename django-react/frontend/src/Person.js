@@ -52,11 +52,15 @@
         const dragHandlers = {onStart: this.onStart, onStop: this.onStop, grid: [20, 20]};
         return (
           <React.Fragment>
-            <Draggable cancel="button" {...dragHandlers} key={this.props.person.id}>
+            <Draggable 
+              cancel="button" {...dragHandlers} 
+              key={this.props.person.id}
+            >
             <div
               id={this.props.person.id}
               onLoad={this.renderRelationship}
               onMouseMove={this.props.coordinates}
+              // not working, because Draggable handles the onDrag event
               onDrag={this.renderRelationship}
               className={"person id_" + this.props.person.id + " " + (this.props.activePersons.includes(this.props.person.id)?"active":"inactive") +  " border rounded"}
               onClick={() => this.props.setActivePerson(this.props.person.id)}

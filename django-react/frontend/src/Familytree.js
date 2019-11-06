@@ -28,6 +28,7 @@
           personList: [],
           activePersons: [],
           personClassCoordinates: [],
+          personClassCoordinatesOld: [],
           relationships: [],
         };
       }  
@@ -47,7 +48,14 @@
 
       componentDidMount() {
         this.refreshList();
-        setInterval(() => requestAnimationFrame(() => this.renderRelationships()), 1000);
+        this.renderRelationships();
+      }
+
+      componentDidUpdate(){
+        if(this.state.personClassCoordinates !== this.state.personClassCoordinatesOld){
+          this.renderRelationships();
+          this.state.personClassCoordinatesOld = this.state.personClassCoordinates;
+        }
       }
 
       refreshList = () => {
@@ -89,11 +97,13 @@
       }
 
       coordinates(e) {
+        var coords = [...this.state.personClassCoordinates];
+
         e.nativeEvent.path.map(item =>{
           if(item.className !== undefined && item.className.includes("person")){
-            for(var i = 0; i < this.state.personClassCoordinates.length; i++){
+            for(var i = 0; i < coords.length; i++){
               // if it's the whole person div
-              if (this.state.personClassCoordinates[i].id === item.id){
+              if (coords[i].id === item.id){
                 // take the transform value from style (draggable component)
                 var transform = item.style.transform.toString();
 
@@ -104,12 +114,18 @@
                 var startY = transform.indexOf(",") + 2;
                 var endY = transform.indexOf(")") - 2;
                 var y = parseInt(transform.substring(startY, endY));
+                var newX = item.offsetLeft + item.clientWidth/2 + x;
+                var newY = item.offsetTop + item.clientHeight/2 + y;
+
                 // set the middle of the div as: corner of the div, relatively to body + half of the div width + translation value from style (draggable component)
-                this.state.personClassCoordinates[i].screen = {x: item.offsetLeft + item.clientWidth/2 + x, y: item.offsetTop + item.clientHeight/2 + y};
+                if(coords[i].screen.x !== newX && coords[i].screen.y !== newY){
+                  coords[i].screen = {x: newX, y: newY};
+                }
               }
             }
           }
-        })
+        });
+        this.setState({personClassCoordinates: coords});
       }
 
       renderItems = () => {
@@ -215,7 +231,7 @@
             </button>
             <div className="contentPerson">
               {this.renderItems()}
-              {this.state.relationships}
+              {this.state.relationships.length > 0 ? this.state.relationships : null}
               {this.state.modal ? (
                 <ModalPerson
                  activeItem={this.state.activeItem}
