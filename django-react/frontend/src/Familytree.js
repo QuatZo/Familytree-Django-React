@@ -27,7 +27,6 @@
           },
           personList: [],
           activePersons: [],
-          draggedPoint: {id: -1, screen: {x: 0, y: 0}, div: {x: 0, y: 0}, actual: {x: 0, y: 0}},
           personClassCoordinates: [],
           relationships: [],
         };
@@ -90,16 +89,23 @@
       }
 
       coordinates(e) {
-        console.log(e.nativeEvent);
-        var scr = {x: e.nativeEvent.x, y: e.nativeEvent.y};
-        var act = {x: e.nativeEvent.layerX, y: e.nativeEvent.layerY};
         e.nativeEvent.path.map(item =>{
           if(item.className !== undefined && item.className.includes("person")){
-            var dv = {x: item.clientWidth + item.clientTop, y: item.clientHeight + item.clientLeft}
-            this.setState({draggedPoint: {id: item.id, screen: scr, div: dv, actual: act}})
             for(var i = 0; i < this.state.personClassCoordinates.length; i++){
+              // if it's the whole person div
               if (this.state.personClassCoordinates[i].id === item.id){
-                this.state.personClassCoordinates[i].screen = {x: scr.x, y: scr.y}
+                // take the transform value from style (draggable component)
+                var transform = item.style.transform.toString();
+
+                var startX = transform.indexOf("(") + 1;
+                var endX = transform.indexOf(",") - 2;
+                var x = parseInt(transform.substring(startX, endX));
+
+                var startY = transform.indexOf(",") + 2;
+                var endY = transform.indexOf(")") - 2;
+                var y = parseInt(transform.substring(startY, endY));
+                // set the middle of the div as: corner of the div, relatively to body + half of the div width + translation value from style (draggable component)
+                this.state.personClassCoordinates[i].screen = {x: item.offsetLeft + item.clientWidth/2 + x, y: item.offsetTop + item.clientHeight/2 + y};
               }
             }
           }
