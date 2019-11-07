@@ -17,12 +17,12 @@
         this.state = {
           viewCompleted: false,
           activeItem: {
-            first_name: "",
-            last_name: "",
-            birth_date: "",
+            first_name: '',
+            last_name: '',
+            birth_date: '',
             status_choices: 'living',
             sex_choices:  'male',
-            birth_place: "",
+            birth_place: '',
             relationship_choices: 'father'
           },
           personList: [],
@@ -54,7 +54,9 @@
       componentDidUpdate(){
         if(this.state.personClassCoordinates !== this.state.personClassCoordinatesOld){
           this.renderRelationships();
-          this.state.personClassCoordinatesOld = this.state.personClassCoordinates;
+          this.setState({
+            personClassCoordinatesOld: this.state.personClassCoordinates
+          })
         }
       }
 
@@ -118,7 +120,7 @@
                 var newY = item.offsetTop + item.clientHeight/2 + y;
 
                 // set the middle of the div as: corner of the div, relatively to body + half of the div width + translation value from style (draggable component)
-                if(coords[i].screen.x !== newX && coords[i].screen.y !== newY){
+                if(coords[i].screen.x !== newX || coords[i].screen.y !== newY){
                   coords[i].screen = {x: newX, y: newY};
                 }
               }
@@ -203,12 +205,13 @@
             });
           }).then(() => {
             for (var i = 0; i<foot.length; i+=2){
-              final.push({x1: foot[i].screen.x, y1: foot[i].screen.y, x2: foot[i+1].screen.x, y2: foot[i+1].screen.y});
+              final.push({id1: foot[i].id, id2: foot[i+1].id, x1: foot[i].screen.x, y1: foot[i].screen.y, x2: foot[i+1].screen.x, y2: foot[i+1].screen.y});
             }
             this.setState({
               relationships: (final.map(item => (
                 <svg height="1080" width="1920">
                   <polyline 
+                  id={"path_" + item.id1 + "_" + item.id2}
                   points={Math.round(item.x1) + " " + Math.round(item.y1) +
                   ", " + Math.round(item.x1) + " " + Math.round((Math.round(item.y1) + Math.round(item.y2))/2) +
                   ", " + Math.round(item.x2) + " " + Math.round((Math.round(item.y1) + Math.round(item.y2))/2) +
@@ -216,6 +219,13 @@
                   stroke="red" 
                   strokeWidth="3" 
                   fill="none"/>
+
+                  <text 
+                  x={(Math.round(item.x1) + Math.round(item.x2))/2} 
+                  y={Math.round((Math.round(item.y1) + Math.round(item.y2))/2) - 5} 
+                  className="error">
+                    Here will be the relationship name
+                  </text>
                 </svg>
                 )
               )
