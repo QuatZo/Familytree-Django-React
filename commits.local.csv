@@ -1,0 +1,41 @@
+5e1d2c7,QuatZo,Thu Nov 7 11:42:41 2019,Label For PathLine & Update Path Per Grid Move
+eeed712,QuatZo,Wed Nov 6 15:50:19 2019,Better Site Update & Text Wrap
+cf392e3,QuatZo,Wed Nov 6 11:43:01 2019,PathLine at the middle of the div
+fddff11,QuatZo,Mon Nov 4 14:27:04 2019,PathLine instead of single Line
+c3f8675,QuatZo,Sat Nov 2 12:58:16 2019,Minor updates
+14ee5b0,QuatZo,Sat Nov 2 12:35:58 2019,Fixed On-Time Refresh
+7edc9ee,QuatZo,Fri Nov 1 17:45:40 2019,Fixed Set Active
+f9f3d61,QuatZo,Fri Nov 1 16:27:09 2019,Fixed Create Button
+e4b1302,Dawid,Thu Oct 31 13:13:57 2019,Merge pull request #3 from QuatZo/relationship-lines-on-load
+0b28176,QuatZo,Thu Oct 31 13:13:03 2019,File Splitting part II
+df084be,QuatZo,Wed Oct 30 19:53:23 2019,File splitting
+a510f06,QuatZo,Thu Oct 24 17:11:59 2019,Code cleanup
+3168632,QuatZo,Thu Oct 24 15:58:55 2019,Working Path On Move
+da72a21,Dawid,Wed Oct 23 13:03:31 2019,Working Path On Load
+bd5ed37,MilordMorfin,Tue Oct 22 19:40:18 2019,Changed PathLines to path
+1773c19,QuatZo,Tue Oct 22 13:20:32 2019,Try-Catch for On Load
+364d7ea,QuatZo,Sun Oct 20 14:28:44 2019,Lines On Load
+b310e09,QuatZo,Sat Oct 19 15:22:38 2019,On Load Div Coordinates & Bug Fixes
+8d50ab7,Dawid,Fri Oct 18 17:40:25 2019,Div coordinates
+e72869c,Dawid,Fri Oct 18 11:27:57 2019,Validation for multiple exact relationships
+25fa804,QuatZo,Thu Oct 17 20:07:53 2019,Dark theme
+3d97e21,Dawid,Wed Oct 16 19:31:50 2019,Merge pull request #2 from QuatZo/Relationships_but_not_working_fine
+a519585,QuatZo,Wed Oct 16 19:30:45 2019,React's Relationships connected w/ Django's
+1157824,Parkitnyy,Tue Oct 15 21:02:52 2019,Relationships_or_whatever
+8403e7c,QuatZo,Tue Oct 15 19:42:19 2019,Added Relationship Modal w/ passed persons
+4e066fe,QuatZo,Tue Oct 15 15:02:17 2019,Working Date &  Fields Validation
+5e6604f,MilordMorfin,Mon Oct 14 20:09:45 2019,Added datepicker to nfo
+b5f265e,MilordMorfin,Mon Oct 14 20:03:57 2019,Birth date part1
+63afc76,MilordMorfin,Mon Oct 14 16:31:37 2019,Added sex and birthplace
+54ce476,Dawid,Mon Oct 14 12:07:28 2019,Fixed Two Active Persons
+58e48e6,QuatZo,Sun Oct 13 19:31:41 2019,Two active persons
+99e1a7d,Dawid,Sat Oct 12 16:10:58 2019,Merge pull request #1 from QuatZo/Select-living-style
+1166fcb,QuatZo,Sat Oct 12 16:10:03 2019,Lifestyle (select)
+f714fc3,MilordMorfin,Sat Oct 12 14:02:57 2019,Change selecting
+776c464,Parkitnyy,Sat Oct 12 12:12:47 2019,Select_of_choices_life
+ef9fa39,MilordMorfin,Thu Oct 10 18:54:51 2019,Draggable frames
+f6b389a,QuatZo,Thu Oct 10 15:14:12 2019,Added person card
+8bf6fd3,MilordMorfin,Wed Oct 9 21:32:42 2019,Improved batch script
+4137566,QuatZo,Wed Oct 9 21:26:53 2019,Familytree Person
+4672c5c,QuatZo,Tue Oct 8 19:36:42 2019,Django w/ REST + React Init
+a072d83,QuatZo,Mon Oct 7 20:51:57 2019,Initial commit

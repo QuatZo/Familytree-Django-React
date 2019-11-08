@@ -236,9 +236,6 @@
       render() {
         return (
           <React.Fragment>
-            <button onClick={this.createItem} className="btn btn-primary">
-              Create Person
-            </button>
             <div className="contentPerson">
               {this.renderItems()}
               {this.state.relationships.length > 0 ? this.state.relationships : null}
@@ -258,6 +255,9 @@
                 />
               ) : null}
             </div>
+            <button onClick={this.createItem} className="btn btn-danger btn-circle btn-xl">
+              <i className="fas fa-plus"></i>
+            </button>
           </React.Fragment>
         );
       }

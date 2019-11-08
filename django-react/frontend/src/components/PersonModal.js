@@ -82,7 +82,7 @@
                 <FormGroup>
                   <Label for="birth_date">Birth Date</Label><br />
                   <DatePicker 
-                  className="form-control"
+                    className="form-control"
                     name="birth_date"
                     value={this.state.activeItem.birth_date}
                     onChange={ this.handleChangeDate} />
