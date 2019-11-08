@@ -63,7 +63,7 @@
               // not working, because Draggable handles the onDrag event
               onDrag={this.renderRelationship}
               className={"person id_" + this.props.person.id + " " + (this.props.activePersons.includes(this.props.person.id)?"active":"inactive") +  " border rounded"}
-              onClick={() => this.props.setActivePerson(this.props.person.id)}
+              onDoubleClick={() => this.props.setActivePerson(this.props.person.id)}
             >
               <img src="https://live.staticflickr.com/7038/6944665187_b8cd703bc2.jpg" 
               draggable="false"

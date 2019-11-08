@@ -209,7 +209,7 @@
             }
             this.setState({
               relationships: (final.map(item => (
-                <svg height="1080" width="1920">
+                <React.Fragment>
                   <polyline 
                   id={"path_" + item.id1 + "_" + item.id2}
                   points={Math.round(item.x1) + " " + Math.round(item.y1) +
@@ -226,7 +226,7 @@
                   className="error">
                     Here will be the relationship name
                   </text>
-                </svg>
+                </React.Fragment>
                 )
               )
             )});
@@ -238,7 +238,9 @@
           <React.Fragment>
             <div className="contentPerson">
               {this.renderItems()}
-              {this.state.relationships.length > 0 ? this.state.relationships : null}
+              <svg height="1080" width="1920">
+                {this.state.relationships.length > 0 ? this.state.relationships : null}
+              </svg>
               {this.state.modal ? (
                 <ModalPerson
                  activeItem={this.state.activeItem}
