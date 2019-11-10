@@ -19,7 +19,7 @@
         this.state = { 
           personList: this.props.personList,
           activePersons: this.props.activePersons,
-          relationship_choices: ""
+          relationship_choices: 'father'
         };
       }
       handleChange = (e) => {
@@ -47,7 +47,7 @@
                     name = "relationship_choices"
                     onChange={this.handleChange}
                   >
-                    <option value="father">Father</option>
+                    <option value="father" selected>Father</option>
                     <option value="mother">Mother</option>
                     <option value="brother/sister">Brother or Sister</option>
                   </select>

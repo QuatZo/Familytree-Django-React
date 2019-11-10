@@ -195,17 +195,19 @@
       renderRelationships = () => {
           var final = [];
           var foot = [];
+          var relationships = [];
           this.getRelationships().then(data => {
             data.map(relationship => {
               this.state.personClassCoordinates.map(person => {
                 if(relationship.id_1 === person.id || relationship.id_2 === person.id){
                   foot.push(person);
+                  relationships.push(relationship.relationships);
                 }
               });
             });
           }).then(() => {
             for (var i = 0; i<foot.length; i+=2){
-              final.push({id1: foot[i].id, id2: foot[i+1].id, x1: foot[i].screen.x, y1: foot[i].screen.y, x2: foot[i+1].screen.x, y2: foot[i+1].screen.y});
+              final.push({relationship: relationships[i], id1: foot[i].id, id2: foot[i+1].id, x1: foot[i].screen.x, y1: foot[i].screen.y, x2: foot[i+1].screen.x, y2: foot[i+1].screen.y});
             }
             this.setState({
               relationships: (final.map(item => (
@@ -223,8 +225,10 @@
                   <text 
                   x={(Math.round(item.x1) + Math.round(item.x2))/2} 
                   y={Math.round((Math.round(item.y1) + Math.round(item.y2))/2) - 5} 
-                  className="error">
-                    Here will be the relationship name
+                  className="error"
+                  // there should be color the same as line color
+                  fill="white">
+                    {item.relationship}
                   </text>
                 </React.Fragment>
                 )
