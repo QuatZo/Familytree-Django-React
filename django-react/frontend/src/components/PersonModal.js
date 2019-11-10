@@ -85,7 +85,11 @@
                     className="form-control"
                     name="birth_date"
                     value={this.state.activeItem.birth_date}
-                    onChange={ this.handleChangeDate} />
+                    onChange={ this.handleChangeDate} 
+                    peekNextMonth
+                    showMonthDropdown
+                    showYearDropdown
+                    dropdownMode="select"/>
                 </FormGroup>
                 <FormGroup>
                   <Label for="status_choices">Status of life</Label>
