@@ -92,6 +92,7 @@
                 exists = true;
             })
             if(!exists) this.toggleRelationship();
+            this.setState({activePersons: []});
             // else - delete/edit relationship OR if above toggle 
             });
           }
