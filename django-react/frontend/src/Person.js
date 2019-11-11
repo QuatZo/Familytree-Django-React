@@ -42,8 +42,27 @@
           .then(() => this.props.refresh());
       };
 
-      renderRelationship = item => {
-        this.props.getPersonCoordinates(item)
+      renderRelationship = e => {
+        var idPerson = -1;
+        e.nativeEvent.path.map(item =>{
+          if(!isNaN(parseInt(item.id))){
+            idPerson = item.id;
+          }
+        })
+        var persons = Array.from(document.querySelectorAll("div.person"));
+        for(var i = 0; i < persons.length; i++){
+          var person = document.getElementById(persons[i].classList[1].split("_").pop());
+          if(person.id === idPerson){
+            //var personCoordinates = person.getBoundingClientRect();
+            console.log(person.offsetLeft)
+            person.style.transform = "translate(" + (this.props.person.x - person.offsetLeft + 5) + "px, " + (this.props.person.y - person.offsetTop + 5) + "px)"
+            break;
+            // array.push({id: idPerson, 
+            //   screen: {x: personCoordinates.left + personCoordinates.width / 2, y: personCoordinates.top + personCoordinates.height / 2}
+            // })
+          }
+        }
+        this.props.getPersonCoordinates(e)
         this.props.renderRelationships()
       }
 
