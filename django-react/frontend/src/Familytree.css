@@ -21,15 +21,25 @@
   color: #09d3ac;
 }
 
+.personcontainer{
+  display: inline-block;
+  width: 13%;
+  position: absolute;
+  color: white;
+  z-index: 1;
+  visibility: hidden;
+}
+
 .person{
   display: inline-block;
   margin: 5px;
-  width: 12%;
-  position: relative;
+  width: 100%;
+  position: absolute;
   padding: 5px;
   background: #262626;
   color: white;
   z-index: 1;
+  visibility: visible !important;
 }
 
 .active{
@@ -66,6 +76,7 @@ svg{
   border-radius: 35px;
   font-size: 24px;
   line-height: 1.33;
+  z-index: 99;
 }
 
 .btn-circle {
@@ -79,4 +90,5 @@ svg{
   position: fixed;
   bottom: 10px;
   right: 10px;
+  z-index: 99;
 }

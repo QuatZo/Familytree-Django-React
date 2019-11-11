@@ -28,8 +28,10 @@
           personList: [],
           activePersons: [],
           personClassCoordinates: [],
-          personClassCoordinatesOld: [],
+          //personClassCoordinatesOld: [],
           relationships: [],
+          hasPersonCoords: false,
+          personSize: [],
         };
       }  
 
@@ -51,14 +53,14 @@
         this.renderRelationships();
       }
 
-      componentDidUpdate(){
+      /* componentDidUpdate(){
         if(this.state.personClassCoordinates !== this.state.personClassCoordinatesOld){
           this.renderRelationships();
           this.setState({
             personClassCoordinatesOld: this.state.personClassCoordinates
           })
         }
-      }
+      } */
 
       refreshList = () => {
         axios
@@ -135,11 +137,9 @@
         const newItems = this.state.personList;
         return newItems.map(item => (
           <Person 
+            key={item.id}
             person={item}
             activePersons={this.state.activePersons}
-            getPersonCoordinates={this.getPersonCoordinates.bind(this)}
-            renderRelationships={this.renderRelationships.bind(this)}
-            coordinates={this.coordinates.bind(this)}
             refresh={this.refreshList.bind(this)}
             setActivePerson={this.setActive.bind(this)}
           />
@@ -171,27 +171,6 @@
         const item = { first_name: "", last_name: "", birth_date: "", status_choices: 'living', sex_choices: 'male', birth_place: ""};
         this.setState({ activeItem: item, modal: !this.state.modal });
       };
-       
-      getPersonCoordinates(e){
-        var array = [...this.state.personClassCoordinates];
-        var idPerson = -1;
-        e.nativeEvent.path.map(item =>{
-          if(!isNaN(parseInt(item.id))){
-            idPerson = item.id;
-          }
-        })
-        var persons = Array.from(document.querySelectorAll("div.person"));
-        for(var i = 0; i < persons.length; i++){
-          var person = document.getElementById(persons[i].classList[1].split("_").pop());
-          if(person.id === idPerson){
-            var personCoordinates = person.getBoundingClientRect();
-            array.push({id: idPerson, 
-              screen: {x: personCoordinates.left + personCoordinates.width / 2, y: personCoordinates.top + personCoordinates.height / 2}
-            })
-          }
-        }
-        this.setState({personClassCoordinates: array});
-      }
 
       renderRelationships = () => {
           var final = [];
@@ -200,7 +179,7 @@
           this.getRelationships().then(data => {
             data.map(relationship => {
               this.state.personClassCoordinates.map(person => {
-                if(relationship.id_1 === person.id || relationship.id_2 === person.id){
+                if(parseInt(relationship.id_1) === parseInt(person.id) || parseInt(relationship.id_2) === parseInt(person.id)){
                   foot.push(person);
                   relationships.push(relationship.relationships);
                 }
@@ -208,11 +187,20 @@
             });
           }).then(() => {
             for (var i = 0; i<foot.length; i+=2){
-              final.push({relationship: relationships[i], id1: foot[i].id, id2: foot[i+1].id, x1: foot[i].screen.x, y1: foot[i].screen.y, x2: foot[i+1].screen.x, y2: foot[i+1].screen.y});
+              final.push({
+                relationship: relationships[i], 
+                id1: foot[i].id, 
+                id2: foot[i+1].id, 
+                x1: foot[i].screen.x + this.state.personSize.width / 2, 
+                y1: foot[i].screen.y + this.state.personSize.height / 2, 
+                x2: foot[i+1].screen.x + this.state.personSize.width / 2, 
+                y2: foot[i+1].screen.y + this.state.personSize.height / 2});
             }
             this.setState({
               relationships: (final.map(item => (
-                <React.Fragment>
+                <React.Fragment
+                key={"fragment_" + item.id1 + "_" + item.id2}
+                >
                   <polyline 
                   id={"path_" + item.id1 + "_" + item.id2}
                   points={Math.round(item.x1) + " " + Math.round(item.y1) +
@@ -238,14 +226,53 @@
           });
       }
 
+      getCoordinates() {
+        var personList = [...this.state.personList]
+        var personCoords = [...this.state.personClassCoordinates]
+        var persons = Array.from(document.querySelectorAll("div.person"));
+        personList.map(person => {
+          for(var i = 0; i < persons.length; i++){
+            if(parseInt(person.id) !== parseInt(persons[i].id)){
+              continue;
+            }            
+            var personHtml = document.getElementById(persons[i].classList[1].split("_").pop());
+            
+            personHtml.style.transform = "translate(" + (person.x - personHtml.offsetLeft + 5) + "px, " + (person.y - personHtml.offsetTop + 5) + "px)"
+            var personCoordinates = personHtml.getBoundingClientRect();
+            if(typeof personCoords !== undefined){
+              if(personCoords.length === 0){
+                personCoords.push({id: person.id, screen: {x: person.x + personCoordinates.width / 2, y: person.y + personCoordinates.height / 2}});
+                break;
+              }
+              var alreadyHasThisPerson = false
+              for(var j = 0; j < personCoords.length; j++){
+                if(personCoords[j].id === person.id){
+                  personCoords[j].screen = {x: person.x + personCoordinates.width / 2, y: person.y + personCoordinates.height / 2}
+                  alreadyHasThisPerson = true;
+                }
+              }
+              if(!alreadyHasThisPerson){
+                personCoords.push({id: person.id, screen: {x: person.x, y: person.y}});
+              }
+            }
+            this.setState({
+              hasPersonCoords: true,
+              personClassCoordinates: personCoords,
+              personSize: {width: personCoordinates.width, height: personCoordinates.height}
+            }, () => this.renderRelationships())
+          }
+        })
+      }
+
       render() {
         return (
           <React.Fragment>
             <div className="contentPerson">
-              {this.renderItems()}
               <svg height="1080" width="1920">
                 {this.state.relationships.length > 0 ? this.state.relationships : null}
               </svg>
+              {this.renderItems()}
+              {this.state.hasPersonCoords ? null: this.getCoordinates()}
               {this.state.modal ? (
                 <ModalPerson
                  activeItem={this.state.activeItem}
