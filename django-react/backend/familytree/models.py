@@ -23,7 +23,7 @@ class FamilytreePerson(models.Model):
     unknown = 'unknown'
     
     status_choices = [(living, 'living'),(deceased,'deceased'),(unknown,'unknown')]
-    status_choices = models.CharField(max_length = 2,choices = status_choices, default = living)
+    status_choices = models.CharField(max_length = 35,choices = status_choices, default = living)
 
     male = 'male'
     female = 'female'
