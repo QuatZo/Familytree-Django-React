@@ -7,6 +7,7 @@
     import Person from "./Person";
     import ModalRelationship from "./components/RelationshipModal";
     import ModalPerson from "./components/PersonModal";
+
     
     import './Familytree.css';
     import 'react-datepicker/dist/react-datepicker.css';
@@ -25,20 +26,20 @@
             birth_place: '',
             relationship_choices: 'father'
           },
-          personList: [],
+          personList: this.props.personList,
           activePersons: [],
           personClassCoordinates: [],
           //personClassCoordinatesOld: [],
-          relationshipList: [],
+          relationshipList: this.props.relationshipList,
           personSize: [],
           init: false
         };
       }  
 
-      componentDidMount() {
+      /* componentDidMount() {
         this.refreshPersonList();
         this.refreshRelationshipList();
-      }
+      } */
 
       refreshPersonList = () => {
         axios
@@ -218,17 +219,20 @@
       renderRelationships = () => {
           var relationshipPairList = [];
           var relationshipPersonList = [];
+          var relationshipsNames = [];
           var relationshipList = [...this.state.relationshipList]
           relationshipList.map(relationship => {
             this.state.personClassCoordinates.map(person => {
               if(parseInt(relationship.id_1) === parseInt(person.id) || parseInt(relationship.id_2) === parseInt(person.id)){
                 relationshipPersonList.push(person);
+                relationshipsNames.push(relationship.relationships);
               }
             });
           });
 
           for (var i = 0; i<relationshipPersonList.length; i+=2){
             relationshipPairList.push({ 
+              relationship: relationshipsNames[i],
               id1: relationshipPersonList[i].id, 
               id2: relationshipPersonList[i+1].id, 
               x1: relationshipPersonList[i].screen.x + this.state.personSize.width / 2, 
@@ -287,7 +291,7 @@
               <svg height="1080" width="1920">
                 {this.state.relationships}
               </svg>
-              {this.renderItems()}              
+              {this.renderItems()}     
               {this.state.modal ? (
                 <ModalPerson
                  activeItem={this.state.activePersonData}
