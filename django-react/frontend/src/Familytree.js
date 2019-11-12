@@ -16,7 +16,7 @@
         super(props);
         this.state = {
           viewCompleted: false,
-          activeItem: {
+          activePersonData: {
             first_name: '',
             last_name: '',
             birth_date: '',
@@ -28,53 +28,172 @@
           personList: [],
           activePersons: [],
           personClassCoordinates: [],
-          personClassCoordinatesOld: [],
-          relationships: [],
+          //personClassCoordinatesOld: [],
+          relationshipList: [],
+          personSize: [],
+          init: false
         };
       }  
 
-      handleSubmit = item => {
-        this.toggle();
+      componentDidMount() {
+        this.refreshPersonList();
+        this.refreshRelationshipList();
+      }
+
+      refreshPersonList = () => {
+        axios
+          .get("http://localhost:8000/api/familytreepersons/")
+          .then(res => this.setState({ personList: res.data }))
+          .then(() => this.getCoordinates())
+          .catch(err => console.log(err));
+      };
+
+      refreshRelationshipList = () => {
+        axios
+          .get("http://localhost:8000/api/familytreerelationship/")
+          .then(res => this.setState({ relationshipList: res.data }))
+          .then(() => this.renderRelationships())
+          .catch(err => console.log(err));
+      };
+
+      togglePersonModal = () => {
+        this.setState({ modal: !this.state.modal });
+      };
+
+      toggleRelationshipModal = () => {
+        this.setState({ ModalRelationship: !this.state.ModalRelationship });
+      };
+
+      handleSubmitPerson = item => {
+        this.togglePersonModal();
         if (item.id) {
           axios
             .put(`http://localhost:8000/api/familytreepersons/${item.id}/`, item)
-            .then(() => this.refreshList());
+            .then(() => this.refreshPersonList());
           return;
         }
         axios
           .post("http://localhost:8000/api/familytreepersons/", item)
-          .then(() => this.refreshList());
+          .then(() => this.refreshPersonList());
       };
 
-      componentDidMount() {
-        this.refreshList();
-        this.renderRelationships();
-      }
+      handleSubmitRelationship = item => {
+        this.toggleRelationshipModal();
+        if (item.id) {
+          axios
+            .put(`http://localhost:8000/api/familytreerelationship/${item.id}/`, item)
+            .then(() => this.refreshRelationshipList());
+          return;
+        }
+        axios
+          .post("http://localhost:8000/api/familytreerelationship/", item)
+          .then(() => this.refreshRelationshipList());
+      };
+      
+      createPerson = () => {
+        const item = { first_name: "", last_name: "", birth_date: "", status_choices: 'living', sex_choices: 'male', birth_place: ""};
+        this.setState({ activeItem: item, modal: !this.state.modal });
+      };
 
-      componentDidUpdate(){
-        if(this.state.personClassCoordinates !== this.state.personClassCoordinatesOld){
-          this.renderRelationships();
+      getCoordinates() {
+        if(this.state.init){
+          this.getCoordinatesInitTrue();
+        }
+        else{
           this.setState({
-            personClassCoordinatesOld: this.state.personClassCoordinates
+            init: true
           })
+          this.getCoordinatesInitFalse();
         }
       }
 
-      refreshList = () => {
-        axios
-          .get("http://localhost:8000/api/familytreepersons/")
-          .then(res => this.setState({ personList: res.data }))
-          .catch(err => console.log(err));
-      };
-      
-      async getRelationships(){
-        const res = await axios
-          .get("http://localhost:8000/api/familytreerelationship/");
-        return res.data;
-      } 
-      
-      setActive(id) {
+      getCoordinatesInitTrue(){
+        var personList = [...this.state.personList]
+        var personListCoords = [...this.state.personClassCoordinates]
+        var personListHTML = Array.from(document.querySelectorAll("div.person"));
+
+        personList.map(person => {
+          for(var i = 0; i < personListHTML.length; i++){
+            if(parseInt(person.id) !== parseInt(personListHTML[i].id)){
+              continue;
+            }            
+            var personHTML = document.getElementById(personListHTML[i].classList[1].split("_").pop());
+            
+            var personCoordinates = personHTML.getBoundingClientRect();
+            var personParentCoords = personHTML.parentElement.style.transform
+            var firstPx = personParentCoords.indexOf("px")
+            var personParentX = parseInt(personParentCoords.slice(10, firstPx))
+            var personParentY = personParentCoords.slice(firstPx + 4, personParentCoords.length)
+            personParentY = parseInt(personParentY.slice(0, personParentY.indexOf("px")))
+
+            if(typeof personListCoords !== undefined){
+              if(personListCoords.length === 0){
+                personListCoords.push({id: person.id, screen: {x: person.x + personParentX, y: person.y + personParentY}});
+                break;
+              }
+              var alreadyHasThisPerson = false
+              for(var j = 0; j < personListCoords.length; j++){
+                if(personListCoords[j].id === person.id){
+                  personListCoords[j].screen = {x: person.x + personParentX, y: person.y + personParentY}
+                  alreadyHasThisPerson = true;
+                }
+              }
+              if(!alreadyHasThisPerson){
+                personListCoords.push({id: person.id, screen: {x: person.x + personParentX, y: person.y + personParentY}});
+              }
+            }
+            this.setState({
+              personClassCoordinates: personListCoords,
+              personSize: {width: personCoordinates.width, height: personCoordinates.height}
+            })
+          }
+        })
+      }
+
+      getCoordinatesInitFalse(){
+        var personList = [...this.state.personList]
+        var personListCoords = [...this.state.personClassCoordinates]
+        var personListHTML = Array.from(document.querySelectorAll("div.person"));
+
+        personList.map(person => {
+          for(var i = 0; i < personListHTML.length; i++){
+            if(parseInt(person.id) !== parseInt(personListHTML[i].id)){
+              continue;
+            }            
+            var personHTML = document.getElementById(personListHTML[i].classList[1].split("_").pop());
+            
+            personHTML.style.transform = "translate(" + (person.x - personHTML.offsetLeft + 5) + "px, " + (person.y - personHTML.offsetTop + 5) + "px)"
+            
+            var personCoordinates = personHTML.getBoundingClientRect();
+            if(typeof personListCoords !== undefined){
+              if(personListCoords.length === 0){
+                personListCoords.push({id: person.id, screen: {x: person.x + personCoordinates.width / 2, y: person.y + personCoordinates.height / 2}});
+                break;
+              }
+              var alreadyHasThisPerson = false
+              for(var j = 0; j < personListCoords.length; j++){
+                if(personListCoords[j].id === person.id){
+                  personListCoords[j].screen = {x: person.x + personCoordinates.width / 2, y: person.y + personCoordinates.height / 2}
+                  alreadyHasThisPerson = true;
+                }
+              }
+              if(!alreadyHasThisPerson){
+                personListCoords.push({id: person.id, screen: {x: person.x, y: person.y}});
+              }
+            }
+            this.setState({
+              hasPersonCoords: true,
+              personClassCoordinates: personListCoords,
+              personSize: {width: personCoordinates.width, height: personCoordinates.height}
+            })
+          }
+        })
+      }
+
+      setActivePerson(id) {
         var array = [...this.state.activePersons];
+        var relationshipList = [...this.state.relationshipList]
+
           if(array.includes(id)){
             var index = array.indexOf(id);
             array.splice(index, 1);
@@ -86,183 +205,106 @@
               array.splice(0, 1);
           if(array.length === 2){
             var exists = false;
-            this.getRelationships().then(data => {
-              data.map(item => {
+            relationshipList.map(item => {
               if(array.includes(parseInt(item.id_1)) && array.includes(parseInt(item.id_2)))
                 exists = true;
             })
-            if(!exists) this.toggleRelationship();
-            this.setState({activePersons: []});
+            if(!exists) this.toggleRelationshipModal();
             // else - delete/edit relationship OR if above toggle 
-            });
           }
           this.setState({activePersons: array});
       }
 
-      coordinates(e) {
-        var coords = [...this.state.personClassCoordinates];
-
-        e.nativeEvent.path.map(item =>{
-          if(item.className !== undefined && item.className.includes("person")){
-            for(var i = 0; i < coords.length; i++){
-              // if it's the whole person div
-              if (coords[i].id === item.id){
-                // take the transform value from style (draggable component)
-                var transform = item.style.transform.toString();
-
-                var startX = transform.indexOf("(") + 1;
-                var endX = transform.indexOf(",") - 2;
-                var x = parseInt(transform.substring(startX, endX));
-
-                var startY = transform.indexOf(",") + 2;
-                var endY = transform.indexOf(")") - 2;
-                var y = parseInt(transform.substring(startY, endY));
-                var newX = item.offsetLeft + item.clientWidth/2 + x;
-                var newY = item.offsetTop + item.clientHeight/2 + y;
-
-                // set the middle of the div as: corner of the div, relatively to body + half of the div width + translation value from style (draggable component)
-                if(coords[i].screen.x !== newX || coords[i].screen.y !== newY){
-                  coords[i].screen = {x: newX, y: newY};
-                }
+      renderRelationships = () => {
+          var relationshipPairList = [];
+          var relationshipPersonList = [];
+          var relationshipList = [...this.state.relationshipList]
+          relationshipList.map(relationship => {
+            this.state.personClassCoordinates.map(person => {
+              if(parseInt(relationship.id_1) === parseInt(person.id) || parseInt(relationship.id_2) === parseInt(person.id)){
+                relationshipPersonList.push(person);
               }
-            }
+            });
+          });
+
+          for (var i = 0; i<relationshipPersonList.length; i+=2){
+            relationshipPairList.push({ 
+              id1: relationshipPersonList[i].id, 
+              id2: relationshipPersonList[i+1].id, 
+              x1: relationshipPersonList[i].screen.x + this.state.personSize.width / 2, 
+              y1: relationshipPersonList[i].screen.y + this.state.personSize.height / 2, 
+              x2: relationshipPersonList[i+1].screen.x + this.state.personSize.width / 2, 
+              y2: relationshipPersonList[i+1].screen.y + this.state.personSize.height / 2});
           }
-        });
-        this.setState({personClassCoordinates: coords});
+          this.setState({
+            relationships: (relationshipPairList.map(item => (
+              <React.Fragment
+              key={"fragment_" + item.id1 + "_" + item.id2}
+              >
+                <polyline 
+                id={"path_" + item.id1 + "_" + item.id2}
+                points={Math.round(item.x1) + " " + Math.round(item.y1) +
+                ", " + Math.round(item.x1) + " " + Math.round((Math.round(item.y1) + Math.round(item.y2))/2) +
+                ", " + Math.round(item.x2) + " " + Math.round((Math.round(item.y1) + Math.round(item.y2))/2) +
+                ", " + Math.round(item.x2) + " " + Math.round(item.y2)} 
+                stroke="red" 
+                strokeWidth="3" 
+                fill="none"/>
+
+                <text 
+                x={(Math.round(item.x1) + Math.round(item.x2))/2} 
+                y={Math.round((Math.round(item.y1) + Math.round(item.y2))/2) - 5} 
+                className="error"
+                // there should be color the same as line color
+                fill="white">
+                  {item.relationship}
+                </text>
+              </React.Fragment>
+              )
+            )
+          )});
       }
 
       renderItems = () => {
         const newItems = this.state.personList;
         return newItems.map(item => (
           <Person 
+            key={item.id}
             person={item}
             activePersons={this.state.activePersons}
-            getPersonCoordinates={this.getPersonCoordinates.bind(this)}
+            refresh={this.refreshPersonList.bind(this)}
+            setActivePerson={this.setActivePerson.bind(this)}
+            getCoordinates={this.getCoordinatesInitTrue.bind(this)}
             renderRelationships={this.renderRelationships.bind(this)}
-            coordinates={this.coordinates.bind(this)}
-            refresh={this.refreshList.bind(this)}
-            setActivePerson={this.setActive.bind(this)}
           />
         ));
       };
-
-      toggle = () => {
-        this.setState({ modal: !this.state.modal });
-      };
-
-      toggleRelationship = () => {
-        this.setState({ ModalRelationship: !this.state.ModalRelationship });
-      };
-
-      handleSubmitRelationship = item => {
-        this.toggleRelationship();
-        if (item.id) {
-          axios
-            .put(`http://localhost:8000/api/familytreerelationship/${item.id}/`, item)
-            .then(() => this.renderRelationships());
-          return;
-        }
-        axios
-          .post("http://localhost:8000/api/familytreerelationship/", item)
-          .then(() => this.renderRelationships());
-      };
-      
-      createItem = () => {
-        const item = { first_name: "", last_name: "", birth_date: "", status_choices: 'living', sex_choices: 'male', birth_place: ""};
-        this.setState({ activeItem: item, modal: !this.state.modal });
-      };
-       
-      getPersonCoordinates(e){
-        var array = [...this.state.personClassCoordinates];
-        var idPerson = -1;
-        e.nativeEvent.path.map(item =>{
-          if(!isNaN(parseInt(item.id))){
-            idPerson = item.id;
-          }
-        })
-        var persons = Array.from(document.querySelectorAll("div.person"));
-        for(var i = 0; i < persons.length; i++){
-          var person = document.getElementById(persons[i].classList[1].split("_").pop());
-          if(person.id === idPerson){
-            var personCoordinates = person.getBoundingClientRect();
-            array.push({id: idPerson, 
-              screen: {x: personCoordinates.left + personCoordinates.width / 2, y: personCoordinates.top + personCoordinates.height / 2}
-            })
-          }
-        }
-        this.setState({personClassCoordinates: array});
-      }
-
-      renderRelationships = () => {
-          var final = [];
-          var foot = [];
-          var relationships = [];
-          this.getRelationships().then(data => {
-            data.map(relationship => {
-              this.state.personClassCoordinates.map(person => {
-                if(relationship.id_1 === person.id || relationship.id_2 === person.id){
-                  foot.push(person);
-                  relationships.push(relationship.relationships);
-                }
-              });
-            });
-          }).then(() => {
-            for (var i = 0; i<foot.length; i+=2){
-              final.push({relationship: relationships[i], id1: foot[i].id, id2: foot[i+1].id, x1: foot[i].screen.x, y1: foot[i].screen.y, x2: foot[i+1].screen.x, y2: foot[i+1].screen.y});
-            }
-            this.setState({
-              relationships: (final.map(item => (
-                <React.Fragment>
-                  <polyline 
-                  id={"path_" + item.id1 + "_" + item.id2}
-                  points={Math.round(item.x1) + " " + Math.round(item.y1) +
-                  ", " + Math.round(item.x1) + " " + Math.round((Math.round(item.y1) + Math.round(item.y2))/2) +
-                  ", " + Math.round(item.x2) + " " + Math.round((Math.round(item.y1) + Math.round(item.y2))/2) +
-                  ", " + Math.round(item.x2) + " " + Math.round(item.y2)} 
-                  stroke="red" 
-                  strokeWidth="3" 
-                  fill="none"/>
-
-                  <text 
-                  x={(Math.round(item.x1) + Math.round(item.x2))/2} 
-                  y={Math.round((Math.round(item.y1) + Math.round(item.y2))/2) - 5} 
-                  className="error"
-                  // there should be color the same as line color
-                  fill="white">
-                    {item.relationship}
-                  </text>
-                </React.Fragment>
-                )
-              )
-            )});
-          });
-      }
 
       render() {
         return (
           <React.Fragment>
             <div className="contentPerson">
-              {this.renderItems()}
               <svg height="1080" width="1920">
-                {this.state.relationships.length > 0 ? this.state.relationships : null}
+                {this.state.relationships}
               </svg>
+              {this.renderItems()}              
               {this.state.modal ? (
                 <ModalPerson
-                 activeItem={this.state.activeItem}
-                 toggle={this.toggle}
-                 onSave={this.handleSubmit}
+                 activeItem={this.state.activePersonData}
+                 toggle={this.togglePersonModal}
+                 onSave={this.handleSubmitPerson}
                 />
               ) : null}
               {this.state.ModalRelationship ? (
                 <ModalRelationship
                   personList={this.state.personList}
                   activePersons={this.state.activePersons}
-                  toggle={this.toggleRelationship}
+                  toggle={this.toggleRelationshipModal}
                   onSave={this.handleSubmitRelationship}
                 />
               ) : null}
             </div>
-            <button onClick={this.createItem} className="btn btn-danger btn-circle btn-xl">
+            <button onClick={this.createPerson} className="btn btn-danger btn-circle btn-xl">
               <i className="fas fa-plus"></i>
             </button>
           </React.Fragment>

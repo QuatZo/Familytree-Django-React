@@ -46,8 +46,9 @@
                     className="form-control"
                     name = "relationship_choices"
                     onChange={this.handleChange}
+                    defaultValue="father"
                   >
-                    <option value="father" selected>Father</option>
+                    <option value="father">Father</option>
                     <option value="mother">Mother</option>
                     <option value="brother/sister">Brother or Sister</option>
                   </select>

@@ -1,5 +1,0 @@
-1. Dodaæ p³eæ (lista z wyborami)
-2. Miejsce urodzenia
-3. Status (¿ywy, zmar³y, nie wiadomo)
-4. Powi¹zania XD
-5. 
