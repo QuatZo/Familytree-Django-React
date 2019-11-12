@@ -23,8 +23,8 @@
 
 .personcontainer{
   display: inline-block;
-  width: 13%;
-  position: absolute;
+  width: 10%;
+  position: fixed;
   color: white;
   z-index: 1;
   visibility: hidden;
@@ -34,7 +34,7 @@
   display: inline-block;
   margin: 5px;
   width: 100%;
-  position: absolute;
+  position: fixed;
   padding: 5px;
   background: #262626;
   color: white;

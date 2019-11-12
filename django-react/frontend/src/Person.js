@@ -10,7 +10,9 @@
     class App extends Component {
       constructor(props) {
         super(props);
-        this.state = { };
+        this.state = {
+          dragging: false,
+         };
       }
 
       editItem = item => {
@@ -40,6 +42,27 @@
           .then(() => this.props.refresh());
       };
 
+
+      handleClick = e => {
+        if(e.type === "mousedown"){
+          this.setState({
+            dragging: true
+          })
+        }
+        else{
+          this.setState({
+            dragging: false
+          })
+        }
+      }
+
+      handleMovement(){
+        if(this.state.dragging){
+          this.props.getCoordinates()
+          this.props.renderRelationships()
+        }
+      }
+
       render() {
         // free movement -> delete grid from handlers
         const dragHandlers = {onStart: this.onStart, onStop: this.onStop, grid: [1, 1]};
@@ -55,9 +78,11 @@
               >
                 <div
                   id={this.props.person.id}
-                  //onMouseMove={this.props.coordinates}
                   className={"person id_" + this.props.person.id + " " + (this.props.activePersons.includes(this.props.person.id)?"active":"inactive") +  " border rounded"}
                   onDoubleClick={() => this.props.setActivePerson(this.props.person.id)}
+                  onMouseDown={this.handleClick.bind(this)}
+                  onMouseUp={this.handleClick.bind(this)}
+                  onMouseMove={this.handleMovement.bind(this)}
                 >
                   <img src="https://live.staticflickr.com/7038/6944665187_b8cd703bc2.jpg" 
                   draggable="false"
