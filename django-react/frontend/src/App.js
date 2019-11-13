@@ -35,6 +35,7 @@
         this.state = {
           personList: [],
           relationshipList: [],
+          relationships: [],
           loadingPersonList: undefined,
           donePersonList: undefined,
           loadingRelationshipList: undefined,

@@ -29,17 +29,16 @@
           personList: this.props.personList,
           activePersons: [],
           personClassCoordinates: [],
-          //personClassCoordinatesOld: [],
           relationshipList: this.props.relationshipList,
           personSize: [],
           init: false
         };
       }  
 
-      /* componentDidMount() {
-        this.refreshPersonList();
-        this.refreshRelationshipList();
-      } */
+      componentDidMount(){
+        console.log(this.state.init)
+        this.getCoordinates()
+      }
 
       refreshPersonList = () => {
         axios
@@ -186,7 +185,7 @@
               hasPersonCoords: true,
               personClassCoordinates: personListCoords,
               personSize: {width: personCoordinates.width, height: personCoordinates.height}
-            })
+            }, () => this.renderRelationships())
           }
         })
       }
@@ -278,7 +277,7 @@
             activePersons={this.state.activePersons}
             refresh={this.refreshPersonList.bind(this)}
             setActivePerson={this.setActivePerson.bind(this)}
-            getCoordinates={this.getCoordinatesInitTrue.bind(this)}
+            getCoordinates={this.getCoordinates.bind(this)}
             renderRelationships={this.renderRelationships.bind(this)}
           />
         ));
