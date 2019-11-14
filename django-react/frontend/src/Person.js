@@ -95,7 +95,7 @@
                     {this.props.person.first_name + ' ' + this.props.person.last_name}
                   </div> 
                   <div
-                    className={'buttons'}
+                    className={'personButtons'}
                   >
                     <button
                       onClick={() => this.editItem(this.props.person)}

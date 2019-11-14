@@ -7,7 +7,6 @@
     import axios from "axios";
     import FadeIn from "react-fade-in";
     import Lottie from "react-lottie";
-    import "bootstrap/dist/css/bootstrap.css";
     import * as stillLoadingData from "./stillloading.json";
     import * as doneLoadingData from "./doneloading.json";
     

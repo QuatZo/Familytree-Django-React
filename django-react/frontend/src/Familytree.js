@@ -36,7 +36,6 @@
       }  
 
       componentDidMount(){
-        console.log(this.state.init)
         this.getCoordinates()
       }
 
@@ -167,13 +166,13 @@
             var personCoordinates = personHTML.getBoundingClientRect();
             if(typeof personListCoords !== undefined){
               if(personListCoords.length === 0){
-                personListCoords.push({id: person.id, screen: {x: person.x + personCoordinates.width / 2, y: person.y + personCoordinates.height / 2}});
+                personListCoords.push({id: person.id, screen: {x: person.x, y: person.y}});
                 break;
               }
               var alreadyHasThisPerson = false
               for(var j = 0; j < personListCoords.length; j++){
                 if(personListCoords[j].id === person.id){
-                  personListCoords[j].screen = {x: person.x + personCoordinates.width / 2, y: person.y + personCoordinates.height / 2}
+                  personListCoords[j].screen = {x: person.x, y: person.y}
                   alreadyHasThisPerson = true;
                 }
               }
@@ -187,6 +186,30 @@
               personSize: {width: personCoordinates.width, height: personCoordinates.height}
             }, () => this.renderRelationships())
           }
+        })
+      }
+
+      resetCoords(){
+        window.location.reload(); 
+      }
+      
+      saveCoords(){
+        var personListHTML = Array.from(document.querySelectorAll("div.person"));
+        var personListCoords = [...this.state.personClassCoordinates]
+        personListHTML.map(item => {
+          var personNew = [];
+          axios
+          .get(`http://localhost:8000/api/familytreepersons/${item.id}/`, item)
+          .then(res => {
+            personNew = res.data;
+            personListCoords.map(coords => {
+            if(coords.id === res.data.id){
+              personNew.x = coords.screen.x;
+              personNew.y = coords.screen.y;
+            }
+            })
+          })
+          .then(() => axios.put(`http://localhost:8000/api/familytreepersons/${personNew.id}/`, personNew));
         })
       }
 
@@ -307,9 +330,17 @@
                 />
               ) : null}
             </div>
-            <button onClick={this.createPerson} className="btn btn-danger btn-circle btn-xl">
-              <i className="fas fa-plus"></i>
-            </button>
+            <div className="buttons">
+              <button onClick={this.resetCoords} className="btn btn-outline-danger btn-circle btn-xl">
+                <i className="fas fa-redo"></i>
+              </button>
+              <button onClick={this.saveCoords.bind(this)} className="btn btn-outline-info btn-circle btn-xl">
+                <i className="far fa-save"></i>
+              </button>
+              <button onClick={this.createPerson} className="btn btn-outline-success btn-circle btn-xl">
+                <i className="fas fa-plus"></i>
+              </button>
+            </div>
           </React.Fragment>
         );
       }
