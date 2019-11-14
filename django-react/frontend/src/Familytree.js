@@ -10,7 +10,6 @@
 
     
     import './Familytree.css';
-    import 'react-datepicker/dist/react-datepicker.css';
 
     class Familytree extends Component {    
       constructor(props) {

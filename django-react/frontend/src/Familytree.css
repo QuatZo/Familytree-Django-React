@@ -98,3 +98,7 @@ svg{
   right: 10px;
   z-index: 99;
 }
+
+.react-datepicker-wrapper{
+  width: 100%;
+}
