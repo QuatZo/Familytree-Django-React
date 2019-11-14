@@ -30,7 +30,8 @@
           personClassCoordinates: [],
           relationshipList: this.props.relationshipList,
           personSize: [],
-          init: false
+          init: false,
+          colorArray: [0, 32, 64, 96, 128, 160, 192, 224, 256]
         };
       }  
 
@@ -242,6 +243,7 @@
           var relationshipPersonList = [];
           var relationshipsNames = [];
           var relationshipList = [...this.state.relationshipList]
+          var randomColor = [...this.state.colorArray]
           relationshipList.map(relationship => {
             this.state.personClassCoordinates.map(person => {
               if(parseInt(relationship.id_1) === parseInt(person.id) || parseInt(relationship.id_2) === parseInt(person.id)){
@@ -272,7 +274,7 @@
                 ", " + Math.round(item.x1) + " " + Math.round((Math.round(item.y1) + Math.round(item.y2))/2) +
                 ", " + Math.round(item.x2) + " " + Math.round((Math.round(item.y1) + Math.round(item.y2))/2) +
                 ", " + Math.round(item.x2) + " " + Math.round(item.y2)} 
-                stroke="red" 
+                stroke={'rgb(' + randomColor[Math.floor(Math.random()*randomColor.length)] + ',' + randomColor[Math.floor(Math.random()*randomColor.length)] + ',' + randomColor[Math.floor(Math.random()*randomColor.length)] + ')'}
                 strokeWidth="3" 
                 fill="none"/>
 
