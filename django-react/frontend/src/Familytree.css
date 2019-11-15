@@ -21,42 +21,11 @@
   color: #09d3ac;
 }
 
-.personcontainer{
-  display: inline-block;
-  width: 10%;
-  position: fixed;
-  color: white;
-  z-index: 1;
-  visibility: hidden;
-}
-
-.person{
-  display: inline-block;
-  margin: 5px;
-  width: 100%;
-  position: fixed;
-  padding: 5px;
-  background: #262626;
-  color: white;
-  z-index: 1;
-  visibility: visible !important;
-}
 
 .active{
   border-color: #66ff66 !important;
 }
 
-.person img{
-  width: 100%;
-  border-color: #484848;
-}
-
-.name{
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 
 .error {
   border: 1px solid red;
@@ -87,8 +56,26 @@ svg{
   text-align: center;
   font-size: 12px;
   line-height: 1.42857;
+  z-index: 99;
+  margin: 2px;
+}
+
+.buttons{
+  display: inline-block;
   position: fixed;
   bottom: 10px;
   right: 10px;
   z-index: 99;
+}
+
+.react-datepicker-wrapper{
+  width: 100%;
+}
+
+.relationshipNames{
+color: blue;
+font-size: 1.5vw;
+font-family: fantasy;
+font-style: oblique;
+
 }

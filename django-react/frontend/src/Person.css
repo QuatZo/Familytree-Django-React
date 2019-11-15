@@ -1,0 +1,33 @@
+.person{
+    display: inline-block;
+    margin: 5px;
+    width: 100%;
+    position: fixed;
+    padding: 5px;
+    background: #262626;
+    color: white;
+    z-index: 1;
+    visibility: visible !important;
+  }
+
+.person img{
+    width: 100%;
+    border-color: #484848;
+  }
+
+.name{
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  
+.personcontainer{
+    display: inline-block;
+    width: 10%;
+    position: fixed;
+    color: white;
+    z-index: 1;
+    visibility: hidden;
+  }

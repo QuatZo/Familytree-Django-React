@@ -4,8 +4,7 @@
     import Draggable from 'react-draggable';
     import ModalPerson from "./components/PersonModal"
     import axios from "axios";
-	  //import './Person.css';
-    import './Familytree.css';
+	  import './Person.css';
 
     class App extends Component {
       constructor(props) {
@@ -37,6 +36,7 @@
       };
 
       handleDelete = item => {
+        this.props.deleteRelationships(item.id)
         axios
           .delete(`http://localhost:8000/api/familytreepersons/${item.id}`)
           .then(() => this.props.refresh());
@@ -95,7 +95,7 @@
                     {this.props.person.first_name + ' ' + this.props.person.last_name}
                   </div> 
                   <div
-                    className={'buttons'}
+                    className={'personButtons'}
                   >
                     <button
                       onClick={() => this.editItem(this.props.person)}

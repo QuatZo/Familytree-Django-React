@@ -7,9 +7,9 @@
     import Person from "./Person";
     import ModalRelationship from "./components/RelationshipModal";
     import ModalPerson from "./components/PersonModal";
+
     
     import './Familytree.css';
-    import 'react-datepicker/dist/react-datepicker.css';
 
     class Familytree extends Component {    
       constructor(props) {
@@ -25,19 +25,18 @@
             birth_place: '',
             relationship_choices: 'father'
           },
-          personList: [],
+          personList: this.props.personList,
           activePersons: [],
           personClassCoordinates: [],
-          //personClassCoordinatesOld: [],
-          relationshipList: [],
+          relationshipList: this.props.relationshipList,
           personSize: [],
-          init: false
+          init: false,
+          colorArray: [0, 32, 64, 96, 128, 160, 192, 224, 256]
         };
       }  
 
-      componentDidMount() {
-        this.refreshPersonList();
-        this.refreshRelationshipList();
+      componentDidMount(){
+        this.getCoordinates()
       }
 
       refreshPersonList = () => {
@@ -167,13 +166,13 @@
             var personCoordinates = personHTML.getBoundingClientRect();
             if(typeof personListCoords !== undefined){
               if(personListCoords.length === 0){
-                personListCoords.push({id: person.id, screen: {x: person.x + personCoordinates.width / 2, y: person.y + personCoordinates.height / 2}});
+                personListCoords.push({id: person.id, screen: {x: person.x, y: person.y}});
                 break;
               }
               var alreadyHasThisPerson = false
               for(var j = 0; j < personListCoords.length; j++){
                 if(personListCoords[j].id === person.id){
-                  personListCoords[j].screen = {x: person.x + personCoordinates.width / 2, y: person.y + personCoordinates.height / 2}
+                  personListCoords[j].screen = {x: person.x, y: person.y}
                   alreadyHasThisPerson = true;
                 }
               }
@@ -185,8 +184,32 @@
               hasPersonCoords: true,
               personClassCoordinates: personListCoords,
               personSize: {width: personCoordinates.width, height: personCoordinates.height}
-            })
+            }, () => this.renderRelationships())
           }
+        })
+      }
+
+      resetCoords(){
+        window.location.reload(); 
+      }
+      
+      saveCoords(){
+        var personListHTML = Array.from(document.querySelectorAll("div.person"));
+        var personListCoords = [...this.state.personClassCoordinates]
+        personListHTML.map(item => {
+          var personNew = [];
+          axios
+          .get(`http://localhost:8000/api/familytreepersons/${item.id}/`, item)
+          .then(res => {
+            personNew = res.data;
+            personListCoords.map(coords => {
+            if(coords.id === res.data.id){
+              personNew.x = coords.screen.x;
+              personNew.y = coords.screen.y;
+            }
+            })
+          })
+          .then(() => axios.put(`http://localhost:8000/api/familytreepersons/${personNew.id}/`, personNew));
         })
       }
 
@@ -218,17 +241,22 @@
       renderRelationships = () => {
           var relationshipPairList = [];
           var relationshipPersonList = [];
+          var relationshipsNames = [];
           var relationshipList = [...this.state.relationshipList]
+          var randomColor = [...this.state.colorArray]
           relationshipList.map(relationship => {
             this.state.personClassCoordinates.map(person => {
               if(parseInt(relationship.id_1) === parseInt(person.id) || parseInt(relationship.id_2) === parseInt(person.id)){
                 relationshipPersonList.push(person);
+                relationshipsNames.push(relationship.relationships);
               }
             });
           });
 
           for (var i = 0; i<relationshipPersonList.length; i+=2){
             relationshipPairList.push({ 
+              relationship: relationshipsNames[i],
+              id: i /2 ,
               id1: relationshipPersonList[i].id, 
               id2: relationshipPersonList[i+1].id, 
               x1: relationshipPersonList[i].screen.x + this.state.personSize.width / 2, 
@@ -236,33 +264,58 @@
               x2: relationshipPersonList[i+1].screen.x + this.state.personSize.width / 2, 
               y2: relationshipPersonList[i+1].screen.y + this.state.personSize.height / 2});
           }
+
+          var colorOfRelationship = []
+
+          relationshipPairList.map(() => (
+              colorOfRelationship.push('rgb(' + randomColor[Math.floor(Math.random()*randomColor.length)] + ',' + randomColor[Math.floor(Math.random()*randomColor.length)] + ',' + randomColor[Math.floor(Math.random()*randomColor.length)] + ')')
+          )
+          
+          )
+
           this.setState({
             relationships: (relationshipPairList.map(item => (
               <React.Fragment
               key={"fragment_" + item.id1 + "_" + item.id2}
               >
+                
                 <polyline 
                 id={"path_" + item.id1 + "_" + item.id2}
                 points={Math.round(item.x1) + " " + Math.round(item.y1) +
                 ", " + Math.round(item.x1) + " " + Math.round((Math.round(item.y1) + Math.round(item.y2))/2) +
                 ", " + Math.round(item.x2) + " " + Math.round((Math.round(item.y1) + Math.round(item.y2))/2) +
                 ", " + Math.round(item.x2) + " " + Math.round(item.y2)} 
-                stroke="red" 
+                stroke = {colorOfRelationship[item.id]}
                 strokeWidth="3" 
                 fill="none"/>
-
                 <text 
                 x={(Math.round(item.x1) + Math.round(item.x2))/2} 
                 y={Math.round((Math.round(item.y1) + Math.round(item.y2))/2) - 5} 
-                className="error"
+                className="relationshipNames"
                 // there should be color the same as line color
-                fill="white">
+                fill={colorOfRelationship[item.id]}>
                   {item.relationship}
                 </text>
               </React.Fragment>
               )
             )
           )});
+      }
+
+      deleteRelationships(id){
+        var relationships = [];
+        axios
+          .get("http://localhost:8000/api/familytreerelationship/")
+          .then(res => relationships = res.data )
+          .then(() => {
+            relationships.map(item => {
+              if(parseInt(id)===parseInt(item.id_1) || parseInt(id)===parseInt(item.id_2)){
+                axios
+                .delete(`http://localhost:8000/api/familytreerelationship/${item.id}`)
+                .then(() => this.refreshRelationshipList());
+              }
+            })
+          })
       }
 
       renderItems = () => {
@@ -274,8 +327,9 @@
             activePersons={this.state.activePersons}
             refresh={this.refreshPersonList.bind(this)}
             setActivePerson={this.setActivePerson.bind(this)}
-            getCoordinates={this.getCoordinatesInitTrue.bind(this)}
+            getCoordinates={this.getCoordinates.bind(this)}
             renderRelationships={this.renderRelationships.bind(this)}
+            deleteRelationships={this.deleteRelationships.bind(this)}
           />
         ));
       };
@@ -287,7 +341,7 @@
               <svg height="1080" width="1920">
                 {this.state.relationships}
               </svg>
-              {this.renderItems()}              
+              {this.renderItems()}     
               {this.state.modal ? (
                 <ModalPerson
                  activeItem={this.state.activePersonData}
@@ -304,9 +358,17 @@
                 />
               ) : null}
             </div>
-            <button onClick={this.createPerson} className="btn btn-danger btn-circle btn-xl">
-              <i className="fas fa-plus"></i>
-            </button>
+            <div className="buttons">
+              <button onClick={this.resetCoords} className="btn btn-outline-danger btn-circle btn-xl">
+                <i className="fas fa-redo"></i>
+              </button>
+              <button onClick={this.saveCoords.bind(this)} className="btn btn-outline-info btn-circle btn-xl">
+                <i className="far fa-save"></i>
+              </button>
+              <button onClick={this.createPerson} className="btn btn-outline-success btn-circle btn-xl">
+                <i className="fas fa-plus"></i>
+              </button>
+            </div>
           </React.Fragment>
         );
       }
