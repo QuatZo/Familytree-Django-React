@@ -37,6 +37,7 @@
       };
 
       handleDelete = item => {
+        this.props.deleteRelationships(item.id)
         axios
           .delete(`http://localhost:8000/api/familytreepersons/${item.id}`)
           .then(() => this.props.refresh());

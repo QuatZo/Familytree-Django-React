@@ -292,6 +292,22 @@
           )});
       }
 
+      deleteRelationships(id){
+        var relationships = [];
+        axios
+          .get("http://localhost:8000/api/familytreerelationship/")
+          .then(res => relationships = res.data )
+          .then(() => {
+            relationships.map(item => {
+              if(parseInt(id)===parseInt(item.id_1) || parseInt(id)===parseInt(item.id_2)){
+                axios
+                .delete(`http://localhost:8000/api/familytreerelationship/${item.id}`)
+                .then(() => this.refreshRelationshipList());
+              }
+            })
+          })
+      }
+
       renderItems = () => {
         const newItems = this.state.personList;
         return newItems.map(item => (
@@ -303,6 +319,7 @@
             setActivePerson={this.setActivePerson.bind(this)}
             getCoordinates={this.getCoordinates.bind(this)}
             renderRelationships={this.renderRelationships.bind(this)}
+            deleteRelationships={this.deleteRelationships.bind(this)}
           />
         ));
       };
