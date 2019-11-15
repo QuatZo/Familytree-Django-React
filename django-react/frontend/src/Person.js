@@ -4,8 +4,7 @@
     import Draggable from 'react-draggable';
     import ModalPerson from "./components/PersonModal"
     import axios from "axios";
-	  //import './Person.css';
-    import './Familytree.css';
+	  import './Person.css';
 
     class App extends Component {
       constructor(props) {

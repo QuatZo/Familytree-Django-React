@@ -256,6 +256,7 @@
           for (var i = 0; i<relationshipPersonList.length; i+=2){
             relationshipPairList.push({ 
               relationship: relationshipsNames[i],
+              id: i /2 ,
               id1: relationshipPersonList[i].id, 
               id2: relationshipPersonList[i+1].id, 
               x1: relationshipPersonList[i].screen.x + this.state.personSize.width / 2, 
@@ -263,27 +264,36 @@
               x2: relationshipPersonList[i+1].screen.x + this.state.personSize.width / 2, 
               y2: relationshipPersonList[i+1].screen.y + this.state.personSize.height / 2});
           }
+
+          var colorOfRelationship = []
+
+          relationshipPairList.map(() => (
+              colorOfRelationship.push('rgb(' + randomColor[Math.floor(Math.random()*randomColor.length)] + ',' + randomColor[Math.floor(Math.random()*randomColor.length)] + ',' + randomColor[Math.floor(Math.random()*randomColor.length)] + ')')
+          )
+          
+          )
+
           this.setState({
             relationships: (relationshipPairList.map(item => (
               <React.Fragment
               key={"fragment_" + item.id1 + "_" + item.id2}
               >
+                
                 <polyline 
                 id={"path_" + item.id1 + "_" + item.id2}
                 points={Math.round(item.x1) + " " + Math.round(item.y1) +
                 ", " + Math.round(item.x1) + " " + Math.round((Math.round(item.y1) + Math.round(item.y2))/2) +
                 ", " + Math.round(item.x2) + " " + Math.round((Math.round(item.y1) + Math.round(item.y2))/2) +
                 ", " + Math.round(item.x2) + " " + Math.round(item.y2)} 
-                stroke={'rgb(' + randomColor[Math.floor(Math.random()*randomColor.length)] + ',' + randomColor[Math.floor(Math.random()*randomColor.length)] + ',' + randomColor[Math.floor(Math.random()*randomColor.length)] + ')'}
+                stroke = {colorOfRelationship[item.id]}
                 strokeWidth="3" 
                 fill="none"/>
-
                 <text 
                 x={(Math.round(item.x1) + Math.round(item.x2))/2} 
                 y={Math.round((Math.round(item.y1) + Math.round(item.y2))/2) - 5} 
-                className="error"
+                className="relationshipNames"
                 // there should be color the same as line color
-                fill="white">
+                fill={colorOfRelationship[item.id]}>
                   {item.relationship}
                 </text>
               </React.Fragment>
