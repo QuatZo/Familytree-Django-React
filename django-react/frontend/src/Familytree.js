@@ -30,8 +30,7 @@
           personClassCoordinates: [],
           relationshipList: this.props.relationshipList,
           personSize: [],
-          init: false,
-          colorArray: [0, 32, 64, 96, 128, 160, 192, 224, 256]
+          reset: false,
         };
       }  
 
@@ -95,18 +94,6 @@
       };
 
       getCoordinates() {
-        if(this.state.init){
-          this.getCoordinatesInitTrue();
-        }
-        else{
-          this.setState({
-            init: true
-          })
-          this.getCoordinatesInitFalse();
-        }
-      }
-
-      getCoordinatesInitTrue(){
         var personList = [...this.state.personList]
         var personListCoords = [...this.state.personClassCoordinates]
         var personListHTML = Array.from(document.querySelectorAll("div.person"));
@@ -115,82 +102,83 @@
           for(var i = 0; i < personListHTML.length; i++){
             if(parseInt(person.id) !== parseInt(personListHTML[i].id)){
               continue;
-            }            
+            }    
+
             var personHTML = document.getElementById(personListHTML[i].classList[1].split("_").pop());
-            
             var personCoordinates = personHTML.getBoundingClientRect();
+
             var personParentCoords = personHTML.parentElement.style.transform
             var firstPx = personParentCoords.indexOf("px")
             var personParentX = parseInt(personParentCoords.slice(10, firstPx))
             var personParentY = personParentCoords.slice(firstPx + 4, personParentCoords.length)
             personParentY = parseInt(personParentY.slice(0, personParentY.indexOf("px")))
 
-            if(typeof personListCoords !== undefined){
+            var x;
+            var y;
+
+            if(this.state.reset) { 
+              personHTML.style.transform = "translate(" + (person.x - personHTML.offsetLeft - personParentX + 5) + "px, " + (person.y - personHTML.offsetTop - personParentY + 5) + "px)" 
+            }
+            else {
+              personHTML.style.transform = "translate(" + (person.x - personHTML.offsetLeft + 5) + "px, " + (person.y - personHTML.offsetTop + 5) + "px)"  
+            }
+            x = person.x + personParentX;
+            y = person.y + personParentY;
+
+            if(typeof personListCoords !== "undefined"){
               if(personListCoords.length === 0){
-                personListCoords.push({id: person.id, screen: {x: person.x + personParentX, y: person.y + personParentY}});
+                personListCoords.push({id: person.id, screen: {x: x, y: y}});
                 break;
               }
               var alreadyHasThisPerson = false
               for(var j = 0; j < personListCoords.length; j++){
                 if(personListCoords[j].id === person.id){
-                  personListCoords[j].screen = {x: person.x + personParentX, y: person.y + personParentY}
+                  personListCoords[j].screen = {x: x, y: y}
                   alreadyHasThisPerson = true;
                 }
               }
               if(!alreadyHasThisPerson){
-                personListCoords.push({id: person.id, screen: {x: person.x + personParentX, y: person.y + personParentY}});
+                personListCoords.push({id: person.id, screen: {x: x, y: y}});
               }
             }
-            this.setState({
+           this.setState({
               personClassCoordinates: personListCoords,
-              personSize: {width: personCoordinates.width, height: personCoordinates.height}
-            })
-          }
-        })
-      }
-
-      getCoordinatesInitFalse(){
-        var personList = [...this.state.personList]
-        var personListCoords = [...this.state.personClassCoordinates]
-        var personListHTML = Array.from(document.querySelectorAll("div.person"));
-
-        personList.map(person => {
-          for(var i = 0; i < personListHTML.length; i++){
-            if(parseInt(person.id) !== parseInt(personListHTML[i].id)){
-              continue;
-            }            
-            var personHTML = document.getElementById(personListHTML[i].classList[1].split("_").pop());
-            
-            personHTML.style.transform = "translate(" + (person.x - personHTML.offsetLeft + 5) + "px, " + (person.y - personHTML.offsetTop + 5) + "px)"
-            
-            var personCoordinates = personHTML.getBoundingClientRect();
-            if(typeof personListCoords !== undefined){
-              if(personListCoords.length === 0){
-                personListCoords.push({id: person.id, screen: {x: person.x, y: person.y}});
-                break;
-              }
-              var alreadyHasThisPerson = false
-              for(var j = 0; j < personListCoords.length; j++){
-                if(personListCoords[j].id === person.id){
-                  personListCoords[j].screen = {x: person.x, y: person.y}
-                  alreadyHasThisPerson = true;
-                }
-              }
-              if(!alreadyHasThisPerson){
-                personListCoords.push({id: person.id, screen: {x: person.x, y: person.y}});
-              }
-            }
-            this.setState({
-              hasPersonCoords: true,
-              personClassCoordinates: personListCoords,
-              personSize: {width: personCoordinates.width, height: personCoordinates.height}
+              personSize: {width: personCoordinates.width, height: personCoordinates.height},
+              init: true
             }, () => this.renderRelationships())
           }
         })
       }
 
       resetCoords(){
-        window.location.reload(); 
+        var personList = [...this.state.personList]
+        var personListHTML = Array.from(document.querySelectorAll("div.person"));
+
+        for(let i = 0; i < personListHTML.length; i++){
+          var personHTML = document.getElementById(personListHTML[i].classList[1].split("_").pop());
+
+          var personParentCoords = personHTML.parentElement.style.transform
+          var firstPx = personParentCoords.indexOf("px")
+          let personParentX = parseInt(personParentCoords.slice(10, firstPx))
+          let personParentY = personParentCoords.slice(firstPx + 4, personParentCoords.length)
+          personParentY = parseInt(personParentY.slice(0, personParentY.indexOf("px")))
+
+          this.props.personList.map(person => {
+            if(person.id === personList[i].id){
+              var parentX = 0;
+              var parentY = 0;
+              if(typeof personList[i].parent !== "undefined"){
+                parentX = personList[i].parent.x;
+                parentY = personList[i].parent.y;
+              }
+              personList[i].x = person.x - personParentX + parentX;
+              personList[i].y = person.y - personParentY + parentY;
+              personList[i].parent = {x: personParentX, y: personParentY}
+            }
+          })
+        }
+
+        this.getCoordinates();
       }
       
       saveCoords(){
@@ -243,7 +231,8 @@
           var relationshipPersonList = [];
           var relationshipsNames = [];
           var relationshipList = [...this.state.relationshipList]
-          var randomColor = [...this.state.colorArray]
+          const randomColor = [0, 31, 63, 95, 127, 159, 191, 223, 255];
+
           relationshipList.map(relationship => {
             this.state.personClassCoordinates.map(person => {
               if(parseInt(relationship.id_1) === parseInt(person.id) || parseInt(relationship.id_2) === parseInt(person.id)){
@@ -253,10 +242,10 @@
             });
           });
 
-          for (var i = 0; i<relationshipPersonList.length; i+=2){
+          for (var i = 0; i < relationshipPersonList.length; i+=2){
             relationshipPairList.push({ 
               relationship: relationshipsNames[i],
-              id: i /2 ,
+              id: i / 2,
               id1: relationshipPersonList[i].id, 
               id2: relationshipPersonList[i+1].id, 
               x1: relationshipPersonList[i].screen.x + this.state.personSize.width / 2, 
@@ -269,9 +258,7 @@
 
           relationshipPairList.map(() => (
               colorOfRelationship.push('rgb(' + randomColor[Math.floor(Math.random()*randomColor.length)] + ',' + randomColor[Math.floor(Math.random()*randomColor.length)] + ',' + randomColor[Math.floor(Math.random()*randomColor.length)] + ')')
-          )
-          
-          )
+          ))
 
           this.setState({
             relationships: (relationshipPairList.map(item => (
@@ -292,7 +279,6 @@
                 x={(Math.round(item.x1) + Math.round(item.x2))/2} 
                 y={Math.round((Math.round(item.y1) + Math.round(item.y2))/2) - 5} 
                 className="relationshipNames"
-                // there should be color the same as line color
                 fill={colorOfRelationship[item.id]}>
                   {item.relationship}
                 </text>
@@ -359,7 +345,7 @@
               ) : null}
             </div>
             <div className="buttons">
-              <button onClick={this.resetCoords} className="btn btn-outline-danger btn-circle btn-xl">
+              <button onClick={this.resetCoords.bind(this)} className="btn btn-outline-danger btn-circle btn-xl">
                 <i className="fas fa-redo"></i>
               </button>
               <button onClick={this.saveCoords.bind(this)} className="btn btn-outline-info btn-circle btn-xl">
