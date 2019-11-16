@@ -74,7 +74,7 @@ svg{
 
 .relationshipNames{
 color: blue;
-font-size: 1.5vw;
+font-size: calc(12px + .5vw);
 font-family: fantasy;
 font-style: oblique;
 
