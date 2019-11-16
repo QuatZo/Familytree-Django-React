@@ -32,8 +32,8 @@ class FamilytreePerson(models.Model):
     sex_choices = [(male, 'male'),(female, 'female'),(other, 'other')]
     sex_choices = models.CharField(max_length = 35,choices = sex_choices, default = other)
 
-    x = models.IntegerField(default=0)
-    y = models.IntegerField(default=0)
+    x = models.FloatField(default=0)
+    y = models.FloatField(default=0)
 
     def _str_(self):
         return self.first_name + " " + self.last_name 

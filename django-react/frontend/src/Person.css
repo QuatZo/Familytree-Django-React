@@ -13,6 +13,7 @@
 .person img{
     width: 100%;
     height: 15vh;
+    min-height: 135px;
     border-color: #484848;
   }
 

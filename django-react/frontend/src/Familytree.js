@@ -30,12 +30,24 @@
           personClassCoordinates: [],
           relationshipList: this.props.relationshipList,
           personSize: [],
-          reset: false,
+          windowSize: {width: 0, height: 0},
         };
+        this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
       }  
 
       componentDidMount(){
+        this.updateWindowDimensions();
+        window.addEventListener('resize', this.updateWindowDimensions);
         this.getCoordinates()
+      }
+
+      componentWillUnmount() {
+        window.removeEventListener('resize', this.updateWindowDimensions);
+      }
+
+      updateWindowDimensions() {
+        var winSize = {width: window.innerWidth, height: window.innerHeight}
+        this.setState({ windowSize: winSize }, () => this.getCoordinates());
       }
 
       refreshPersonList = () => {
@@ -97,7 +109,7 @@
         var personList = [...this.state.personList]
         var personListCoords = [...this.state.personClassCoordinates]
         var personListHTML = Array.from(document.querySelectorAll("div.person"));
-
+        var personCoordinates = [];
         personList.map(person => {
           for(var i = 0; i < personListHTML.length; i++){
             if(parseInt(person.id) !== parseInt(personListHTML[i].id)){
@@ -105,7 +117,7 @@
             }    
 
             var personHTML = document.getElementById(personListHTML[i].classList[1].split("_").pop());
-            var personCoordinates = personHTML.getBoundingClientRect();
+            personCoordinates = personHTML.getBoundingClientRect();
 
             var personParentCoords = personHTML.parentElement.style.transform
             var firstPx = personParentCoords.indexOf("px")
@@ -116,14 +128,10 @@
             var x;
             var y;
 
-            if(this.state.reset) { 
-              personHTML.style.transform = "translate(" + (person.x - personHTML.offsetLeft - personParentX + 5) + "px, " + (person.y - personHTML.offsetTop - personParentY + 5) + "px)" 
-            }
-            else {
-              personHTML.style.transform = "translate(" + (person.x - personHTML.offsetLeft + 5) + "px, " + (person.y - personHTML.offsetTop + 5) + "px)"  
-            }
-            x = person.x + personParentX;
-            y = person.y + personParentY;
+            personHTML.style.transform = "translate(" + (person.x * this.state.windowSize.width - personHTML.offsetLeft + 5) + "px, " + (person.y * this.state.windowSize.height - personHTML.offsetTop + 5) + "px)"  
+            
+            x = person.x * this.state.windowSize.width + personParentX;
+            y = person.y * this.state.windowSize.height + personParentY;
 
             if(typeof personListCoords !== "undefined"){
               if(personListCoords.length === 0){
@@ -141,13 +149,13 @@
                 personListCoords.push({id: person.id, screen: {x: x, y: y}});
               }
             }
-           this.setState({
-              personClassCoordinates: personListCoords,
-              personSize: {width: personCoordinates.width, height: personCoordinates.height},
-              init: true
-            }, () => this.renderRelationships())
           }
-        })
+        });
+        this.setState({
+          personClassCoordinates: personListCoords,
+          personSize: {width: personCoordinates.width, height: personCoordinates.height},
+          init: true
+        }, () => this.renderRelationships())
       }
 
       resetCoords(){
@@ -171,14 +179,14 @@
                 parentX = personList[i].parent.x;
                 parentY = personList[i].parent.y;
               }
-              personList[i].x = person.x - personParentX + parentX;
-              personList[i].y = person.y - personParentY + parentY;
+              personList[i].x = (person.x * this.state.windowSize.width - personParentX + parentX) / this.state.windowSize.width;
+              personList[i].y = (person.y * this.state.windowSize.height - personParentY + parentY) / this.state.windowSize.height;
               personList[i].parent = {x: personParentX, y: personParentY}
             }
           })
         }
 
-        this.getCoordinates();
+        this.getCoordinates()
       }
       
       saveCoords(){
@@ -192,8 +200,8 @@
             personNew = res.data;
             personListCoords.map(coords => {
             if(coords.id === res.data.id){
-              personNew.x = coords.screen.x;
-              personNew.y = coords.screen.y;
+              personNew.x = coords.screen.x / this.state.windowSize.width;
+              personNew.y = coords.screen.y / this.state.windowSize.height;
             }
             })
           })
@@ -241,7 +249,6 @@
               }
             });
           });
-
           for (var i = 0; i < relationshipPersonList.length; i+=2){
             relationshipPairList.push({ 
               relationship: relationshipsNames[i],
