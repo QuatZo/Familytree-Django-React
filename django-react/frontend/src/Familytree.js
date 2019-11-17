@@ -31,6 +31,7 @@
           relationshipList: this.props.relationshipList,
           personSize: [],
           windowSize: {width: 0, height: 0},
+          saving: false
         };
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
       }  
@@ -205,7 +206,14 @@
             }
             })
           })
-          .then(() => axios.put(`http://localhost:8000/api/familytreepersons/${personNew.id}/`, personNew));
+          .then(() => axios.put(`http://localhost:8000/api/familytreepersons/${personNew.id}/`, personNew))            
+        })
+        this.setState({
+          saving: true,
+        }, () => {
+          setTimeout(() => {
+            this.setState({saving: false})
+          }, 3000);
         })
       }
 
@@ -355,7 +363,7 @@
               <button onClick={this.resetCoords.bind(this)} className="btn btn-outline-danger btn-circle btn-xl">
                 <i className="fas fa-redo"></i>
               </button>
-              <button onClick={this.saveCoords.bind(this)} className="btn btn-outline-info btn-circle btn-xl">
+              <button disabled={this.state.saving} onClick={this.saveCoords.bind(this)} className="btn btn-outline-info btn-circle btn-xl">
                 <i className="far fa-save"></i>
               </button>
               <button onClick={this.createPerson} className="btn btn-outline-success btn-circle btn-xl">
