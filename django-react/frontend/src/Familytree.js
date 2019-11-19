@@ -80,12 +80,14 @@
         if (item.id) {
           axios
             .put(`http://localhost:8000/api/familytreepersons/${item.id}/`, item)
-            .then(() => this.refreshPersonList());
+            .then(() => this.refreshPersonList())
+            .catch(err => console.log(err));
           return;
         }
         axios
           .post("http://localhost:8000/api/familytreepersons/", item)
-          .then(() => this.refreshPersonList());
+          .then(() => this.refreshPersonList())
+          .catch(err => console.log(err));
       };
 
       handleSubmitRelationship = item => {
@@ -93,12 +95,14 @@
         if (item.id) {
           axios
             .put(`http://localhost:8000/api/familytreerelationship/${item.id}/`, item)
-            .then(() => this.refreshRelationshipList());
+            .then(() => this.refreshRelationshipList())
+            .catch(err => console.log(err));
           return;
         }
         axios
           .post("http://localhost:8000/api/familytreerelationship/", item)
-          .then(() => this.refreshRelationshipList());
+          .then(() => this.refreshRelationshipList())
+          .catch(err => console.log(err));
       };
       
       createPerson = () => {
@@ -206,7 +210,8 @@
             }
             })
           })
-          .then(() => axios.put(`http://localhost:8000/api/familytreepersons/${personNew.id}/`, personNew))            
+          .then(() => axios.put(`http://localhost:8000/api/familytreepersons/${personNew.id}/`, personNew)) 
+          .catch(err => console.log(err));           
         })
         this.setState({
           saving: true,
@@ -313,10 +318,12 @@
               if(parseInt(id)===parseInt(item.id_1) || parseInt(id)===parseInt(item.id_2)){
                 axios
                 .delete(`http://localhost:8000/api/familytreerelationship/${item.id}`)
-                .then(() => this.refreshRelationshipList());
+                .then(() => this.refreshRelationshipList())
+                .catch(err => console.log(err));
               }
             })
           })
+          .catch(err => console.log(err));
       }
 
       renderItems = () => {

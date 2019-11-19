@@ -23,12 +23,14 @@
         if (item.id) {
           axios
             .put(`http://localhost:8000/api/familytreepersons/${item.id}/`, item)
-            .then(() => this.props.refresh());
+            .then(() => this.props.refresh())
+            .catch(err => console.log(err));
           return;
         }
         axios
           .post("http://localhost:8000/api/familytreepersons/", item)
-          .then(() => this.props.refresh());
+          .then(() => this.props.refresh())
+          .catch(err => console.log(err));
       };
 
       toggle = () => {
@@ -39,7 +41,8 @@
         this.props.deleteRelationships(item.id)
         axios
           .delete(`http://localhost:8000/api/familytreepersons/${item.id}`)
-          .then(() => this.props.refresh());
+          .then(() => this.props.refresh())
+          .catch(err => console.log(err));
       };
 
 
