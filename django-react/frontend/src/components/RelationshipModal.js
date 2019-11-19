@@ -53,14 +53,15 @@
                     <option value="brother">Brother</option>
                     <option value="sister">Sister</option>
                     <option value="son">Son</option>
+                    <option value="daughter">Daughter</option>
                     <option value="adoptive son">Adoptive son</option>
                     <option value="adoptive daughter">Adoptive daughter</option>
                     <option value="surrogate father">Surrogate father</option>
                     <option value="surrogate mother">Surrogate mother</option>
                     <option value="stepbrother">Stepbrother</option>
                     <option value="stepsister">Stepsister</option>
-                    <option value="stepdaughter">Stepdaughter</option>
                     <option value="stepson">Stepson</option>
+                    <option value="stepdaughter">Stepdaughter</option>
 
 
 
