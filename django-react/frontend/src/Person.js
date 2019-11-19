@@ -24,13 +24,21 @@
           axios
             .put(`http://localhost:8000/api/familytreepersons/${item.id}/`, item)
             .then(() => this.props.refresh())
-            .catch(err => console.log(err));
+            .then(() => this.props.notifySave())
+            .catch(err => {
+              console.log(err);
+              this.props.notifyError();
+            });
           return;
         }
         axios
           .post("http://localhost:8000/api/familytreepersons/", item)
           .then(() => this.props.refresh())
-          .catch(err => console.log(err));
+          .then(() => this.props.notifySave())
+          .catch(err => {
+            console.log(err);
+            this.props.notifyError();
+          });
       };
 
       toggle = () => {
@@ -42,7 +50,11 @@
         axios
           .delete(`http://localhost:8000/api/familytreepersons/${item.id}`)
           .then(() => this.props.refresh())
-          .catch(err => console.log(err));
+          .then(() => this.props.notifyDelete())
+          .catch(err => {
+            console.log(err);
+            this.props.notifyError();
+          });
       };
 
 
