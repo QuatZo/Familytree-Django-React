@@ -44,7 +44,19 @@ class FamilytreeRelationship(models.Model):
 
     father = 'father'
     mother = 'mother'
-    brother_sister = 'brother/sister'
+    brother = 'brother'
+    sister = 'sister'
+    son = 'son'
+    daughter = 'daughter'
+    adoptive_son = 'adoptive son'
+    adoptive_daughter = 'adoptive daughter'
+    surrogate_father = 'surrogate father'
+    surrogate_mother = 'surrogate mother'
+    stepbrother = 'stepbrother'
+    stepsister = 'stepsister'
+    stepdaughter = 'stepdaughter'
+    stepson = 'stepson'
 
-    relationships = [(father, 'father'),(mother, 'mother'),(brother_sister, 'brother/sister')]
+
+    relationships = [(father, 'father'),(mother, 'mother'),(brother, 'brother'),(sister, 'sister'), (son, 'son'), (daughter, 'daughter'), (adoptive_son, 'adoptive son'), (adoptive_daughter, 'adoptive daughter'), (surrogate_father, 'surrogate father'), (surrogate_mother, 'surrogate mother'), (stepbrother, 'stepbrother'), (stepsister,'stepsister'), (stepdaughter, 'stepdaughter'), (stepson, 'stepson')]
     relationships = models.CharField(max_length = 35,choices = relationships, default = father)
