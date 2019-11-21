@@ -39,6 +39,7 @@
       }  
 
       notifyReset = () => toast.info("The position of all persons has been set to the initial!");
+      notifySaving = () => toast.info("Saving coordinates... Do not leave the page until the saving process is finished!");
 
       notifyAddPerson = () => toast.success("New person has been added, it should be at the top-left corner of the page!");
       notifyAddRelationship = () => toast.success("New relationship has been added, it should be visible. If not, try to move something around!");
@@ -234,6 +235,8 @@
       }
       
       saveCoords(){
+        this.notifySaving();
+
         var saved = true;
         var personListHTML = Array.from(document.querySelectorAll("div.person"));
         var personListCoords = [...this.state.personClassCoordinates]
@@ -426,7 +429,7 @@
               <button onClick={this.resetCoords.bind(this)} className="btn btn-outline-danger btn-circle btn-xl">
                 <i className="fas fa-redo"></i>
               </button>
-              <button disabled={this.state.saving} onClick={this.saveCoords.bind(this)} className="btn btn-outline-info btn-circle btn-xl">
+              <button disabled={this.state.saving} onClick={() => {if(window.confirm("Are you sure you want to save the coordinates?")) this.saveCoords()}} className="btn btn-outline-info btn-circle btn-xl">
                 <i className="far fa-save"></i>
               </button>
               <button onClick={this.createPerson} className="btn btn-outline-success btn-circle btn-xl">

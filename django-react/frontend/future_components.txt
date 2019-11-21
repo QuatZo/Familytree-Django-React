@@ -1,0 +1,9 @@
+Swipe:
+	https://www.npmjs.com/package/react-swipeable + some sort of timeline
+
+Timelines (modal, scrollable probably the best option):
+	https://github.com/sherubthakur/react-horizontal-timeline -> need the swipeable component
+	https://github.com/aaron9000/react-image-timeline -> can be as a modal, so no need to have react-swipeable component;
+	
+Dropzone for images:
+	https://www.npmjs.com/package/react-dropzone
