@@ -17,6 +17,7 @@
 14. npm install react-draggable ?? npm install jsplumb
 15. npm install react-datepicker --save
 16. npm i react-loading react-lottie react-fade-in bootstrap
-17. npm start 
+17. npm install --save react-toastify
+18. npm start 
 
 Jesli wszystko dziala, wylacz i uruchom ***run.bat***

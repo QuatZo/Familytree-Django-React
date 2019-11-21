@@ -23,12 +23,22 @@
         if (item.id) {
           axios
             .put(`http://localhost:8000/api/familytreepersons/${item.id}/`, item)
-            .then(() => this.props.refresh());
+            .then(() => this.props.refresh())
+            .then(() => this.props.notifySave())
+            .catch(err => {
+              console.log(err);
+              this.props.notifyError();
+            });
           return;
         }
         axios
           .post("http://localhost:8000/api/familytreepersons/", item)
-          .then(() => this.props.refresh());
+          .then(() => this.props.refresh())
+          .then(() => this.props.notifySave())
+          .catch(err => {
+            console.log(err);
+            this.props.notifyError();
+          });
       };
 
       toggle = () => {
@@ -39,7 +49,12 @@
         this.props.deleteRelationships(item.id)
         axios
           .delete(`http://localhost:8000/api/familytreepersons/${item.id}`)
-          .then(() => this.props.refresh());
+          .then(() => this.props.refresh())
+          .then(() => this.props.notifyDelete())
+          .catch(err => {
+            console.log(err);
+            this.props.notifyError();
+          });
       };
 
 
@@ -94,20 +109,18 @@
                   >
                     {this.props.person.first_name + ' ' + this.props.person.last_name}
                   </div> 
-                  <div
-                    className={'personButtons'}
-                  >
+                  <div>
                     <button
                       onClick={() => this.editItem(this.props.person)}
-                      className="btn btn-secondary mr-2"
+                      className="btn btn-info btn-xl personbutton"
                     >
-                      Edit{" "}
+                      <i className="fas fa-user-edit"></i>
                     </button>
                     <button
-                      onClick={() => this.handleDelete(this.props.person)}
-                      className="btn btn-danger"
+                      onClick={() => {if(window.confirm("Are you sure you want to delete " + this.props.person.first_name + " " + this.props.person.last_name + " with connected relationships from Familytree?")) this.handleDelete(this.props.person)}}
+                      className="btn btn-danger btn-xl personbutton"
                     >
-                      Delete{" "}
+                      <i className="fas fa-user-minus"></i>
                     </button>
                   </div>
                 </div>

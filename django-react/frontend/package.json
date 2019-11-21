@@ -17,6 +17,7 @@
     "react-lottie": "^1.2.3",
     "react-scripts": "3.2.0",
     "react-svg-pathline": "^0.5.0",
+    "react-toastify": "^5.4.1",
     "reactstrap": "^8.0.1"
   },
   "scripts": {

@@ -7,6 +7,8 @@
     import Person from "./Person";
     import ModalRelationship from "./components/RelationshipModal";
     import ModalPerson from "./components/PersonModal";
+    import { ToastContainer, toast } from 'react-toastify';
+    import 'react-toastify/dist/ReactToastify.css';
 
     
     import './Familytree.css';
@@ -36,6 +38,21 @@
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
       }  
 
+      notifyReset = () => toast.info("The position of all persons has been set to the initial!");
+      notifySaving = () => toast.info("Saving coordinates... Do not leave the page until the saving process is finished!");
+
+      notifyAddPerson = () => toast.success("New person has been added, it should be at the top-left corner of the page!");
+      notifyAddRelationship = () => toast.success("New relationship has been added, it should be visible. If not, try to move something around!");
+
+      notifySavePerson = () => toast.success("New data of the person has been saved!");
+      notifySaveRelationship = () => toast.success("New data of the relationship has been saved!");
+      notifySaveCoords = () => toast.success("New coords have been saved!");
+
+      notifyDeletePerson = () => toast.warn("Person has been deleted!");
+      notifyDeleteRelationship = () => toast.warn("Relationship has been deleted!");
+
+      notifyError = () => toast.error("Something went wrong! Try again later! If it doesn't help, contact administrator.");
+
       componentDidMount(){
         this.updateWindowDimensions();
         window.addEventListener('resize', this.updateWindowDimensions);
@@ -56,7 +73,10 @@
           .get("http://localhost:8000/api/familytreepersons/")
           .then(res => this.setState({ personList: res.data }))
           .then(() => this.getCoordinates())
-          .catch(err => console.log(err));
+          .catch(err => {
+            console.log(err);
+            this.notifyError();
+          });
       };
 
       refreshRelationshipList = () => {
@@ -64,7 +84,10 @@
           .get("http://localhost:8000/api/familytreerelationship/")
           .then(res => this.setState({ relationshipList: res.data }))
           .then(() => this.renderRelationships())
-          .catch(err => console.log(err));
+          .catch(err => {
+            console.log(err);
+            this.notifyError();
+          });
       };
 
       togglePersonModal = () => {
@@ -80,12 +103,22 @@
         if (item.id) {
           axios
             .put(`http://localhost:8000/api/familytreepersons/${item.id}/`, item)
-            .then(() => this.refreshPersonList());
+            .then(() => this.refreshPersonList())
+            .then(() => this.notifySavePerson())
+            .catch(err => {
+              console.log(err);
+              this.notifyError();
+            });
           return;
         }
         axios
           .post("http://localhost:8000/api/familytreepersons/", item)
-          .then(() => this.refreshPersonList());
+          .then(() => this.refreshPersonList())
+          .then(() => this.notifyAddPerson())
+          .catch(err => {
+            console.log(err);
+            this.notifyError();
+          });
       };
 
       handleSubmitRelationship = item => {
@@ -93,12 +126,22 @@
         if (item.id) {
           axios
             .put(`http://localhost:8000/api/familytreerelationship/${item.id}/`, item)
-            .then(() => this.refreshRelationshipList());
+            .then(() => this.refreshRelationshipList())
+            .then(() => this.notifySaveRelationship())
+            .catch(err => {
+              console.log(err);
+              this.notifyError();
+            });
           return;
         }
         axios
           .post("http://localhost:8000/api/familytreerelationship/", item)
-          .then(() => this.refreshRelationshipList());
+          .then(() => this.refreshRelationshipList())
+          .then(() => this.notifyAddRelationship())
+          .catch(err => {
+            console.log(err);
+            this.notifyError();
+          });
       };
       
       createPerson = () => {
@@ -187,10 +230,14 @@
           })
         }
 
-        this.getCoordinates()
+        this.getCoordinates();
+        this.notifyReset();
       }
       
       saveCoords(){
+        this.notifySaving();
+
+        var saved = true;
         var personListHTML = Array.from(document.querySelectorAll("div.person"));
         var personListCoords = [...this.state.personClassCoordinates]
         personListHTML.map(item => {
@@ -206,14 +253,21 @@
             }
             })
           })
-          .then(() => axios.put(`http://localhost:8000/api/familytreepersons/${personNew.id}/`, personNew))            
+          .then(() => axios.put(`http://localhost:8000/api/familytreepersons/${personNew.id}/`, personNew))
+          .catch(err => {
+            console.log(err);
+            saved = false;
+            this.notifyError();
+          });        
         })
         this.setState({
           saving: true,
         }, () => {
           setTimeout(() => {
-            this.setState({saving: false})
-          }, 3000);
+            console.log("here!")
+            this.setState({saving: false});
+            if (saved) { this.notifySaveCoords() };
+          }, 5000);
         })
       }
 
@@ -240,6 +294,31 @@
             // else - delete/edit relationship OR if above toggle 
           }
           this.setState({activePersons: array});
+      }
+
+      deleteRelationships(id){
+        var relationships = [];
+        axios
+          .get("http://localhost:8000/api/familytreerelationship/")
+          .then(res => relationships = res.data )
+          .then(() => {
+            relationships.map(item => {
+              if(parseInt(id)===parseInt(item.id_1) || parseInt(id)===parseInt(item.id_2)){
+                axios
+                .delete(`http://localhost:8000/api/familytreerelationship/${item.id}`)
+                .then(() => this.refreshRelationshipList())
+                .then(() => this.notifyDeleteRelationship())
+                .catch(err => {
+                  console.log(err);
+                  this.notifyError();
+                });
+              }
+            })
+          })
+          .catch(err => {
+            console.log(err);
+            this.notifyError();
+          });
       }
 
       renderRelationships = () => {
@@ -303,22 +382,6 @@
           )});
       }
 
-      deleteRelationships(id){
-        var relationships = [];
-        axios
-          .get("http://localhost:8000/api/familytreerelationship/")
-          .then(res => relationships = res.data )
-          .then(() => {
-            relationships.map(item => {
-              if(parseInt(id)===parseInt(item.id_1) || parseInt(id)===parseInt(item.id_2)){
-                axios
-                .delete(`http://localhost:8000/api/familytreerelationship/${item.id}`)
-                .then(() => this.refreshRelationshipList());
-              }
-            })
-          })
-      }
-
       renderItems = () => {
         const newItems = this.state.personList;
         return newItems.map(item => (
@@ -331,6 +394,9 @@
             getCoordinates={this.getCoordinates.bind(this)}
             renderRelationships={this.renderRelationships.bind(this)}
             deleteRelationships={this.deleteRelationships.bind(this)}
+            notifyDelete={this.notifyDeletePerson.bind(this)}
+            notifySave={this.notifySavePerson.bind(this)}
+            notifyError={this.notifyError.bind(this)}
           />
         ));
       };
@@ -363,13 +429,14 @@
               <button onClick={this.resetCoords.bind(this)} className="btn btn-outline-danger btn-circle btn-xl">
                 <i className="fas fa-redo"></i>
               </button>
-              <button disabled={this.state.saving} onClick={this.saveCoords.bind(this)} className="btn btn-outline-info btn-circle btn-xl">
+              <button disabled={this.state.saving} onClick={() => {if(window.confirm("Are you sure you want to save the coordinates?")) this.saveCoords()}} className="btn btn-outline-info btn-circle btn-xl">
                 <i className="far fa-save"></i>
               </button>
               <button onClick={this.createPerson} className="btn btn-outline-success btn-circle btn-xl">
                 <i className="fas fa-plus"></i>
               </button>
             </div>
+            <ToastContainer />
           </React.Fragment>
         );
       }
