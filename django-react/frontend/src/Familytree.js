@@ -264,7 +264,6 @@
           saving: true,
         }, () => {
           setTimeout(() => {
-            console.log("here!")
             this.setState({saving: false});
             if (saved) { this.notifySaveCoords() };
           }, 5000);

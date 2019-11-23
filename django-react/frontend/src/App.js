@@ -42,7 +42,7 @@
           donePersonList: undefined,
           loadingRelationshipList: undefined,
           doneRelationshipList: undefined,
-          displayed_form: '',
+          displayed_form: localStorage.getItem('token') ? '' : 'login',
           logged_in: localStorage.getItem('token') ? true : false,
           username: ''
         };
@@ -55,7 +55,7 @@
           axios
             .get('http://localhost:8000/current_user/', {headers: { Authorization: `JWT ${localStorage.getItem('token')}`}})
             .then(res => {
-              this.setState({ username: res.username });
+              this.setState({ username: res.data.username });
             })
           }
       }
@@ -63,7 +63,6 @@
       componentDidUpdate(){
         if (this.loginCounter < 1 && this.state.logged_in && !this.state.doneRelationshipList && !this.state.donePersonList){
           this.loginCounter += 1;
-          console.log("DID UPDATE!");
           setTimeout(() => {
             axios
               .get("http://localhost:8000/api/familytreepersons/", {headers: { Authorization: `JWT ${localStorage.getItem('token')}`}})
@@ -190,6 +189,7 @@
               logged_in={this.state.logged_in}
               display_form={this.display_form}
               handle_logout={this.handle_logout}
+              username={this.state.username}
             />
             {form}
             {this.state.logged_in

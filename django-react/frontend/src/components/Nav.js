@@ -1,20 +1,29 @@
+/*eslint jsx-a11y/anchor-is-valid: 0*/
+
 import React from 'react';
 import PropTypes from 'prop-types';
 
 function Nav(props) {
   const logged_out_nav = (
-    <ul>
-      <li onClick={() => props.display_form('login')}>login</li>
-      <li onClick={() => props.display_form('signup')}>signup</li>
-    </ul>
+    <div className="nav_buttons">
+      <button onClick={() => props.display_form('login')} className="btn btn-outline-success my-2 my-sm-0 nav_button">Login</button>
+      <button onClick={() => props.display_form('signup')} className="btn btn-outline-info my-2 my-sm-0  nav_button">Register</button>
+    </div>
   );
 
   const logged_in_nav = (
-    <ul>
-      <li onClick={props.handle_logout}>logout</li>
-    </ul>
+    <React.Fragment>
+      <a class="navbar-brand" href="#"> | {props.username} | </a>
+        <button onClick={props.handle_logout} className="btn btn-outline-danger my-2 my-sm-0">Logout</button>
+    </React.Fragment>
   );
-  return <div>{props.logged_in ? logged_in_nav : logged_out_nav}</div>;
+  return (
+    <nav className="navbar sticky-top navbar-dark bg-dark">
+      <a className="navbar-brand" href="#">Familytree</a>
+      {props.logged_in ? logged_in_nav : logged_out_nav}
+    </nav>
+      
+  );
 }
 
 export default Nav;

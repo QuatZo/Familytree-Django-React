@@ -1,8 +1,3 @@
-.App {
-  text-align: center;
-  color: white;
-}
-
 .App-logo {
   height: 40vmin;
 }
@@ -25,4 +20,12 @@
 .loading{
   color: white;
   text-align: center;
+}
+
+.nav_buttons{
+  display: inline-block;
+} 
+
+.nav_button{
+  margin-left: 10px;
 }
