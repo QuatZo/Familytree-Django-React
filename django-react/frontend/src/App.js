@@ -105,11 +105,12 @@
         };
         axios(options)
           .then(res => {
+            // we store the user's ID under res.data.user.id
             localStorage.setItem('token', res.data.token);
             this.setState({
               logged_in: true,
               displayed_form: '',
-              username: res.data.username
+              username: res.data.user.username
             });
           });
       };
