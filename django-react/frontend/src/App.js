@@ -159,15 +159,15 @@
       };
 
       refreshPersonList = () => {
-        this.instance
-          .get("http://localhost:8000/api/familytreepersons/")
+        axios
+          .get("http://localhost:8000/api/familytreepersons/", {headers: { Authorization: `JWT ${localStorage.getItem('token')}`}})
           .then(res => this.setState({ personList: res.data }))
           .catch(err => console.log(err));
       };
 
       refreshRelationshipList = () => {
-        this.instance
-          .get("http://localhost:8000/api/familytreerelationship/")
+        axios
+        .get("http://localhost:8000/api/familytreerelationship/", {headers: { Authorization: `JWT ${localStorage.getItem('token')}`}})
           .then(res => this.setState({ relationshipList: res.data }))
           .catch(err => console.log(err));
       };
