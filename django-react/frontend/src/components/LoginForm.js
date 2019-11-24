@@ -20,44 +20,35 @@ class LoginForm extends React.Component {
 
   render() {
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
-            <div className="card card-signin my-5">
-              <div className="card-body">
-                <h5 className="card-title text-center">Welcome back!</h5>
-                <form className="form-signin" onSubmit={e => this.props.handle_login(e, this.state)}>
-                  <div className="form-label-group">
-                    <input 
-                    className="form-control" 
-                    type="text"
-                    id="username"
-                    name="username"
-                    value={this.state.username}
-                    onChange={this.handle_change}
-                    required 
-                    autoFocus
-                    />
-                    <label htmlFor="username">Your login</label>
-                  </div>
-
-                  <div className="form-label-group">
-                    <input className="form-control" 
-                    type="password"
-                    name="password"
-                    id="password"
-                    value={this.state.password}
-                    onChange={this.handle_change}
-                    required
-                    />
-                    <label htmlFor="password">Your password</label>
-                  </div>
-                  <button className="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign in</button>
-                </form>
-              </div>
+      <div class="login-dark">
+        <form method="post" onSubmit={e => this.props.handle_login(e, this.state)}>
+            <h2 class="sr-only">Login Form</h2>
+            <div class="illustration"><i class="far fa-user"></i></div>
+            <div class="form-group">
+              <input 
+              class="form-control" 
+              type="text" 
+              name="username" 
+              placeholder="Username" 
+              value={this.state.username}
+              onChange={this.handle_change}
+              required 
+              autoFocus
+              />
             </div>
-          </div>
-        </div>
+            <div class="form-group">
+              <input 
+              class="form-control" 
+              type="password" 
+              name="password" 
+              placeholder="Password" 
+              value={this.state.password}
+              onChange={this.handle_change}
+              required
+              />
+            </div>
+            <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Log In</button></div>
+          </form>
       </div>
     );
   }

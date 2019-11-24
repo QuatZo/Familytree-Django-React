@@ -7,7 +7,7 @@
     import Person from "./Person";
     import ModalRelationship from "./components/RelationshipModal";
     import ModalPerson from "./components/PersonModal";
-    import { ToastContainer, toast } from 'react-toastify';
+    import { toast } from 'react-toastify';
     import 'react-toastify/dist/ReactToastify.css';
 
     
