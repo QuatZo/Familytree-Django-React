@@ -435,7 +435,6 @@
                 <i className="fas fa-plus"></i>
               </button>
             </div>
-            <ToastContainer />
           </React.Fragment>
         );
       }

@@ -52,7 +52,7 @@ class SignupForm extends React.Component {
                     />
                     <label htmlFor="password">Your password</label>
                   </div>
-                  <button className="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign in</button>
+                  <button className="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Register</button>
                 </form>
               </div>
             </div>

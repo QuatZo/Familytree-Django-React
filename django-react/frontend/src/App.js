@@ -12,6 +12,7 @@
     import Lottie from "react-lottie";
     import * as stillLoadingData from "./stillloading.json";
     import * as doneLoadingData from "./doneloading.json";
+    import { ToastContainer, toast } from 'react-toastify';
     
     const defaultOptionsLoading = {
         loop: true,
@@ -50,13 +51,22 @@
 
       loginCounter = 0;
 
+      notifySuccessLogin = () => toast.success("You logged in as " + this.state.username + ". Have a nice use!");
+      notifySuccessRegister = () => toast.success("You registered as " + this.state.username + " and will be redirected to login page. Log in to use this website!");
+      notifySuccessLogout = () => toast.success("You logged out, have a nice day!")
+
+      notifyError = () => toast.error("Something went wrong! Try again later! If it doesn't help, contact administrator.");
+      notifyErrorLogin = () => toast.error("Incorrect username and/or password!");
+
+
       componentDidMount() {
         if (this.state.logged_in) {
           axios
             .get('http://localhost:8000/current_user/', {headers: { Authorization: `JWT ${localStorage.getItem('token')}`}})
             .then(res => {
-              this.setState({ username: res.data.username });
+              this.setState({ username: res.data.username }, () => this.notifySuccessLogin());
             })
+            .catch(() => this.notifyErrorLogin())
           }
       }
 
@@ -110,8 +120,9 @@
               logged_in: true,
               displayed_form: '',
               username: res.data.user.username
-            });
-          });
+            }, () => this.notifySuccessLogin());
+          })
+          .catch(() => this.notifyErrorLogin());
       };
     
       handle_signup = (e, data) => {
@@ -128,11 +139,12 @@
           .then(res => {
             localStorage.setItem('token', res.data.token);
             this.setState({
-              logged_in: true,
-              displayed_form: '',
+              logged_in: false,
+              displayed_form: 'login',
               username: res.data.username
-            });
-          });
+            }, () => this.notifySuccessRegister());
+          })
+          .catch(() => this.notifyErrorLogin());
       };
     
       handle_logout = () => {
@@ -148,7 +160,7 @@
           donePersonList: undefined,
           loadingRelationshipList: undefined,
           doneRelationshipList: undefined,
-        });
+        }, () => this.notifySuccessLogout());
       };
     
       display_form = form => {
@@ -161,14 +173,14 @@
         axios
           .get("http://localhost:8000/api/familytreepersons/", {headers: { Authorization: `JWT ${localStorage.getItem('token')}`}})
           .then(res => this.setState({ personList: res.data }))
-          .catch(err => console.log(err));
+          .catch(err => this.notifyError());
       };
 
       refreshRelationshipList = () => {
         axios
         .get("http://localhost:8000/api/familytreerelationship/", {headers: { Authorization: `JWT ${localStorage.getItem('token')}`}})
           .then(res => this.setState({ relationshipList: res.data }))
-          .catch(err => console.log(err));
+          .catch(err => this.notifyError());
       };
 
       render() {
@@ -230,6 +242,7 @@
                 </React.Fragment>
               )      
               : 'Please, log in.'}
+              <ToastContainer />
           </div>
         );
       }
