@@ -57,16 +57,21 @@
 
       notifyError = () => toast.error("Something went wrong! Try again later! If it doesn't help, contact administrator.");
       notifyErrorLogin = () => toast.error("Incorrect username and/or password!");
+      notifyErrorTimeout = () => toast.error("Your seesion has expired. Please, log in!");
 
 
       componentDidMount() {
         if (this.state.logged_in) {
+          console.log(localStorage.getItem('token'));
           axios
             .get('http://localhost:8000/current_user/', {headers: { Authorization: `JWT ${localStorage.getItem('token')}`}})
             .then(res => {
               this.setState({ username: res.data.username }, () => this.notifySuccessLogin());
             })
-            .catch(() => this.notifyErrorLogin())
+            .catch(() => {
+              this.notifyErrorTimeout();
+              this.handle_logout();
+            })
           }
       }
 

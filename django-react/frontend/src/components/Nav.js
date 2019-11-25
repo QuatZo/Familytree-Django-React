@@ -13,7 +13,7 @@ function Nav(props) {
 
   const logged_in_nav = (
     <React.Fragment>
-      <a class="navbar-brand" href="#"> | {props.username} | </a>
+      <a className="navbar-brand" href="#"> | {props.username} | </a>
         <button onClick={props.handle_logout} className="btn btn-outline-danger my-2 my-sm-0">Logout</button>
     </React.Fragment>
   );
