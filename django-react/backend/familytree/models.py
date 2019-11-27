@@ -61,6 +61,7 @@ class FamilytreeRelationship(models.Model):
         return self.relationships
 
 class Familytree(models.Model):
+    user_id = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
     person = models.ManyToManyField(FamilytreePerson)
     description = models.TextField()
     relationship = models.ManyToManyField(FamilytreeRelationship, blank=True)

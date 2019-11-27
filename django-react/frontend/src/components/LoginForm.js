@@ -20,13 +20,13 @@ class LoginForm extends React.Component {
 
   render() {
     return (
-      <div class="login-dark">
+      <div className="login-dark">
         <form method="post" onSubmit={e => this.props.handle_login(e, this.state)}>
-            <h2 class="sr-only">Login Form</h2>
-            <div class="illustration"><i class="far fa-user"></i></div>
-            <div class="form-group">
+            <h2 className="sr-only">Login Form</h2>
+            <div className="illustration"><i className="far fa-user"></i></div>
+            <div className="form-group">
               <input 
-              class="form-control" 
+              className="form-control" 
               type="text" 
               name="username" 
               placeholder="Username" 
@@ -36,9 +36,9 @@ class LoginForm extends React.Component {
               autoFocus
               />
             </div>
-            <div class="form-group">
+            <div className="form-group">
               <input 
-              class="form-control" 
+              className="form-control" 
               type="password" 
               name="password" 
               placeholder="Password" 
@@ -47,7 +47,7 @@ class LoginForm extends React.Component {
               required
               />
             </div>
-            <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Log In</button></div>
+            <div className="form-group"><button className="btn btn-primary btn-block" type="submit">Log In</button></div>
           </form>
       </div>
     );

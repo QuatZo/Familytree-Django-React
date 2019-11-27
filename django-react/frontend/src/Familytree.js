@@ -70,7 +70,7 @@
 
       refreshPersonList = () => {
         axios
-          .get("http://localhost:8000/api/familytreepersons/")
+          .get("http://localhost:8000/api/familytreepersons/", { params: {user_id: localStorage.getItem('user_id')}})
           .then(res => this.setState({ personList: res.data }))
           .then(() => this.getCoordinates())
           .catch(err => {
@@ -81,7 +81,7 @@
 
       refreshRelationshipList = () => {
         axios
-          .get("http://localhost:8000/api/familytreerelationship/")
+          .get("http://localhost:8000/api/familytreerelationship/", { params: {user_id: localStorage.getItem('user_id')}})
           .then(res => this.setState({ relationshipList: res.data }))
           .then(() => this.renderRelationships())
           .catch(err => {
@@ -298,7 +298,7 @@
       deleteRelationships(id){
         var relationships = [];
         axios
-          .get("http://localhost:8000/api/familytreerelationship/")
+          .get("http://localhost:8000/api/familytreerelationship/", {params: {user_id: localStorage.getItem('user_id')}})
           .then(res => relationships = res.data )
           .then(() => {
             relationships.map(item => {

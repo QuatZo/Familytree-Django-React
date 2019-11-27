@@ -45,7 +45,7 @@
           doneRelationshipList: undefined,
           displayed_form: localStorage.getItem('token') ? '' : 'login',
           logged_in: localStorage.getItem('token') ? true : false,
-          username: ''
+          username: '',
         };
       }
 
@@ -62,9 +62,10 @@
 
       componentDidMount() {
         if (this.state.logged_in) {
-          console.log(localStorage.getItem('token'));
           axios
-            .get('http://localhost:8000/current_user/', {headers: { Authorization: `JWT ${localStorage.getItem('token')}`}})
+            .get('http://localhost:8000/current_user/', {
+              headers: { Authorization: `JWT ${localStorage.getItem('token')}`},
+            })
             .then(res => {
               this.setState({ username: res.data.username }, () => this.notifySuccessLogin());
             })
@@ -80,7 +81,10 @@
           this.loginCounter += 1;
           setTimeout(() => {
             axios
-              .get("http://localhost:8000/api/familytreepersons/", {headers: { Authorization: `JWT ${localStorage.getItem('token')}`}})
+              .get("http://localhost:8000/api/familytreepersons/", {
+                headers: { Authorization: `JWT ${localStorage.getItem('token')}`},
+                params: {user_id: localStorage.getItem('user_id')}
+              })
               .then(res => this.setState({ personList: res.data }))
               .then(() => {
                   this.setState({ loadingPersonList: true });
@@ -96,7 +100,10 @@
         this.setState({ donePersonList: true });
         setTimeout(() => {
         axios
-          .get("http://localhost:8000/api/familytreerelationship/", {headers: { Authorization: `JWT ${localStorage.getItem('token')}`}})
+          .get("http://localhost:8000/api/familytreerelationship/", {
+            headers: { Authorization: `JWT ${localStorage.getItem('token')}`},
+            params: {user_id: localStorage.getItem('user_id')}
+          })
           .then(res => this.setState({ relationshipList: res.data }))
           .then(() => {
             this.setState({ loadingRelationshipList: true });
@@ -121,10 +128,11 @@
           .then(res => {
             // we store the user's ID under res.data.user.id
             localStorage.setItem('token', res.data.token);
+            localStorage.setItem('user_id', res.data.user.id);
             this.setState({
               logged_in: true,
               displayed_form: '',
-              username: res.data.user.username
+              username: res.data.user.username,
             }, () => this.notifySuccessLogin());
           })
           .catch(() => this.notifyErrorLogin());
@@ -142,7 +150,6 @@
         };
         axios(options)
           .then(res => {
-            localStorage.setItem('token', res.data.token);
             this.setState({
               logged_in: false,
               displayed_form: 'login',
@@ -154,6 +161,7 @@
     
       handle_logout = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('user_id');
         this.loginCounter = 0;
         this.setState({ 
           logged_in: false, 
@@ -176,14 +184,21 @@
 
       refreshPersonList = () => {
         axios
-          .get("http://localhost:8000/api/familytreepersons/", {headers: { Authorization: `JWT ${localStorage.getItem('token')}`}})
+          .get("http://localhost:8000/api/familytreepersons/", {
+            headers: { Authorization: `JWT ${localStorage.getItem('token')}`},
+            params: {user_id: localStorage.getItem('user_id')}
+          })
           .then(res => this.setState({ personList: res.data }))
+          .then(() => console.log(this.state.user_id))
           .catch(err => this.notifyError());
       };
 
       refreshRelationshipList = () => {
         axios
-        .get("http://localhost:8000/api/familytreerelationship/", {headers: { Authorization: `JWT ${localStorage.getItem('token')}`}})
+        .get("http://localhost:8000/api/familytreerelationship/", {
+          headers: { Authorization: `JWT ${localStorage.getItem('token')}`},
+          params: {user_id: localStorage.getItem('user_id')}
+        })
           .then(res => this.setState({ relationshipList: res.data }))
           .catch(err => this.notifyError());
       };
