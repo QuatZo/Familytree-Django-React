@@ -1,18 +1,14 @@
 from django.db import models
+from django.contrib.auth.models import User
 import datetime
+from django.conf import settings
 
+AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 
 # Create your models here
-class Familytree(models.Model):
-    title = models.CharField(max_length=120)
-    description = models.TextField()
-    completed = models.BooleanField(default=False)
-
-    def _str_(self):
-        return self.title
-
 
 class FamilytreePerson(models.Model):
+    user_id = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     birth_date = models.CharField(max_length=10, blank=True, default='')
@@ -39,8 +35,9 @@ class FamilytreePerson(models.Model):
         return self.first_name + " " + self.last_name 
 
 class FamilytreeRelationship(models.Model):
-    id_1 = models.CharField(max_length=50)
-    id_2 = models.CharField(max_length=50)
+    user_id = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
+    id_1 = models.ForeignKey(FamilytreePerson, on_delete=models.CASCADE, related_name="id_1")
+    id_2 = models.ForeignKey(FamilytreePerson, on_delete=models.CASCADE, related_name="id_2")
 
     father = 'father'
     mother = 'mother'
@@ -57,6 +54,25 @@ class FamilytreeRelationship(models.Model):
     stepdaughter = 'stepdaughter'
     stepson = 'stepson'
 
-
     relationships = [(father, 'father'),(mother, 'mother'),(brother, 'brother'),(sister, 'sister'), (son, 'son'), (daughter, 'daughter'), (adoptive_son, 'adoptive son'), (adoptive_daughter, 'adoptive daughter'), (surrogate_father, 'surrogate father'), (surrogate_mother, 'surrogate mother'), (stepbrother, 'stepbrother'), (stepsister,'stepsister'), (stepdaughter, 'stepdaughter'), (stepson, 'stepson')]
     relationships = models.CharField(max_length = 35,choices = relationships, default = father)
+
+    def _str_(self):
+        return self.relationships
+
+class Familytree(models.Model):
+    user_id = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
+    person = models.ManyToManyField(FamilytreePerson)
+    description = models.TextField()
+    relationship = models.ManyToManyField(FamilytreeRelationship, blank=True)
+
+    def get_persons(self):
+        print(self.person.all())
+        return "\n".join([str(p) for p in self.person.all()])
+
+    def get_relationships(self):
+        return "\n".join([str(r) for r in self.relationship.all()])
+
+
+    def _str_(self):
+        return self.description

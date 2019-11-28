@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import Familytree, FamilytreePerson, FamilytreeRelationship
 
 class FamilytreeAdmin(admin.ModelAdmin):
-	list_display = ('title', 'description', 'completed')
+	list_display = ('get_persons', 'description', 'get_relationships')
 	
 class FamilytreePersonAdmin(admin.ModelAdmin):
 	list_display = ('first_name', 'last_name', 'birth_date', 'status_choices', 'sex_choices', 'birth_place')

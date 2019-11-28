@@ -7,3 +7,6 @@ Timelines (modal, scrollable probably the best option):
 	
 Dropzone for images:
 	https://www.npmjs.com/package/react-dropzone
+	
+Movie player:
+	https://www.npmjs.com/package/react-player

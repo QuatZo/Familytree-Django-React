@@ -21,8 +21,17 @@
       handleSubmit = item => {
         this.toggle();
         if (item.id) {
-          axios
-            .put(`http://localhost:8000/api/familytreepersons/${item.id}/`, item)
+          const options = {
+            url: `http://localhost:8000/api/familytreepersons/${item.id}/`,
+            content: item,
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `JWT ${localStorage.getItem('token')}`
+            },
+            data: item
+          };
+          axios(options)
             .then(() => this.props.refresh())
             .then(() => this.props.notifySave())
             .catch(err => {
@@ -31,8 +40,13 @@
             });
           return;
         }
-        axios
-          .post("http://localhost:8000/api/familytreepersons/", item)
+        
+        axios.post('http://localhost:8000/api/familytreepersons/', item, {
+          headers: {
+          'Content-Type': 'application/json',
+          Accept : 'application/json',
+          Authorization: `JWT ${localStorage.getItem('token')}`
+        }})
           .then(() => this.props.refresh())
           .then(() => this.props.notifySave())
           .catch(err => {
@@ -46,10 +60,15 @@
       };
 
       handleDelete = item => {
-        this.props.deleteRelationships(item.id)
+        // because of Django's foreign key & on_delete param, it deletes relationships, so it's no longer needed
+        // this function hasn't been deleted from familytree.js, because it'll be used for single relationship delete
+        // this.props.deleteRelationships(item.id)
         axios
-          .delete(`http://localhost:8000/api/familytreepersons/${item.id}`)
+          .delete(`http://localhost:8000/api/familytreepersons/${item.id}`, {
+            headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
+          })
           .then(() => this.props.refresh())
+          .then(() => this.props.refreshRelationships())
           .then(() => this.props.notifyDelete())
           .catch(err => {
             console.log(err);
@@ -112,13 +131,13 @@
                   <div>
                     <button
                       onClick={() => this.editItem(this.props.person)}
-                      className="btn btn-info btn-xl personbutton"
+                      className="btn btn-outline-info btn-xl personbutton"
                     >
                       <i className="fas fa-user-edit"></i>
                     </button>
                     <button
                       onClick={() => {if(window.confirm("Are you sure you want to delete " + this.props.person.first_name + " " + this.props.person.last_name + " with connected relationships from Familytree?")) this.handleDelete(this.props.person)}}
-                      className="btn btn-danger btn-xl personbutton"
+                      className="btn btn-outline-danger btn-xl personbutton"
                     >
                       <i className="fas fa-user-minus"></i>
                     </button>

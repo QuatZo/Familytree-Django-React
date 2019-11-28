@@ -19,7 +19,7 @@
         this.state = { 
           personList: this.props.personList,
           activePersons: this.props.activePersons,
-          relationship_choices: 'father'
+          relationship_choices: 'father',
         };
       }
       handleChange = (e) => {
@@ -62,15 +62,12 @@
                     <option value="stepsister">Stepsister</option>
                     <option value="stepson">Stepson</option>
                     <option value="stepdaughter">Stepdaughter</option>
-
-
-
                   </select>
                 </FormGroup>
               </Form>
             </ModalBody>
             <ModalFooter>
-              <Button color="success" onClick={() => onSave({"id_1": this.state.activePersons[0], "id_2": this.state.activePersons[1],"relationships": this.state.relationship_choices})}>
+              <Button color="success" onClick={() => onSave({"user_id": localStorage.getItem('user_id'), "id_1": this.state.activePersons[0], "id_2": this.state.activePersons[1],"relationships": this.state.relationship_choices})}>
                 Save
               </Button>
             </ModalFooter>
