@@ -31,11 +31,23 @@ class FamilytreeView(viewsets.ModelViewSet):
     serializer_class = FamilytreeSerializer
     queryset = Familytree.objects.all()
 
+    def get_queryset(self):
+        user = self.request.user
+        return Familytree.objects.filter(user_id=user)
+
 
 class FamilytreePersonView(viewsets.ModelViewSet):
     serializer_class = FamilytreePersonSerializer
     queryset = FamilytreePerson.objects.all()
 
+    def get_queryset(self):
+        user = self.request.user
+        return FamilytreePerson.objects.filter(user_id=user)
+
 class FamilytreeRelationshipView(viewsets.ModelViewSet):
     serializer_class = FamilytreeRelationshipSerializer
     queryset = FamilytreeRelationship.objects.all()
+
+    def get_queryset(self):
+        user = self.request.user
+        return FamilytreeRelationship.objects.filter(user_id=user)

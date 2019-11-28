@@ -82,8 +82,7 @@
           setTimeout(() => {
             axios
               .get("http://localhost:8000/api/familytreepersons/", {
-                headers: { Authorization: `JWT ${localStorage.getItem('token')}`},
-                params: {user_id: localStorage.getItem('user_id')}
+                headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
               })
               .then(res => this.setState({ personList: res.data }))
               .then(() => {
@@ -101,8 +100,7 @@
         setTimeout(() => {
         axios
           .get("http://localhost:8000/api/familytreerelationship/", {
-            headers: { Authorization: `JWT ${localStorage.getItem('token')}`},
-            params: {user_id: localStorage.getItem('user_id')}
+            headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
           })
           .then(res => this.setState({ relationshipList: res.data }))
           .then(() => {
@@ -185,8 +183,7 @@
       refreshPersonList = () => {
         axios
           .get("http://localhost:8000/api/familytreepersons/", {
-            headers: { Authorization: `JWT ${localStorage.getItem('token')}`},
-            params: {user_id: localStorage.getItem('user_id')}
+            headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
           })
           .then(res => this.setState({ personList: res.data }))
           .then(() => console.log(this.state.user_id))
@@ -196,8 +193,7 @@
       refreshRelationshipList = () => {
         axios
         .get("http://localhost:8000/api/familytreerelationship/", {
-          headers: { Authorization: `JWT ${localStorage.getItem('token')}`},
-          params: {user_id: localStorage.getItem('user_id')}
+          headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
         })
           .then(res => this.setState({ relationshipList: res.data }))
           .catch(err => this.notifyError());
