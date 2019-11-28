@@ -19,6 +19,7 @@
         this.state = {
           viewCompleted: false,
           activePersonData: {
+            user_id: localStorage.getItem('user_id'),
             first_name: '',
             last_name: '',
             birth_date: '',
@@ -70,7 +71,9 @@
 
       refreshPersonList = () => {
         axios
-          .get("http://localhost:8000/api/familytreepersons/")
+          .get("http://localhost:8000/api/familytreepersons/", {
+            headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
+          })
           .then(res => this.setState({ personList: res.data }))
           .then(() => this.getCoordinates())
           .catch(err => {
@@ -81,7 +84,9 @@
 
       refreshRelationshipList = () => {
         axios
-          .get("http://localhost:8000/api/familytreerelationship/")
+          .get("http://localhost:8000/api/familytreerelationship/", {
+            headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
+          })
           .then(res => this.setState({ relationshipList: res.data }))
           .then(() => this.renderRelationships())
           .catch(err => {
@@ -101,8 +106,17 @@
       handleSubmitPerson = item => {
         this.togglePersonModal();
         if (item.id) {
-          axios
-            .put(`http://localhost:8000/api/familytreepersons/${item.id}/`, item)
+          const options = {
+            url: `http://localhost:8000/api/familytreepersons/${item.id}/`,
+            content: item,
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `JWT ${localStorage.getItem('token')}`
+            },
+            data: item
+          };
+          axios(options)
             .then(() => this.refreshPersonList())
             .then(() => this.notifySavePerson())
             .catch(err => {
@@ -111,8 +125,19 @@
             });
           return;
         }
-        axios
-          .post("http://localhost:8000/api/familytreepersons/", item)
+
+        const options = {
+          url: 'http://localhost:8000/api/familytreepersons/',
+          content: item,
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept : 'application/json',
+            Authorization: `JWT ${localStorage.getItem('token')}`
+          },
+          data: item
+        };
+        axios(options)
           .then(() => this.refreshPersonList())
           .then(() => this.notifyAddPerson())
           .catch(err => {
@@ -124,8 +149,17 @@
       handleSubmitRelationship = item => {
         this.toggleRelationshipModal();
         if (item.id) {
-          axios
-            .put(`http://localhost:8000/api/familytreerelationship/${item.id}/`, item)
+          const options = {
+            url: `http://localhost:8000/api/familytreerelationship/${item.id}/`,
+            content: item,
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `JWT ${localStorage.getItem('token')}`
+            },
+            data: item
+          };
+          axios(options)
             .then(() => this.refreshRelationshipList())
             .then(() => this.notifySaveRelationship())
             .catch(err => {
@@ -134,18 +168,29 @@
             });
           return;
         }
-        axios
-          .post("http://localhost:8000/api/familytreerelationship/", item)
+        const options = {
+          url: 'http://localhost:8000/api/familytreerelationship/',
+          content: item,
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept : 'application/json',
+            Authorization: `JWT ${localStorage.getItem('token')}`
+          },
+          data: item
+        };
+        axios(options)
           .then(() => this.refreshRelationshipList())
           .then(() => this.notifyAddRelationship())
           .catch(err => {
+            console.log(item)
             console.log(err);
             this.notifyError();
           });
       };
       
       createPerson = () => {
-        const item = { first_name: "", last_name: "", birth_date: "", status_choices: 'living', sex_choices: 'male', birth_place: ""};
+        const item = { user_id: localStorage.getItem('user_id'), first_name: "", last_name: "", birth_date: "", status_choices: 'living', sex_choices: 'male', birth_place: ""};
         this.setState({ activeItem: item, modal: !this.state.modal });
       };
 
@@ -243,7 +288,9 @@
         personListHTML.map(item => {
           var personNew = [];
           axios
-          .get(`http://localhost:8000/api/familytreepersons/${item.id}/`, item)
+          .get(`http://localhost:8000/api/familytreepersons/${item.id}/`, { 
+            headers: { Authorization: `JWT ${localStorage.getItem('token')}` }
+          })
           .then(res => {
             personNew = res.data;
             personListCoords.map(coords => {
@@ -253,7 +300,9 @@
             }
             })
           })
-          .then(() => axios.put(`http://localhost:8000/api/familytreepersons/${personNew.id}/`, personNew))
+          .then(() => axios.put(`http://localhost:8000/api/familytreepersons/${personNew.id}/`, personNew, {
+            headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
+          }))
           .catch(err => {
             console.log(err);
             saved = false;
@@ -295,19 +344,25 @@
           this.setState({activePersons: array});
       }
 
-      deleteRelationships(id){
+      // it will be useful in the future, after some rework
+      /* deleteRelationships(id){
         var relationships = [];
         axios
-          .get("http://localhost:8000/api/familytreerelationship/")
+          .get("http://localhost:8000/api/familytreerelationship/", {
+            headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
+          })
           .then(res => relationships = res.data )
           .then(() => {
             relationships.map(item => {
               if(parseInt(id)===parseInt(item.id_1) || parseInt(id)===parseInt(item.id_2)){
                 axios
-                .delete(`http://localhost:8000/api/familytreerelationship/${item.id}`)
+                .delete(`http://localhost:8000/api/familytreerelationship/${item.id}`, {
+                  headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
+                })
                 .then(() => this.refreshRelationshipList())
                 .then(() => this.notifyDeleteRelationship())
                 .catch(err => {
+                  console.log(item)
                   console.log(err);
                   this.notifyError();
                 });
@@ -318,7 +373,7 @@
             console.log(err);
             this.notifyError();
           });
-      }
+      } */
 
       renderRelationships = () => {
           var relationshipPairList = [];
@@ -392,7 +447,7 @@
             setActivePerson={this.setActivePerson.bind(this)}
             getCoordinates={this.getCoordinates.bind(this)}
             renderRelationships={this.renderRelationships.bind(this)}
-            deleteRelationships={this.deleteRelationships.bind(this)}
+            refreshRelationships={this.refreshRelationshipList.bind(this)}
             notifyDelete={this.notifyDeletePerson.bind(this)}
             notifySave={this.notifySavePerson.bind(this)}
             notifyError={this.notifyError.bind(this)}

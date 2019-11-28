@@ -57,6 +57,16 @@
             <ModalBody>
               <Form>
               <FormGroup>
+                <Input
+                type="number"
+                name="user_id"
+                value={localStorage.getItem('user_id')}
+                hidden
+                readOnly
+                >
+                </Input>
+              </FormGroup>
+              <FormGroup>
                   <Label for="first_name">First Name</Label>
                   <Input
                     type="text"
