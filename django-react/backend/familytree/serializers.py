@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
 from django.contrib.auth.models import User
-from .models import Familytree, FamilytreePerson, FamilytreeRelationship
+from .models import FamilytreePerson, FamilytreeRelationship
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -33,12 +33,6 @@ class UserSerializerWithToken(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('token', 'username', 'password')
-
-class FamilytreeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Familytree
-        fields = ('id', 'user_id', 'person', 'description', 'relationship')
-
 
 class FamilytreePersonSerializer(serializers.ModelSerializer):
     class Meta:

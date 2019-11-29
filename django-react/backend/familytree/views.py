@@ -7,8 +7,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import FamilytreeSerializer, FamilytreePersonSerializer, FamilytreeRelationshipSerializer, UserSerializer, UserSerializerWithToken
-from .models import Familytree, FamilytreePerson, FamilytreeRelationship
+from .serializers import FamilytreePersonSerializer, FamilytreeRelationshipSerializer, UserSerializer, UserSerializerWithToken
+from .models import FamilytreePerson, FamilytreeRelationship
 
 
 @api_view(['GET'])
@@ -26,14 +26,6 @@ class UserList(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-class FamilytreeView(viewsets.ModelViewSet):
-    serializer_class = FamilytreeSerializer
-
-    def get_queryset(self):
-        user = self.request.user
-        return Familytree.objects.filter(user_id=user)
-
 
 class FamilytreePersonView(viewsets.ModelViewSet):
     serializer_class = FamilytreePersonSerializer
