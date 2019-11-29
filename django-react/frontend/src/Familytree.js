@@ -49,6 +49,7 @@
       notifySaveRelationship = () => toast.success("New data of the relationship has been saved!");
       notifySaveCoords = () => toast.success("New coords have been saved!");
 
+      notifyDelete = () => toast.warn("Everything has been deleted! Now you can start from scratch.");
       notifyDeletePerson = () => toast.warn("Person has been deleted!");
       notifyDeleteRelationship = () => toast.warn("Relationship has been deleted!");
 
@@ -344,6 +345,33 @@
           this.setState({activePersons: array});
       }
 
+
+      deleteEverything(){
+        // since relationships are connected w/ persons, we don't need to delete any relationship. Just persons.
+        axios
+          .get("http://localhost:8000/api/familytreepersons/", {
+            headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
+          })
+          .then(res => {
+            res.data.map(item => {
+              axios
+              .delete(`http://localhost:8000/api/familytreepersons/${item.id}`, {
+                headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
+              })
+              .then(() => {
+                this.refreshPersonList();
+                this.refreshRelationshipList();
+              })
+            })
+          })
+          .then(() => {
+            this.notifyDelete();
+          })
+          .catch(err => {
+            console.log(err);
+            this.notifyError();
+          });
+      }
       // it will be useful in the future, after some rework
       /* deleteRelationships(id){
         var relationships = [];
@@ -480,7 +508,10 @@
               ) : null}
             </div>
             <div className="buttons">
-              <button onClick={this.resetCoords.bind(this)} className="btn btn-outline-danger btn-circle btn-xl">
+              <button onClick={() => {if(window.confirm("Are you sure you want to delete WHOLE Family Tree?")) this.deleteEverything()}} className="btn btn-outline-danger btn-circle btn-xl">
+                <i className="fas fa-times"></i>
+              </button>
+              <button onClick={this.resetCoords.bind(this)} className="btn btn-outline-warning btn-circle btn-xl">
                 <i className="fas fa-redo"></i>
               </button>
               <button disabled={this.state.saving} onClick={() => {if(window.confirm("Are you sure you want to save the coordinates?")) this.saveCoords()}} className="btn btn-outline-info btn-circle btn-xl">
