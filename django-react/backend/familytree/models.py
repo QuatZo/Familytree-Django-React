@@ -13,6 +13,7 @@ class FamilytreePerson(models.Model):
     last_name = models.CharField(max_length=50)
     birth_date = models.CharField(max_length=10, blank=True, default='')
     birth_place = models.CharField(max_length=50, blank=True, default='')
+    avatar = models.CharField(max_length=200, default='/media/avatars/0.png')
     
     living = 'living'
     deceased = 'deceased'

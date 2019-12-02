@@ -37,7 +37,7 @@ class UserSerializerWithToken(serializers.ModelSerializer):
 class FamilytreePersonSerializer(serializers.ModelSerializer):
     class Meta:
         model = FamilytreePerson
-        fields = ('id', 'user_id', 'first_name', 'last_name', 'birth_date', 'status_choices', 'sex_choices', 'birth_place', 'x', 'y')
+        fields = ('id', 'avatar', 'user_id', 'first_name', 'last_name', 'birth_date', 'status_choices', 'sex_choices', 'birth_place', 'x', 'y')
 
 class FamilytreeRelationshipSerializer(serializers.ModelSerializer):
     class Meta:

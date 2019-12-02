@@ -118,10 +118,10 @@
                   onMouseUp={this.handleClick.bind(this)}
                   onMouseMove={this.handleMovement.bind(this)}
                 >
-                  <img src="https://live.staticflickr.com/7038/6944665187_b8cd703bc2.jpg" 
+                  <img src={this.props.person.avatar}
                   draggable="false"
                   className = "img-thumbnail"
-                  alt = "Error not found"/>
+                  alt = "Error: not found"/>
                   <div
                     className={`name`}
                     first_name={this.props.person.first_name}
