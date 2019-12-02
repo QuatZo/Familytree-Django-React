@@ -9,6 +9,7 @@
     import ModalPerson from "./components/PersonModal";
     import { toast } from 'react-toastify';
     import 'react-toastify/dist/ReactToastify.css';
+    import { Tooltip } from 'react-svg-tooltip';
 
     
     import './Familytree.css';
@@ -58,7 +59,7 @@
       componentDidMount(){
         this.updateWindowDimensions();
         window.addEventListener('resize', this.updateWindowDimensions);
-        this.getCoordinates()
+        this.getCoordinates();
       }
 
       componentWillUnmount() {
@@ -430,19 +431,22 @@
               y2: relationshipPersonList[i+1].screen.y + this.state.personSize.height / 2});
           }
 
-          var colorOfRelationship = []
+          var colorOfRelationship = [];
+          var reference = [];
 
-          relationshipPairList.map(() => (
-              colorOfRelationship.push('rgb(' + randomColor[Math.floor(Math.random()*randomColor.length)] + ',' + randomColor[Math.floor(Math.random()*randomColor.length)] + ',' + randomColor[Math.floor(Math.random()*randomColor.length)] + ')')
-          ))
+          relationshipPairList.map(() => {
+              colorOfRelationship.push('rgb(' + randomColor[Math.floor(Math.random()*randomColor.length)] + ',' + randomColor[Math.floor(Math.random()*randomColor.length)] + ',' + randomColor[Math.floor(Math.random()*randomColor.length)] + ')');
+              const lineRef = React.createRef();
+              reference.push(lineRef);
+          })
 
           this.setState({
             relationships: (relationshipPairList.map(item => (
               <React.Fragment
               key={"fragment_" + item.id1 + "_" + item.id2}
               >
-                
                 <polyline 
+                ref={reference[item.id]}
                 id={"path_" + item.id1 + "_" + item.id2}
                 points={Math.round(item.x1) + " " + Math.round(item.y1) +
                 ", " + Math.round(item.x1) + " " + Math.round((Math.round(item.y1) + Math.round(item.y2))/2) +
@@ -451,13 +455,10 @@
                 stroke = {colorOfRelationship[item.id]}
                 strokeWidth="3" 
                 fill="none"/>
-                <text 
-                x={(Math.round(item.x1) + Math.round(item.x2))/2} 
-                y={Math.round((Math.round(item.y1) + Math.round(item.y2))/2) - 5} 
-                className="relationshipNames"
-                fill={colorOfRelationship[item.id]}>
-                  {item.relationship}
-                </text>
+                <Tooltip triggerRef={reference[item.id]}>
+                    <rect x={0} y={-35} width={75} height={35} rx={5} ry={5} fill='black'/>
+                    <text x={15} y={-10} fontSize={18} fill='white'>{item.relationship}</text>
+                </Tooltip>
               </React.Fragment>
               )
             )
