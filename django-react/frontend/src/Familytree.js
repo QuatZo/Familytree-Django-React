@@ -7,9 +7,9 @@
     import Person from "./Person";
     import ModalRelationship from "./components/RelationshipModal";
     import ModalPerson from "./components/PersonModal";
-    import { toast } from 'react-toastify';
-    import 'react-toastify/dist/ReactToastify.css';
-
+    import { Tooltip } from 'react-svg-tooltip';
+    import NOTIFY from './Enums.ts';
+    import ShowNotification from './components/Notification';
     
     import './Familytree.css';
 
@@ -39,25 +39,10 @@
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
       }  
 
-      notifyReset = () => toast.info("The position of all persons has been set to the initial!");
-      notifySaving = () => toast.info("Saving coordinates... Do not leave the page until the saving process is finished!");
-
-      notifyAddPerson = () => toast.success("New person has been added, it should be at the top-left corner of the page!");
-      notifyAddRelationship = () => toast.success("New relationship has been added, it should be visible. If not, try to move something around!");
-
-      notifySavePerson = () => toast.success("New data of the person has been saved!");
-      notifySaveRelationship = () => toast.success("New data of the relationship has been saved!");
-      notifySaveCoords = () => toast.success("New coords have been saved!");
-
-      notifyDeletePerson = () => toast.warn("Person has been deleted!");
-      notifyDeleteRelationship = () => toast.warn("Relationship has been deleted!");
-
-      notifyError = () => toast.error("Something went wrong! Try again later! If it doesn't help, contact administrator.");
-
       componentDidMount(){
         this.updateWindowDimensions();
         window.addEventListener('resize', this.updateWindowDimensions);
-        this.getCoordinates()
+        this.getCoordinates();
       }
 
       componentWillUnmount() {
@@ -78,7 +63,7 @@
           .then(() => this.getCoordinates())
           .catch(err => {
             console.log(err);
-            this.notifyError();
+            ShowNotification(NOTIFY.ERROR);
           });
       };
 
@@ -91,7 +76,7 @@
           .then(() => this.renderRelationships())
           .catch(err => {
             console.log(err);
-            this.notifyError();
+            ShowNotification(NOTIFY.ERROR);
           });
       };
 
@@ -118,10 +103,10 @@
           };
           axios(options)
             .then(() => this.refreshPersonList())
-            .then(() => this.notifySavePerson())
+            .then(() => ShowNotification(NOTIFY.SAVE_PERSON))
             .catch(err => {
               console.log(err);
-              this.notifyError();
+              ShowNotification(NOTIFY.ERROR);
             });
           return;
         }
@@ -139,10 +124,10 @@
         };
         axios(options)
           .then(() => this.refreshPersonList())
-          .then(() => this.notifyAddPerson())
+          .then(() => ShowNotification(NOTIFY.ADD_PERSON))
           .catch(err => {
             console.log(err);
-            this.notifyError();
+            ShowNotification(NOTIFY.ERROR);
           });
       };
 
@@ -161,10 +146,10 @@
           };
           axios(options)
             .then(() => this.refreshRelationshipList())
-            .then(() => this.notifySaveRelationship())
+            .then(() => ShowNotification(NOTIFY.SAVE_RELATIONSHIP))
             .catch(err => {
               console.log(err);
-              this.notifyError();
+              ShowNotification(NOTIFY.ERROR);
             });
           return;
         }
@@ -181,11 +166,10 @@
         };
         axios(options)
           .then(() => this.refreshRelationshipList())
-          .then(() => this.notifyAddRelationship())
+          .then(() => ShowNotification(NOTIFY.ADD_RELATIONSHIP))
           .catch(err => {
-            console.log(item)
             console.log(err);
-            this.notifyError();
+            ShowNotification(NOTIFY.ERROR);
           });
       };
       
@@ -276,11 +260,11 @@
         }
 
         this.getCoordinates();
-        this.notifyReset();
+        ShowNotification(NOTIFY.RESET)
       }
       
       saveCoords(){
-        this.notifySaving();
+        ShowNotification(NOTIFY.SAVING)
 
         var saved = true;
         var personListHTML = Array.from(document.querySelectorAll("div.person"));
@@ -306,7 +290,7 @@
           .catch(err => {
             console.log(err);
             saved = false;
-            this.notifyError();
+            ShowNotification(NOTIFY.ERROR);
           });        
         })
         this.setState({
@@ -314,7 +298,7 @@
         }, () => {
           setTimeout(() => {
             this.setState({saving: false});
-            if (saved) { this.notifySaveCoords() };
+            if (saved) { ShowNotification(NOTIFY.SAVE_COORDS) };
           }, 5000);
         })
       }
@@ -344,6 +328,33 @@
           this.setState({activePersons: array});
       }
 
+
+      deleteEverything(){
+        // since relationships are connected w/ persons, we don't need to delete any relationship. Just persons.
+        axios
+          .get("http://localhost:8000/api/familytreepersons/", {
+            headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
+          })
+          .then(res => {
+            res.data.map(item => {
+              axios
+              .delete(`http://localhost:8000/api/familytreepersons/${item.id}`, {
+                headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
+              })
+              .then(() => {
+                this.refreshPersonList();
+                this.refreshRelationshipList();
+              })
+            })
+          })
+          .then(() => {
+            ShowNotification(NOTIFY.DELETE);
+          })
+          .catch(err => {
+            console.log(err);
+            ShowNotification(NOTIFY.ERROR);
+          });
+      }
       // it will be useful in the future, after some rework
       /* deleteRelationships(id){
         var relationships = [];
@@ -360,18 +371,18 @@
                   headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
                 })
                 .then(() => this.refreshRelationshipList())
-                .then(() => this.notifyDeleteRelationship())
+                .then(() => ShowNotification(NOTIFY.DELETE_RELATIONSHIP)))
                 .catch(err => {
                   console.log(item)
                   console.log(err);
-                  this.notifyError();
+                  ShowNotification(NOTIFY.ERROR);
                 });
               }
             })
           })
           .catch(err => {
             console.log(err);
-            this.notifyError();
+            ShowNotification(NOTIFY.ERROR);
           });
       } */
 
@@ -402,19 +413,22 @@
               y2: relationshipPersonList[i+1].screen.y + this.state.personSize.height / 2});
           }
 
-          var colorOfRelationship = []
+          var colorOfRelationship = [];
+          var reference = [];
 
-          relationshipPairList.map(() => (
-              colorOfRelationship.push('rgb(' + randomColor[Math.floor(Math.random()*randomColor.length)] + ',' + randomColor[Math.floor(Math.random()*randomColor.length)] + ',' + randomColor[Math.floor(Math.random()*randomColor.length)] + ')')
-          ))
+          relationshipPairList.map(() => {
+              colorOfRelationship.push('rgb(' + randomColor[Math.floor(Math.random()*randomColor.length)] + ',' + randomColor[Math.floor(Math.random()*randomColor.length)] + ',' + randomColor[Math.floor(Math.random()*randomColor.length)] + ')');
+              const lineRef = React.createRef();
+              reference.push(lineRef);
+          })
 
           this.setState({
             relationships: (relationshipPairList.map(item => (
               <React.Fragment
               key={"fragment_" + item.id1 + "_" + item.id2}
               >
-                
                 <polyline 
+                ref={reference[item.id]}
                 id={"path_" + item.id1 + "_" + item.id2}
                 points={Math.round(item.x1) + " " + Math.round(item.y1) +
                 ", " + Math.round(item.x1) + " " + Math.round((Math.round(item.y1) + Math.round(item.y2))/2) +
@@ -423,13 +437,10 @@
                 stroke = {colorOfRelationship[item.id]}
                 strokeWidth="3" 
                 fill="none"/>
-                <text 
-                x={(Math.round(item.x1) + Math.round(item.x2))/2} 
-                y={Math.round((Math.round(item.y1) + Math.round(item.y2))/2) - 5} 
-                className="relationshipNames"
-                fill={colorOfRelationship[item.id]}>
-                  {item.relationship}
-                </text>
+                <Tooltip triggerRef={reference[item.id]}>
+                    <rect x={0} y={-35} width={75} height={35} rx={5} ry={5} fill='black'/>
+                    <text x={15} y={-10} fontSize={18} fill='white'>{item.relationship}</text>
+                </Tooltip>
               </React.Fragment>
               )
             )
@@ -448,9 +459,6 @@
             getCoordinates={this.getCoordinates.bind(this)}
             renderRelationships={this.renderRelationships.bind(this)}
             refreshRelationships={this.refreshRelationshipList.bind(this)}
-            notifyDelete={this.notifyDeletePerson.bind(this)}
-            notifySave={this.notifySavePerson.bind(this)}
-            notifyError={this.notifyError.bind(this)}
           />
         ));
       };
@@ -480,7 +488,10 @@
               ) : null}
             </div>
             <div className="buttons">
-              <button onClick={this.resetCoords.bind(this)} className="btn btn-outline-danger btn-circle btn-xl">
+              <button onClick={() => {if(window.confirm("Are you sure you want to delete WHOLE Family Tree?")) this.deleteEverything()}} className="btn btn-outline-danger btn-circle btn-xl">
+                <i className="fas fa-times"></i>
+              </button>
+              <button onClick={this.resetCoords.bind(this)} className="btn btn-outline-warning btn-circle btn-xl">
                 <i className="fas fa-redo"></i>
               </button>
               <button disabled={this.state.saving} onClick={() => {if(window.confirm("Are you sure you want to save the coordinates?")) this.saveCoords()}} className="btn btn-outline-info btn-circle btn-xl">

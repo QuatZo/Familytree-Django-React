@@ -20,7 +20,6 @@ from familytree import views
 from rest_framework_jwt.views import obtain_jwt_token
 
 router = routers.DefaultRouter()
-router.register(r'familytrees', views.FamilytreeView, 'familytree')
 router.register(r'familytreepersons', views.FamilytreePersonView, 'familytreeperson')
 router.register(r'familytreerelationship', views.FamilytreeRelationshipView, 'familytreerelationship')
 

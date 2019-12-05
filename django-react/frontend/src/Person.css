@@ -27,10 +27,9 @@
   
 .personcontainer{
   display: inline-block;
-  width: 9vw;
+  width: 8vw;
   min-width: 150px;
   position: fixed;
-  color: white;
   z-index: 1;
   visibility: hidden;
 }

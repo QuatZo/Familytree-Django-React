@@ -13,6 +13,7 @@ class FamilytreePerson(models.Model):
     last_name = models.CharField(max_length=50)
     birth_date = models.CharField(max_length=10, blank=True, default='')
     birth_place = models.CharField(max_length=50, blank=True, default='')
+    avatar = models.CharField(max_length=200, default='/media/avatars/0.png')
     
     living = 'living'
     deceased = 'deceased'
@@ -59,20 +60,3 @@ class FamilytreeRelationship(models.Model):
 
     def _str_(self):
         return self.relationships
-
-class Familytree(models.Model):
-    user_id = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
-    person = models.ManyToManyField(FamilytreePerson)
-    description = models.TextField()
-    relationship = models.ManyToManyField(FamilytreeRelationship, blank=True)
-
-    def get_persons(self):
-        print(self.person.all())
-        return "\n".join([str(p) for p in self.person.all()])
-
-    def get_relationships(self):
-        return "\n".join([str(r) for r in self.relationship.all()])
-
-
-    def _str_(self):
-        return self.description
