@@ -4,7 +4,9 @@
     import Draggable from 'react-draggable';
     import ModalPerson from "./components/PersonModal"
     import axios from "axios";
-	  import './Person.css';
+    import './Person.css';
+    import NOTIFY from './Enums.ts';
+    import ShowNotification from './components/Notification';
 
     class App extends Component {
       constructor(props) {
@@ -33,10 +35,10 @@
           };
           axios(options)
             .then(() => this.props.refresh())
-            .then(() => this.props.notifySave())
+            .then(() => ShowNotification(NOTIFY.SAVE_PERSON))
             .catch(err => {
               console.log(err);
-              this.props.notifyError();
+              ShowNotification(NOTIFY.ERROR);
             });
           return;
         }
@@ -48,10 +50,10 @@
           Authorization: `JWT ${localStorage.getItem('token')}`
         }})
           .then(() => this.props.refresh())
-          .then(() => this.props.notifySave())
+          .then(() => ShowNotification(NOTIFY.SAVE_PERSON))
           .catch(err => {
             console.log(err);
-            this.props.notifyError();
+            ShowNotification(NOTIFY.ERROR);
           });
       };
 
@@ -69,10 +71,10 @@
           })
           .then(() => this.props.refresh())
           .then(() => this.props.refreshRelationships())
-          .then(() => this.props.notifyDelete())
+          .then(() => ShowNotification(NOTIFY.DELETE_PERSON))
           .catch(err => {
             console.log(err);
-            this.props.notifyError();
+            ShowNotification(NOTIFY.ERROR);
           });
       };
 

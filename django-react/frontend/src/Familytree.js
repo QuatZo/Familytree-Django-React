@@ -7,10 +7,9 @@
     import Person from "./Person";
     import ModalRelationship from "./components/RelationshipModal";
     import ModalPerson from "./components/PersonModal";
-    import { toast } from 'react-toastify';
-    import 'react-toastify/dist/ReactToastify.css';
     import { Tooltip } from 'react-svg-tooltip';
-
+    import NOTIFY from './Enums.ts';
+    import ShowNotification from './components/Notification';
     
     import './Familytree.css';
 
@@ -40,22 +39,6 @@
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
       }  
 
-      notifyReset = () => toast.info("The position of all persons has been set to the initial!");
-      notifySaving = () => toast.info("Saving coordinates... Do not leave the page until the saving process is finished!");
-
-      notifyAddPerson = () => toast.success("New person has been added, it should be at the top-left corner of the page!");
-      notifyAddRelationship = () => toast.success("New relationship has been added, it should be visible. If not, try to move something around!");
-
-      notifySavePerson = () => toast.success("New data of the person has been saved!");
-      notifySaveRelationship = () => toast.success("New data of the relationship has been saved!");
-      notifySaveCoords = () => toast.success("New coords have been saved!");
-
-      notifyDelete = () => toast.warn("Everything has been deleted! Now you can start from scratch.");
-      notifyDeletePerson = () => toast.warn("Person has been deleted!");
-      notifyDeleteRelationship = () => toast.warn("Relationship has been deleted!");
-
-      notifyError = () => toast.error("Something went wrong! Try again later! If it doesn't help, contact administrator.");
-
       componentDidMount(){
         this.updateWindowDimensions();
         window.addEventListener('resize', this.updateWindowDimensions);
@@ -80,7 +63,7 @@
           .then(() => this.getCoordinates())
           .catch(err => {
             console.log(err);
-            this.notifyError();
+            ShowNotification(NOTIFY.ERROR);
           });
       };
 
@@ -93,7 +76,7 @@
           .then(() => this.renderRelationships())
           .catch(err => {
             console.log(err);
-            this.notifyError();
+            ShowNotification(NOTIFY.ERROR);
           });
       };
 
@@ -120,10 +103,10 @@
           };
           axios(options)
             .then(() => this.refreshPersonList())
-            .then(() => this.notifySavePerson())
+            .then(() => ShowNotification(NOTIFY.SAVE_PERSON))
             .catch(err => {
               console.log(err);
-              this.notifyError();
+              ShowNotification(NOTIFY.ERROR);
             });
           return;
         }
@@ -141,10 +124,10 @@
         };
         axios(options)
           .then(() => this.refreshPersonList())
-          .then(() => this.notifyAddPerson())
+          .then(() => ShowNotification(NOTIFY.ADD_PERSON))
           .catch(err => {
             console.log(err);
-            this.notifyError();
+            ShowNotification(NOTIFY.ERROR);
           });
       };
 
@@ -163,10 +146,10 @@
           };
           axios(options)
             .then(() => this.refreshRelationshipList())
-            .then(() => this.notifySaveRelationship())
+            .then(() => ShowNotification(NOTIFY.SAVE_RELATIONSHIP))
             .catch(err => {
               console.log(err);
-              this.notifyError();
+              ShowNotification(NOTIFY.ERROR);
             });
           return;
         }
@@ -183,11 +166,10 @@
         };
         axios(options)
           .then(() => this.refreshRelationshipList())
-          .then(() => this.notifyAddRelationship())
+          .then(() => ShowNotification(NOTIFY.ADD_RELATIONSHIP))
           .catch(err => {
-            console.log(item)
             console.log(err);
-            this.notifyError();
+            ShowNotification(NOTIFY.ERROR);
           });
       };
       
@@ -278,11 +260,11 @@
         }
 
         this.getCoordinates();
-        this.notifyReset();
+        ShowNotification(NOTIFY.RESET)
       }
       
       saveCoords(){
-        this.notifySaving();
+        ShowNotification(NOTIFY.SAVING)
 
         var saved = true;
         var personListHTML = Array.from(document.querySelectorAll("div.person"));
@@ -308,7 +290,7 @@
           .catch(err => {
             console.log(err);
             saved = false;
-            this.notifyError();
+            ShowNotification(NOTIFY.ERROR);
           });        
         })
         this.setState({
@@ -316,7 +298,7 @@
         }, () => {
           setTimeout(() => {
             this.setState({saving: false});
-            if (saved) { this.notifySaveCoords() };
+            if (saved) { ShowNotification(NOTIFY.SAVE_COORDS) };
           }, 5000);
         })
       }
@@ -366,11 +348,11 @@
             })
           })
           .then(() => {
-            this.notifyDelete();
+            ShowNotification(NOTIFY.DELETE);
           })
           .catch(err => {
             console.log(err);
-            this.notifyError();
+            ShowNotification(NOTIFY.ERROR);
           });
       }
       // it will be useful in the future, after some rework
@@ -389,18 +371,18 @@
                   headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
                 })
                 .then(() => this.refreshRelationshipList())
-                .then(() => this.notifyDeleteRelationship())
+                .then(() => ShowNotification(NOTIFY.DELETE_RELATIONSHIP)))
                 .catch(err => {
                   console.log(item)
                   console.log(err);
-                  this.notifyError();
+                  ShowNotification(NOTIFY.ERROR);
                 });
               }
             })
           })
           .catch(err => {
             console.log(err);
-            this.notifyError();
+            ShowNotification(NOTIFY.ERROR);
           });
       } */
 
@@ -477,9 +459,6 @@
             getCoordinates={this.getCoordinates.bind(this)}
             renderRelationships={this.renderRelationships.bind(this)}
             refreshRelationships={this.refreshRelationshipList.bind(this)}
-            notifyDelete={this.notifyDeletePerson.bind(this)}
-            notifySave={this.notifySavePerson.bind(this)}
-            notifyError={this.notifyError.bind(this)}
           />
         ));
       };

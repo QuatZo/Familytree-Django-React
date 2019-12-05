@@ -12,7 +12,9 @@
     import Lottie from "react-lottie";
     import * as stillLoadingData from "./stillloading.json";
     import * as doneLoadingData from "./doneloading.json";
-    import { ToastContainer, toast } from 'react-toastify';
+    import { ToastContainer} from 'react-toastify';
+    import NOTIFY from './Enums.ts';
+    import ShowNotification from './components/Notification';
     
     const defaultOptionsLoading = {
         loop: true,
@@ -31,7 +33,7 @@
           preserveAspectRatio: "xMidYMid meet"
         }
       };
-    
+
     class App extends Component {
       constructor(props) {
         super(props);
@@ -51,15 +53,6 @@
 
       loginCounter = 0;
 
-      notifySuccessLogin = () => toast.success("You logged in as " + this.state.username + ". Have a nice use!");
-      notifySuccessRegister = () => toast.success("You registered as " + this.state.username + " and will be redirected to login page. Log in to use this website!");
-      notifySuccessLogout = () => toast.success("You logged out, have a nice day!")
-
-      notifyError = () => toast.error("Something went wrong! Try again later! If it doesn't help, contact administrator.");
-      notifyErrorLogin = () => toast.error("Incorrect username and/or password!");
-      notifyErrorTimeout = () => toast.error("Your seesion has expired. Please, log in!");
-
-
       componentDidMount() {
         if (this.state.logged_in) {
           axios
@@ -67,10 +60,10 @@
               headers: { Authorization: `JWT ${localStorage.getItem('token')}`},
             })
             .then(res => {
-              this.setState({ username: res.data.username }, () => this.notifySuccessLogin());
+              this.setState({ username: res.data.username }, () => ShowNotification(NOTIFY.SUCCESS_LOGIN));
             })
             .catch(() => {
-              this.notifyErrorTimeout();
+              ShowNotification(NOTIFY.ERROR_TIMEOUT)
               this.handle_logout();
             })
           }
@@ -131,9 +124,9 @@
               logged_in: true,
               displayed_form: '',
               username: res.data.user.username,
-            }, () => this.notifySuccessLogin());
+            }, () => ShowNotification(NOTIFY.SUCCESS_LOGIN));
           })
-          .catch(() => this.notifyErrorLogin());
+          .catch(() => ShowNotification(NOTIFY.ERROR_LOGIN));
       };
     
       handle_signup = (e, data) => {
@@ -152,9 +145,9 @@
               logged_in: false,
               displayed_form: 'login',
               username: res.data.username
-            }, () => this.notifySuccessRegister());
+            }, () => ShowNotification(NOTIFY.SUCCESS_REGISTER));
           })
-          .catch(() => this.notifyErrorLogin());
+          .catch(() => ShowNotification(NOTIFY.ERROR_LOGIN));
       };
     
       handle_logout = () => {
@@ -169,9 +162,10 @@
           relationships: [],
           loadingPersonList: undefined,
           donePersonList: undefined,
+          displayed_form: 'login',
           loadingRelationshipList: undefined,
           doneRelationshipList: undefined,
-        }, () => this.notifySuccessLogout());
+        }, () => ShowNotification(NOTIFY.SUCCESS_LOGOUT));
       };
     
       display_form = form => {
@@ -187,7 +181,7 @@
           })
           .then(res => this.setState({ personList: res.data }))
           .then(() => console.log(this.state.user_id))
-          .catch(err => this.notifyError());
+          .catch(err => ShowNotification(NOTIFY.ERROR));
       };
 
       refreshRelationshipList = () => {
@@ -196,7 +190,7 @@
           headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
         })
           .then(res => this.setState({ relationshipList: res.data }))
-          .catch(err => this.notifyError());
+          .catch(err => ShowNotification(NOTIFY.ERROR));
       };
 
       render() {
