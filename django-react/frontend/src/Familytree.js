@@ -6,7 +6,7 @@
     import axios from "axios";
     import Person from "./Person";
     import ModalRelationship from "./components/RelationshipModal";
-    import ModalPerson from "./components/PersonModal";
+    import ModalPerson from "./components/PersonAddModal";
     import { Tooltip } from 'react-svg-tooltip';
     import NOTIFY from './Enums.ts';
     import ShowNotification from './components/Notification';

@@ -2,7 +2,7 @@
 
     import React, { Component } from "react";
     import Draggable from 'react-draggable';
-    import ModalPerson from "./components/PersonModal"
+    import ModalPerson from "./components/PersonEditTimelineModal"
     import axios from "axios";
     import './Person.css';
     import NOTIFY from './Enums.ts';
