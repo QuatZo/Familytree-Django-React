@@ -10,7 +10,7 @@
   width: 100%;
 }
 
-.personModalTimeline{
-  color: green;
-  font-size: 55px;
+.rt-arrow, 
+.rt-dot{
+  z-index: 0 !important;
 }

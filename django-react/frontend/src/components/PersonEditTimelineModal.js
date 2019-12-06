@@ -2,8 +2,10 @@
 
     import React, { Component } from "react";
     import DatePicker from "react-datepicker";
+    import Timeline from 'react-image-timeline';
     import 'react-datepicker/dist/react-datepicker.css';
     import '../PersonEdit.css'
+    import 'react-image-timeline/dist/timeline.css';
     
     import {
       Button,
@@ -18,6 +20,29 @@
       Input,
       Label,
     } from "reactstrap";
+
+    const sampleTimelineData = [
+      {
+        date: new Date(2013, 9, 27),
+        text: "Sed leo elit, pellentesque sit amet congue quis, ornare nec lorem.",
+        title: "Cairo, Egypt",
+        buttonText: 'Click Me',
+        imageUrl: "http://github.com/aaron9000/react-image-timeline/blob/master/src/assets/cairo.jpg?raw=true",
+        onClick: () => {
+            console.log('hello');
+        }
+      },
+      {
+        date: new Date(2019, 9, 27),
+        text: "Cogito ergo sum",
+        title: "Bytom, Poland",
+        buttonText: 'Hard-coded text?',
+        imageUrl: "/media/avatars/0.png",
+        onClick: () => {
+            console.log('hello');
+        }
+      }
+    ]
 
     export default class CustomModal extends Component {
       constructor(props) {
@@ -166,15 +191,7 @@
             </ModalHeader>
             <ModalBody>
               <div className="personModalTimeline">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam feugiat eget nibh et finibus. Donec dapibus erat felis, vel ullamcorper quam dapibus tincidunt. Quisque eget hendrerit ante. Etiam tempor quam lacinia urna vehicula dictum. Curabitur imperdiet lorem in erat porta finibus id eget dolor. Proin porttitor quis mauris id gravida. Sed nec mauris luctus, vehicula nisl vitae, sagittis dui. Sed efficitur nec risus semper bibendum. Nam ornare tincidunt diam et viverra. Suspendisse sem nisi, pulvinar ac ligula nec, ornare facilisis libero. Suspendisse potenti. Nulla blandit vestibulum magna.
-
-                Fusce mauris est, blandit at posuere in, suscipit vel ante. Nullam rutrum dapibus tortor ut volutpat. Quisque ex magna, pulvinar ac malesuada sed, maximus id purus. Aliquam ante dui, bibendum imperdiet erat ac, placerat finibus tortor. Vivamus massa mauris, efficitur in magna varius, tempor vestibulum turpis. Sed vehicula tempus sodales. Phasellus in lacus nisi. Morbi dictum lorem nec ullamcorper ullamcorper. Aliquam in vehicula quam.
-
-                Curabitur finibus sagittis quam, et commodo libero condimentum ut. Maecenas leo leo, eleifend eu nibh sit amet, cursus rhoncus lorem. Sed ac rutrum tellus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Fusce bibendum eget mauris vulputate vestibulum. Ut condimentum pharetra fringilla. Nullam metus nulla, suscipit et ante ultrices, ullamcorper volutpat libero. Quisque et odio varius ligula aliquam mattis. Sed varius augue non sem porttitor, eu tincidunt turpis venenatis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec hendrerit neque non varius mattis. Cras vitae orci vitae metus rutrum tempor nec at purus. Vivamus sed porta lacus, at ultricies tortor. Nulla facilisi. Vestibulum dignissim nisi diam, at porttitor tortor ullamcorper in. Suspendisse auctor consequat tellus quis lacinia.
-
-                Vivamus bibendum tempus erat vel lobortis. Praesent eu augue tortor. Ut sed metus lacus. Curabitur felis tortor, egestas eu massa ut, imperdiet consectetur ligula. Integer sit amet sagittis risus, vitae congue urna. Ut pellentesque non erat eget semper. Quisque elementum tristique bibendum. Fusce sodales neque et velit imperdiet interdum. Donec sit amet leo sed dui sodales mattis. In eu finibus orci. Suspendisse faucibus elit a lorem rhoncus pretium eget sit amet erat.
-
-                Aliquam placerat erat tincidunt neque laoreet auctor. Integer sed facilisis libero. Nam vestibulum semper felis vitae dignissim. Mauris vitae vehicula nisl, vitae posuere orci. Mauris cursus viverra lectus. Nam venenatis ullamcorper velit. Aliquam suscipit lacus non purus dapibus bibendum. Nunc ultrices orci non tincidunt porta. Aenean ac facilisis velit. Mauris et vehicula ligula, vitae sollicitudin est. Aliquam nec purus finibus, interdum nunc sed, luctus ante. Ut rutrum ipsum in ex accumsan, eu dignissim nisl dignissim. Cras vel leo vitae lacus vestibulum dictum. Nunc sed dui hendrerit, bibendum nibh a, fringilla velit. Praesent nec sollicitudin ligula. Curabitur ac luctus risus.
+              <Timeline events={sampleTimelineData} />
               </div>
             </ModalBody>
             <ModalFooter>

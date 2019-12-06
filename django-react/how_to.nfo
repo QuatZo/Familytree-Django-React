@@ -20,6 +20,7 @@
 17. npm install --save react-toastify
 18. npm install react-svg-tooltip
 19. npm install typescript
-20. npm start 
+20. npm install react-image-timeline --save
+21. npm start 
 
 Jesli wszystko dziala, wylacz i uruchom ***run.bat***
