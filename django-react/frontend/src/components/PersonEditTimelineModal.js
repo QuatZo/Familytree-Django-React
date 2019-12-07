@@ -6,6 +6,9 @@
     import 'react-datepicker/dist/react-datepicker.css';
     import '../PersonEdit.css'
     import 'react-image-timeline/dist/timeline.css';
+    import axios from "axios";
+    import NOTIFY from '../Enums.ts';
+    import ShowNotification from './Notification';
     
     import {
       Button,
@@ -53,28 +56,67 @@
             first_name: false,
             last_name: false,
           },
+          timelineData: [],
         };
       }
+
+      componentDidMount(){
+        this.downloadTimelineData();
+      }
+
+      downloadTimelineData(){
+        var data = [];
+        axios
+        .get("http://localhost:8000/api/familytreemilestone/", {
+          headers: { Authorization: `JWT ${localStorage.getItem('token')}`},
+          params: { person_id: this.props.activeItem.id }
+        })
+        .then(res => {
+          res.data.map(item => {
+            var dateStr = item.date.split("-");
+            data.push({
+              date: new Date(parseInt(dateStr[0]), parseInt(dateStr[1]) - 1, parseInt(dateStr[2])), // new Date uses months indexes, so 0-11 instead of 1-12; strange but true
+              text: item.text,
+              title: item.title,
+              buttonText: "Edit milestone",
+              imageUrl: item.image,
+              onClick: () => { console.log(item);}
+            });
+          });
+          this.setState({timelineData: data});
+        })
+        .catch(err => {
+          console.log(err);
+          ShowNotification(NOTIFY.ERROR);
+          this.setState({timelineData: []});
+        });
+      }
+
+
       handleChange = (e) => {
         let { name, value } = e.target;
         const activeItem = { ...this.state.activeItem, [name]: value};
         this.setState({ activeItem });
       };
+
       handleChangeDate = date => {
         const activeItem = { ...this.state.activeItem, ["birth_date"]: (new Date(date)).toISOString().slice(0, 10)};
         this.setState({activeItem});
       };
+
       validate(first_name, last_name){
         return{
           first_name: first_name.trim().length === 0,
           last_name: last_name.trim().length === 0
         }
       }
+
       handleBlur = (field) => (evt) => {
         this.setState({
           touched: { ...this.state.touched, [field]: true },
         });
       }
+
       render() {
         const { toggle, onSave } = this.props;
         const errors = this.validate(this.state.activeItem.first_name, this.state.activeItem.last_name);
@@ -189,11 +231,13 @@
                 </Row>
               </Form>
             </ModalHeader>
+            {this.state.timelineData.length < 1 ? null : 
             <ModalBody>
               <div className="personModalTimeline">
-              <Timeline events={sampleTimelineData} />
+              <Timeline events={this.state.timelineData} />
               </div>
             </ModalBody>
+            }
             <ModalFooter>
               <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem)}>
                 Save
