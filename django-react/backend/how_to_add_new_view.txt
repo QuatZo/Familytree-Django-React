@@ -1,0 +1,7 @@
+﻿1. Create model in models.py
+2. Create serializer in serializers.py
+3. Create view in views.py
+4. Register proxy for API in urls.py
+* Turn off server, if it wasn't already
+5. Run migrate.cmd
+6. Run server and have fun

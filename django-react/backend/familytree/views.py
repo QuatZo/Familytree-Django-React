@@ -7,8 +7,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import FamilytreePersonSerializer, FamilytreeRelationshipSerializer, UserSerializer, UserSerializerWithToken
-from .models import FamilytreePerson, FamilytreeRelationship
+from .serializers import FamilytreePersonSerializer, FamilytreeRelationshipSerializer, UserSerializer, UserSerializerWithToken, FamilytreeMilestoneSerializer
+from .models import FamilytreePerson, FamilytreeRelationship, FamilytreeMilestone
 
 
 @api_view(['GET'])
@@ -40,3 +40,13 @@ class FamilytreeRelationshipView(viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         return FamilytreeRelationship.objects.filter(user_id=user)
+
+class FamilytreeMilestoneView(viewsets.ModelViewSet):
+    serializer_class = FamilytreeMilestoneSerializer
+
+    def get_queryset(self):
+        person = self.request.query_params.get('person_id', None)
+        user = self.request.user
+        if person is not None:
+            return FamilytreeMilestone.objects.filter(user_id=user, person_id=person)
+        return None

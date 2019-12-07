@@ -26,8 +26,8 @@
         date: new Date(2013, 9, 27),
         text: "Sed leo elit, pellentesque sit amet congue quis, ornare nec lorem.",
         title: "Cairo, Egypt",
-        buttonText: 'Click Me',
-        imageUrl: "http://github.com/aaron9000/react-image-timeline/blob/master/src/assets/cairo.jpg?raw=true",
+        buttonText: 'Edit milestone',
+        imageUrl: "/media/milestones/default.jpg",
         onClick: () => {
             console.log('hello');
         }
@@ -36,8 +36,8 @@
         date: new Date(2019, 9, 27),
         text: "Cogito ergo sum",
         title: "Bytom, Poland",
-        buttonText: 'Hard-coded text?',
-        imageUrl: "/media/avatars/0.png",
+        buttonText: 'Edit milestone',
+        imageUrl: "/media/milestones/default.jpg",
         onClick: () => {
             console.log('hello');
         }

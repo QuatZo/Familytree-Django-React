@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
 from django.contrib.auth.models import User
-from .models import FamilytreePerson, FamilytreeRelationship
+from .models import FamilytreePerson, FamilytreeRelationship, FamilytreeMilestone
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -43,3 +43,8 @@ class FamilytreeRelationshipSerializer(serializers.ModelSerializer):
     class Meta:
         model = FamilytreeRelationship
         fields = ('id', 'user_id', 'id_1', 'id_2', 'relationships')
+
+class FamilytreeMilestoneSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FamilytreeMilestone
+        fields = ('id', 'user_id', 'person_id', 'date', 'title', 'text', 'image')

@@ -22,6 +22,7 @@ from rest_framework_jwt.views import obtain_jwt_token
 router = routers.DefaultRouter()
 router.register(r'familytreepersons', views.FamilytreePersonView, 'familytreeperson')
 router.register(r'familytreerelationship', views.FamilytreeRelationshipView, 'familytreerelationship')
+router.register(r'familytreemilestone', views.FamilytreeMilestoneView, 'familytreemilestone')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
