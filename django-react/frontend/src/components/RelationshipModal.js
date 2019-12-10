@@ -22,6 +22,7 @@
           relationship_choices: 'father',
         };
       }
+      
       handleChange = (e) => {
         var relationship = [...this.state.relationship_choices];
         relationship = e.target.value;

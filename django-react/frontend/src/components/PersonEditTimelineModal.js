@@ -1,4 +1,6 @@
 // frontend/src/components/PersonModal.js
+/*eslint array-callback-return: 0*/
+/*eslint no-useless-computed-key: 0*/
 
     import React, { Component } from "react";
     import DatePicker from "react-datepicker";
@@ -23,29 +25,6 @@
       Input,
       Label,
     } from "reactstrap";
-
-    const sampleTimelineData = [
-      {
-        date: new Date(2013, 9, 27),
-        text: "Sed leo elit, pellentesque sit amet congue quis, ornare nec lorem.",
-        title: "Cairo, Egypt",
-        buttonText: 'Edit milestone',
-        imageUrl: "/media/milestones/default.jpg",
-        onClick: () => {
-            console.log('hello');
-        }
-      },
-      {
-        date: new Date(2019, 9, 27),
-        text: "Cogito ergo sum",
-        title: "Bytom, Poland",
-        buttonText: 'Edit milestone',
-        imageUrl: "/media/milestones/default.jpg",
-        onClick: () => {
-            console.log('hello');
-        }
-      }
-    ]
 
     export default class CustomModal extends Component {
       constructor(props) {
@@ -78,9 +57,9 @@
               date: new Date(parseInt(dateStr[0]), parseInt(dateStr[1]) - 1, parseInt(dateStr[2])), // new Date uses months indexes, so 0-11 instead of 1-12; strange but true
               text: item.text,
               title: item.title,
-              buttonText: "Edit milestone",
+              buttonText: "Edit Milestone",
               imageUrl: item.image,
-              onClick: () => { console.log(item);}
+              onClick: () => { console.log(item);} // here will be the Edit Milestone button click event
             });
           });
           this.setState({timelineData: data});
@@ -91,7 +70,6 @@
           this.setState({timelineData: []});
         });
       }
-
 
       handleChange = (e) => {
         let { name, value } = e.target;

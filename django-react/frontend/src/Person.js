@@ -62,8 +62,8 @@
       };
 
       handleDelete = item => {
-        // because of Django's foreign key & on_delete param, it deletes relationships, so it's no longer needed
-        // this function hasn't been deleted from familytree.js, because it'll be used for single relationship delete
+        // Django's foreign key & on_delete param handles the deletion of relationships, so it's no longer needed to do this manually
+        // Delete Relationship function hasn't been deleted from familytree.js, because it'll probably be used for single relationship delete
         // this.props.deleteRelationships(item.id)
         axios
           .delete(`http://localhost:8000/api/familytreepersons/${item.id}`, {
