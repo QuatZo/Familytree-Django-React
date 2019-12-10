@@ -6,7 +6,6 @@
     import LoginForm from './components/LoginForm';
     import SignupForm from './components/SignupForm';
     import Familytree from "./Familytree";
-    import Todo from "./Todo";
     import axios from "axios";
     import FadeIn from "react-fade-in";
     import Lottie from "react-lottie";
@@ -247,8 +246,6 @@
                   personList = {this.state.personList}
                   relationshipList = {this.state.relationshipList}
                   />
-                  {//<Todo />
-                  }
                 </React.Fragment>
               )      
               : 'Please, log in.'}

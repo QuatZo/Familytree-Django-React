@@ -153,6 +153,7 @@
             });
           return;
         }
+
         const options = {
           url: 'http://localhost:8000/api/familytreerelationship/',
           content: item,
@@ -265,7 +266,6 @@
       
       saveCoords(){
         ShowNotification(NOTIFY.SAVING)
-
         var saved = true;
         var personListHTML = Array.from(document.querySelectorAll("div.person"));
         var personListCoords = [...this.state.personClassCoordinates]
@@ -304,6 +304,7 @@
       }
 
       setActivePerson(id) {
+        // multiple relationships per pair === 'exists' variable is garbage
         var array = [...this.state.activePersons];
         var relationshipList = [...this.state.relationshipList]
 
@@ -355,6 +356,7 @@
             ShowNotification(NOTIFY.ERROR);
           });
       }
+      
       // it will be useful in the future, after some rework
       /* deleteRelationships(id){
         var relationships = [];

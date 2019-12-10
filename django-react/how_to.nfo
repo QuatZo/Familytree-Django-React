@@ -1,17 +1,14 @@
-*** INSTALACJA ***
+*** INSTALLATION ***
+
 0. CMD -> pip install pipenv
 1. CMD -> Folder django-react
 2. pipenv --python 3.6
-2.a. Jesli potrzebne po instalacji: pipenv shell
-3. pipenv install django
-4. pipenv install djangorestframework django-cors-headers djangorestframework-jwt
-5. cd backend
-6. python manage.py makemigrations
-7. python manage.py migrate
-8. python manage.py runserver - jesli sie uruchomi to CTRL + C (test czy dziala i wszystko sie dobrze zainstalowalo)
-9. cd ..
-10. cd frontend
-11. npm install
-12. npm start 
+* if needed: pipenv shell
+3. pipenv install
+4. run ***migrate.bat***
+5. cd ../frontend
+*. npm install -g create-react-app
+6. npm install
+7. npm start 
 
-Jesli wszystko dziala, wylacz i uruchom ***run.bat***
+if everything works, open ***run.bat***
