@@ -10,6 +10,7 @@
       ModalFooter,
       Form,
       FormGroup,
+      Input,
       Label
     } from "reactstrap";
 
@@ -20,7 +21,10 @@
           personList: this.props.personList,
           activePersons: this.props.activePersons,
           relationship_choices: 'father',
+          color: '#ffffff'
         };
+        
+        
       }
       handleChange = (e) => {
         var relationship = [...this.state.relationship_choices];
@@ -33,8 +37,17 @@
         return targetPerson.first_name + " " + targetPerson.last_name;
       }
 
+      genColor(){
+        var randomColor = require('random-color');
+        var color = randomColor(0.3, 0.99);
+        console.log(color.hexString());
+        return color.hexString();
+      }
+
       render() {
         const { toggle, onSave } = this.props;
+        
+
         return (
           <Modal isOpen={true} toggle={toggle}>
             <ModalHeader toggle={toggle}> Relationship</ModalHeader>
@@ -67,7 +80,7 @@
               </Form>
             </ModalBody>
             <ModalFooter>
-              <Button color="success" onClick={() => onSave({"user_id": localStorage.getItem('user_id'), "id_1": this.state.activePersons[0], "id_2": this.state.activePersons[1],"relationships": this.state.relationship_choices})}>
+              <Button color="success" onClick={() => onSave({"user_id": localStorage.getItem('user_id'), "id_1": this.state.activePersons[0], "id_2": this.state.activePersons[1],"relationships": this.state.relationship_choices, "color": this.genColor()})}>
                 Save
               </Button>
             </ModalFooter>

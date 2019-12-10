@@ -11,16 +11,7 @@
 8. python manage.py runserver - jesli sie uruchomi to CTRL + C (test czy dziala i wszystko sie dobrze zainstalowalo)
 9. cd ..
 10. cd frontend
-11. npm install -g create-react-app
-12. npm add bootstrap reactstrap
-13. npm add axios
-14. npm install react-draggable ?? npm install jsplumb
-15. npm install react-datepicker --save
-16. npm i react-loading react-lottie react-fade-in bootstrap
-17. npm install --save react-toastify
-18. npm install react-svg-tooltip
-19. npm install typescript
-20. npm install react-image-timeline --save
-21. npm start 
+11. npm install
+12. npm start 
 
 Jesli wszystko dziala, wylacz i uruchom ***run.bat***

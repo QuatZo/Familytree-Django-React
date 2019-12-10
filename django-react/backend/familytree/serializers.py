@@ -42,7 +42,7 @@ class FamilytreePersonSerializer(serializers.ModelSerializer):
 class FamilytreeRelationshipSerializer(serializers.ModelSerializer):
     class Meta:
         model = FamilytreeRelationship
-        fields = ('id', 'user_id', 'id_1', 'id_2', 'relationships')
+        fields = ('id', 'user_id', 'id_1', 'id_2', 'relationships', 'color')
 
 class FamilytreeMilestoneSerializer(serializers.ModelSerializer):
     class Meta:

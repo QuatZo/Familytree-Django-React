@@ -391,6 +391,7 @@
           var relationshipPersonList = [];
           var relationshipsNames = [];
           var relationshipList = [...this.state.relationshipList]
+          var relationshipColor = [];
           const randomColor = [0, 31, 63, 95, 127, 159, 191, 223, 255];
 
           relationshipList.map(relationship => {
@@ -398,6 +399,7 @@
               if(parseInt(relationship.id_1) === parseInt(person.id) || parseInt(relationship.id_2) === parseInt(person.id)){
                 relationshipPersonList.push(person);
                 relationshipsNames.push(relationship.relationships);
+                relationshipColor.push(relationship.color);
               }
             });
           });
@@ -410,16 +412,16 @@
               x1: relationshipPersonList[i].screen.x + this.state.personSize.width / 2, 
               y1: relationshipPersonList[i].screen.y + this.state.personSize.height / 2, 
               x2: relationshipPersonList[i+1].screen.x + this.state.personSize.width / 2, 
-              y2: relationshipPersonList[i+1].screen.y + this.state.personSize.height / 2});
+              y2: relationshipPersonList[i+1].screen.y + this.state.personSize.height / 2,
+              color: relationshipColor[i]
+            });
           }
 
-          var colorOfRelationship = [];
           var reference = [];
 
-          relationshipPairList.map(() => {
-              colorOfRelationship.push('rgb(' + randomColor[Math.floor(Math.random()*randomColor.length)] + ',' + randomColor[Math.floor(Math.random()*randomColor.length)] + ',' + randomColor[Math.floor(Math.random()*randomColor.length)] + ')');
-              const lineRef = React.createRef();
-              reference.push(lineRef);
+          relationshipPairList.map( () => {
+            const lineRef = React.createRef();
+            reference.push(lineRef);
           })
 
           this.setState({
@@ -434,7 +436,7 @@
                 ", " + Math.round(item.x1) + " " + Math.round((Math.round(item.y1) + Math.round(item.y2))/2) +
                 ", " + Math.round(item.x2) + " " + Math.round((Math.round(item.y1) + Math.round(item.y2))/2) +
                 ", " + Math.round(item.x2) + " " + Math.round(item.y2)} 
-                stroke = {colorOfRelationship[item.id]}
+                stroke = {item.color}
                 strokeWidth="3" 
                 fill="none"/>
                 <Tooltip triggerRef={reference[item.id]}>
