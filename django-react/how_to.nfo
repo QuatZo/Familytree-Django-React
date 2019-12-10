@@ -1,8 +1,9 @@
 *** INSTALLATION ***
+
 0. CMD -> pip install pipenv
 1. CMD -> Folder django-react
 2. pipenv --python 3.6
-2.a. if needed: pipenv shell
+* if needed: pipenv shell
 3. pipenv install
 4. run ***migrate.bat***
 5. cd ../frontend

@@ -39,6 +39,7 @@ class FamilytreeRelationship(models.Model):
     user_id = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
     id_1 = models.ForeignKey(FamilytreePerson, on_delete=models.CASCADE, related_name="id_1")
     id_2 = models.ForeignKey(FamilytreePerson, on_delete=models.CASCADE, related_name="id_2")
+    color = models.CharField(max_length = 7, default = '#ffffff')
 
     father = 'father'
     mother = 'mother'
