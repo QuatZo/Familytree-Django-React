@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 function Nav(props) {
   const logged_out_nav = (
+  
     <div className="nav_buttons">
       <button onClick={() => props.display_form('login')} className="btn btn-outline-success my-2 my-sm-0 nav_button">Login</button>
       <button onClick={() => props.display_form('signup')} className="btn btn-outline-info my-2 my-sm-0  nav_button">Register</button>
@@ -20,6 +21,7 @@ function Nav(props) {
   return (
     <nav className="navbar sticky-top navbar-dark bg-dark">
       <a className="navbar-brand" href="#">Familytree</a>
+      {props.children}
       {props.logged_in ? logged_in_nav : logged_out_nav}
     </nav>
       

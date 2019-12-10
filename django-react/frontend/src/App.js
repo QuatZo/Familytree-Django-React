@@ -48,10 +48,13 @@
           displayed_form: localStorage.getItem('token') ? '' : 'login',
           logged_in: localStorage.getItem('token') ? true : false,
           username: '',
+          backgroundColor: '#262626'
         };
       }
 
       loginCounter = 0;
+
+      
 
       componentDidMount() {
         if (this.state.logged_in) {
@@ -87,6 +90,8 @@
           }, 1200);
         }
       }
+
+
 
       fetchRelationshipList = () => {
         this.setState({ donePersonList: true });
@@ -205,14 +210,61 @@
           default:
             form = null;
         }
+        const toggleBackgroundColorHandler = () => {
+          const body = document.querySelector('body');
+          const navigation = document.querySelector('nav');
+          const formElement = document.querySelector('form');
+          const changeColorButton = document.querySelector('#changeColorButton');
+          
+          const currentColor = this.state.backgroundColor;
+          let newColor;
+         // #343a40
+          if (currentColor === '#262626') {
+            newColor = '#2f6ec2';
+            navigation.classList.remove('bg-dark');
+            navigation.classList.remove('navbar-dark');
+            navigation.classList.add('bg-light');
+            navigation.classList.add('navbar-light');
+            if(formElement){
+              formElement.classList.add('bg-light');
+              formElement.classList.remove('bg-dark');
+            }
+            changeColorButton.classList.remove('btn-dark')
+            changeColorButton.classList.add('btn-light')
+          } else {
+            newColor = '#262626';
+            navigation.classList.add('bg-dark');
+            navigation.classList.add('navbar-dark');
+            navigation.classList.remove('bg-light');
+            navigation.classList.remove('navbar-light');
+            if(formElement){
+              formElement.classList.remove('bg-light')
+              formElement.classList.add('bg-dark');
+            }
+            changeColorButton.classList.add('btn-dark')
+            changeColorButton.classList.remove('btn-light')
+          }
+          body.style.backgroundColor = newColor;
+          this.setState({
+            ...this.state,
+            backgroundColor: newColor
+          });
+        }
+
         return (
+
           <div className="App">
             <Nav
               logged_in={this.state.logged_in}
               display_form={this.display_form}
               handle_logout={this.handle_logout}
               username={this.state.username}
-            />
+            >
+          <button id="changeColorButton" className="btn btn-dark change-color-button" onClick={toggleBackgroundColorHandler}>
+            {this.state.backgroundColor === '#262626' ? "Enable light theme" : "Enable dark theme"}
+          </button>
+            </Nav>
+
             {form}
             {this.state.logged_in
               ? !this.state.donePersonList ? (

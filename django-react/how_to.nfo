@@ -19,6 +19,7 @@
 16. npm i react-loading react-lottie react-fade-in bootstrap
 17. npm install --save react-toastify
 18. npm install react-svg-tooltip
-18. npm start 
+19. nmp install typescript
+20. npm start 
 
 Jesli wszystko dziala, wylacz i uruchom ***run.bat***

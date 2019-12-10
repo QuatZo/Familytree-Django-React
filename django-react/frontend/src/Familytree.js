@@ -177,6 +177,12 @@
         const item = { user_id: localStorage.getItem('user_id'), first_name: "", last_name: "", birth_date: "", status_choices: 'living', sex_choices: 'male', birth_place: ""};
         this.setState({ activeItem: item, modal: !this.state.modal });
       };
+	  
+	  darkModeSwitch = () => {
+        
+      };
+	  
+	  
 
       getCoordinates() {
         var personList = [...this.state.personList]
@@ -488,6 +494,9 @@
               ) : null}
             </div>
             <div className="buttons">
+			  <button onClick={this.darkModeSwitch} className="btn btn-outline-secondary btn-circle btn-xl">
+                <i className="fas fa-moon"></i>
+              </button>
               <button onClick={() => {if(window.confirm("Are you sure you want to delete WHOLE Family Tree?")) this.deleteEverything()}} className="btn btn-outline-danger btn-circle btn-xl">
                 <i className="fas fa-times"></i>
               </button>
