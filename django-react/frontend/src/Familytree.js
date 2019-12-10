@@ -178,9 +178,7 @@
         this.setState({ activeItem: item, modal: !this.state.modal });
       };
 	  
-	  darkModeSwitch = () => {
-        
-      };
+	  
 	  
 	  
 
@@ -494,9 +492,7 @@
               ) : null}
             </div>
             <div className="buttons">
-			  <button onClick={this.darkModeSwitch} className="btn btn-outline-secondary btn-circle btn-xl">
-                <i className="fas fa-moon"></i>
-              </button>
+			
               <button onClick={() => {if(window.confirm("Are you sure you want to delete WHOLE Family Tree?")) this.deleteEverything()}} className="btn btn-outline-danger btn-circle btn-xl">
                 <i className="fas fa-times"></i>
               </button>

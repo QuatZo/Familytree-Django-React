@@ -220,7 +220,7 @@
           let newColor;
          // #343a40
           if (currentColor === '#262626') {
-            newColor = '#2f6ec2';
+            newColor = '#cbd1d1';
             navigation.classList.remove('bg-dark');
             navigation.classList.remove('navbar-dark');
             navigation.classList.add('bg-light');
