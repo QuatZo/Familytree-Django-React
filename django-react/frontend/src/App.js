@@ -215,6 +215,8 @@
           const navigation = document.querySelector('nav');
           const formElement = document.querySelector('form');
           const changeColorButton = document.querySelector('#changeColorButton');
+          const button = document.querySelector('button');
+          
           
           const currentColor = this.state.backgroundColor;
           let newColor;
@@ -225,6 +227,8 @@
             navigation.classList.remove('navbar-dark');
             navigation.classList.add('bg-light');
             navigation.classList.add('navbar-light');
+            button.classList.add('btn-danger');
+            button.classList.remove('btn-outline-danger');
             if(formElement){
               formElement.classList.add('bg-light');
               formElement.classList.remove('bg-dark');
@@ -237,7 +241,9 @@
             navigation.classList.add('navbar-dark');
             navigation.classList.remove('bg-light');
             navigation.classList.remove('navbar-light');
-            if(formElement){
+            button.classList.remove('btn-danger');
+            button.classList.add('btn-outline-danger');
+           if(formElement){
               formElement.classList.remove('bg-light')
               formElement.classList.add('bg-dark');
             }

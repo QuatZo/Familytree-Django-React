@@ -52,9 +52,13 @@
         const errors = this.validate(this.state.activeItem.first_name, this.state.activeItem.last_name);
         const isEnabled = !Object.keys(errors).some(x => errors[x]);
         return (
-          <Modal isOpen={true} toggle={toggle}>
+          
+          <Modal  isOpen={true} toggle={toggle}>
+            <div class="bg-dark text-light">
             <ModalHeader toggle={toggle}> Person </ModalHeader>
+            
             <ModalBody>
+              
               <Form>
               <FormGroup>
                 <Input
@@ -139,13 +143,17 @@
                   />
                 </FormGroup>
               </Form>
+              
             </ModalBody>
+            
             <ModalFooter>
               <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem)}>
                 Save
               </Button>
             </ModalFooter>
+            </div>
           </Modal>
+          
         );
       }
     }

@@ -470,6 +470,7 @@
       render() {
         return (
           <React.Fragment>
+            
             <div className="contentPerson">
               <svg height="1080" width="1920">
                 {this.state.relationships}
@@ -491,6 +492,7 @@
                 />
               ) : null}
             </div>
+            
             <div className="buttons">
 			
               <button onClick={() => {if(window.confirm("Are you sure you want to delete WHOLE Family Tree?")) this.deleteEverything()}} className="btn btn-outline-danger btn-circle btn-xl">

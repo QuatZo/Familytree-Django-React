@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './LoginForm.css'
 
+
 class LoginForm extends React.Component {
   state = {
     username: '',
@@ -20,7 +21,7 @@ class LoginForm extends React.Component {
 
   render() {
     return (
-      <div className="login-dark">
+      <div id="login" className="login-dark">
         <form method="post" onSubmit={e => this.props.handle_login(e, this.state)}>
             <h2 className="sr-only">Login Form</h2>
             <div className="illustration"><i className="far fa-user"></i></div>
