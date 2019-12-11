@@ -394,7 +394,6 @@
           var relationshipsNames = [];
           var relationshipList = [...this.state.relationshipList]
           var relationshipColor = [];
-          const randomColor = [0, 31, 63, 95, 127, 159, 191, 223, 255];
 
           relationshipList.map(relationship => {
             this.state.personClassCoordinates.map(person => {
