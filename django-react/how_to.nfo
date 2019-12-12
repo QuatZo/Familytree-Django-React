@@ -3,12 +3,19 @@
 0. CMD -> pip install pipenv
 1. CMD -> Folder django-react
 2. pipenv --python 3.6
-* if needed: pipenv shell
-3. pipenv install
-4. run ***migrate.bat***
-5. cd ../frontend
-*. npm install -g create-react-app
-6. npm install
-7. npm start 
+3. pipenv shell
+4. cd ../frontend
+5. npm install -g create-react-app
+6. open ***run.bat***
 
-if everything works, open ***run.bat***
+
+
+*** USAGE ***
+1. open ***run.bat***
+
+
+
+*** NO FIELD IN DATABASE ERROR ***
+1. delete ***django-react/backend/db.sqlite3***
+2. delete all files from ***django-react/backend/familytree/migrations*** except ***__init__***
+3. open ***run.bat***
