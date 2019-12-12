@@ -62,7 +62,45 @@
               onClick: () => { console.log(item);} // here will be the Edit Milestone button click event
             });
           });
-          this.setState({timelineData: data});
+        })
+        .then( () => {
+          axios
+          .get("http://localhost:8000/api/familytreerelationship/", {
+            headers: { Authorization: `JWT ${localStorage.getItem('token')}`},
+            params: { id_1: this.props.activeItem.id }
+          })
+          .then(res => {
+            res.data.map(item => {
+              data.push({
+                date: new Date(1999, 11, 11), // temporarily
+                text: "It is nice relationship, temp text fyi. First person FTW.", // temporarily, in the text should be the end date of relationship, if ended
+                title: "Is " + item.relationships, // temporarily
+                buttonText: "Edit Relationship",
+                imageUrl: "/media/milestones/default.jpg",
+                onClick: () => { console.log(item);} // here will be the Edit Relationship button click event
+              })
+            })
+          })
+          .then( () => {
+            axios
+            .get("http://localhost:8000/api/familytreerelationship/", {
+              headers: { Authorization: `JWT ${localStorage.getItem('token')}`},
+              params: { id_2: this.props.activeItem.id }
+            })
+            .then(res => {
+              res.data.map(item => {
+                data.push({
+                  date: new Date(1999, 11, 11), // temporarily
+                  text: "It is nice relationship, temp text fyi. Second person FTW.", // temporarily, in the text should be the end date of relationship, if ended
+                  title: "Has " + item.relationships, // temporarily
+                  buttonText: "Edit Relationship",
+                  imageUrl: "/media/milestones/default.jpg",
+                  onClick: () => { console.log(item);} // here will be the Edit Relationship button click event
+                })
+              });
+              this.setState({timelineData: data});
+            })
+          })
         })
         .catch(err => {
           console.log(err);

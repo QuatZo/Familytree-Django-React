@@ -39,6 +39,18 @@ class FamilytreeRelationshipView(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
+        id_1 = self.request.query_params.get('id_1', None)
+        id_2 = self.request.query_params.get('id_2', None)
+
+        print(id_1)
+        print(id_2)
+
+        if id_1 is not None:
+            if id_2 is not None:
+                return FamilytreeRelationship.objects.filter(user_id=user, id_1=id_1, id_2=id_2)
+            return FamilytreeRelationship.objects.filter(user_id=user, id_1=id_1)
+        if id_2 is not None:
+            return FamilytreeRelationship.objects.filter(user_id=user, id_2=id_2)
         return FamilytreeRelationship.objects.filter(user_id=user)
 
 class FamilytreeMilestoneView(viewsets.ModelViewSet):
