@@ -425,6 +425,14 @@
             reference.push(lineRef);
           })
 
+          function getTextWidth(text, font) {
+            var canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
+            var context = canvas.getContext("2d");
+            context.font = font;
+            var metrics = context.measureText(text);
+            return metrics.width;
+        }
+
           this.setState({
             relationships: (relationshipPairList.map(item => (
               <React.Fragment
@@ -441,8 +449,8 @@
                 strokeWidth="3" 
                 fill="none"/>
                 <Tooltip triggerRef={reference[item.id]}>
-                    <rect x={0} y={-35} width={75} height={35} rx={5} ry={5} fill='black'/>
-                    <text x={15} y={-10} fontSize={18} fill='white'>{item.relationship}</text>
+                    <rect x={0} y={-35} width={getTextWidth(item.relationship, "16pt arial")+29} height={35} rx={5} ry={5} fill='black'/>
+                    <text x={15} y={-10} fontSize={"16pt"} fill='white'>{item.relationship}</text>
                 </Tooltip>
               </React.Fragment>
               )
