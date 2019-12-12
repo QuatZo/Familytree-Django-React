@@ -1,9 +1,0 @@
-﻿1. Utworz model w models.py
-2. Utworz serializer w serializers.py
-3. Utwórz widok w views.py
-4. Zarejestruj proxy w API w urls.py
-* Wyłącz serwer jak nie był wyłączony
-5. Odpal CMD -> Folder projektowy (django-react) -> pipenv shell i przejdź do folderu backend
-6. Przygotuj migrację: python manage.py makemigrations
-7. Zaaplikuj przygotowaną migrację: python manage.py migrate
-8. Uruchom serwer i elo mordeczko

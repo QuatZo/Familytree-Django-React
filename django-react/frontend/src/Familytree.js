@@ -6,7 +6,7 @@
     import axios from "axios";
     import Person from "./Person";
     import ModalRelationship from "./components/RelationshipModal";
-    import ModalPerson from "./components/PersonModal";
+    import ModalPerson from "./components/PersonAddModal";
     import { Tooltip } from 'react-svg-tooltip';
     import NOTIFY from './Enums.ts';
     import ShowNotification from './components/Notification';
@@ -153,6 +153,7 @@
             });
           return;
         }
+
         const options = {
           url: 'http://localhost:8000/api/familytreerelationship/',
           content: item,
@@ -265,7 +266,6 @@
       
       saveCoords(){
         ShowNotification(NOTIFY.SAVING)
-
         var saved = true;
         var personListHTML = Array.from(document.querySelectorAll("div.person"));
         var personListCoords = [...this.state.personClassCoordinates]
@@ -304,6 +304,7 @@
       }
 
       setActivePerson(id) {
+        // multiple relationships per pair === 'exists' variable is garbage
         var array = [...this.state.activePersons];
         var relationshipList = [...this.state.relationshipList]
 
@@ -355,6 +356,7 @@
             ShowNotification(NOTIFY.ERROR);
           });
       }
+      
       // it will be useful in the future, after some rework
       /* deleteRelationships(id){
         var relationships = [];
@@ -391,13 +393,14 @@
           var relationshipPersonList = [];
           var relationshipsNames = [];
           var relationshipList = [...this.state.relationshipList]
-          const randomColor = [0, 31, 63, 95, 127, 159, 191, 223, 255];
+          var relationshipColor = [];
 
           relationshipList.map(relationship => {
             this.state.personClassCoordinates.map(person => {
               if(parseInt(relationship.id_1) === parseInt(person.id) || parseInt(relationship.id_2) === parseInt(person.id)){
                 relationshipPersonList.push(person);
                 relationshipsNames.push(relationship.relationships);
+                relationshipColor.push(relationship.color);
               }
             });
           });
@@ -410,16 +413,16 @@
               x1: relationshipPersonList[i].screen.x + this.state.personSize.width / 2, 
               y1: relationshipPersonList[i].screen.y + this.state.personSize.height / 2, 
               x2: relationshipPersonList[i+1].screen.x + this.state.personSize.width / 2, 
-              y2: relationshipPersonList[i+1].screen.y + this.state.personSize.height / 2});
+              y2: relationshipPersonList[i+1].screen.y + this.state.personSize.height / 2,
+              color: relationshipColor[i]
+            });
           }
 
-          var colorOfRelationship = [];
           var reference = [];
 
-          relationshipPairList.map(() => {
-              colorOfRelationship.push('rgb(' + randomColor[Math.floor(Math.random()*randomColor.length)] + ',' + randomColor[Math.floor(Math.random()*randomColor.length)] + ',' + randomColor[Math.floor(Math.random()*randomColor.length)] + ')');
-              const lineRef = React.createRef();
-              reference.push(lineRef);
+          relationshipPairList.map( () => {
+            const lineRef = React.createRef();
+            reference.push(lineRef);
           })
 
           this.setState({
@@ -434,7 +437,7 @@
                 ", " + Math.round(item.x1) + " " + Math.round((Math.round(item.y1) + Math.round(item.y2))/2) +
                 ", " + Math.round(item.x2) + " " + Math.round((Math.round(item.y1) + Math.round(item.y2))/2) +
                 ", " + Math.round(item.x2) + " " + Math.round(item.y2)} 
-                stroke = {colorOfRelationship[item.id]}
+                stroke = {item.color}
                 strokeWidth="3" 
                 fill="none"/>
                 <Tooltip triggerRef={reference[item.id]}>

@@ -10,6 +10,7 @@
       ModalFooter,
       Form,
       FormGroup,
+      Input,
       Label
     } from "reactstrap";
 
@@ -17,20 +18,41 @@
       constructor(props) {
         super(props);
         this.state = { 
+          activeItem: {
+            user_id: localStorage.getItem("user_id"),
+            id_1: this.props.activePersons[0],
+            id_2: this.props.activePersons[1],
+            relationships: 'father',
+            color: this.genColor()
+          },
           personList: this.props.personList,
-          activePersons: this.props.activePersons,
-          relationship_choices: 'father',
         };
       }
+      
       handleChange = (e) => {
-        var relationship = [...this.state.relationship_choices];
+        var relationship = [...this.state.activeItem.relationships];
         relationship = e.target.value;
-        this.setState({relationship_choices: relationship});
+        
+        this.setState({
+          activeItem: {
+            user_id: this.state.activeItem.user_id, 
+            id_1: this.state.activeItem.id_1, 
+            id_2: this.state.activeItem.id_2, 
+            relationships: relationship, 
+            color: this.state.activeItem.color
+          }
+        });
       };
 
       getPerson(idPerson){
         var targetPerson = this.state.personList.find(item => item.id === idPerson);
         return targetPerson.first_name + " " + targetPerson.last_name;
+      }
+
+      genColor(){
+        var randomColor = require('random-color');
+        var color = randomColor(0.3, 0.99);
+        return color.hexString();
       }
 
       render() {
@@ -41,7 +63,7 @@
             <ModalBody>
               <Form>
                 <FormGroup>
-                  <Label for="relationship_choices">What's the relation between {this.getPerson(this.state.activePersons[0])} and {this.getPerson(this.state.activePersons[1])}</Label>
+                  <Label for="relationship_choices">What's {this.getPerson(this.state.activeItem.id_1)} to the {this.getPerson(this.state.activeItem.id_2)}</Label>
                   <select
                     className="form-control"
                     name = "relationship_choices"
@@ -67,7 +89,7 @@
               </Form>
             </ModalBody>
             <ModalFooter>
-              <Button color="success" onClick={() => onSave({"user_id": localStorage.getItem('user_id'), "id_1": this.state.activePersons[0], "id_2": this.state.activePersons[1],"relationships": this.state.relationship_choices})}>
+              <Button color="success" onClick={() => onSave(this.state.activeItem)}>
                 Save
               </Button>
             </ModalFooter>

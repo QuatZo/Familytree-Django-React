@@ -39,6 +39,7 @@ class FamilytreeRelationship(models.Model):
     user_id = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
     id_1 = models.ForeignKey(FamilytreePerson, on_delete=models.CASCADE, related_name="id_1")
     id_2 = models.ForeignKey(FamilytreePerson, on_delete=models.CASCADE, related_name="id_2")
+    color = models.CharField(max_length = 7, default = '#ffffff')
 
     father = 'father'
     mother = 'mother'
@@ -60,3 +61,14 @@ class FamilytreeRelationship(models.Model):
 
     def _str_(self):
         return self.relationships
+
+class FamilytreeMilestone(models.Model):
+    user_id = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
+    person_id = models.ManyToManyField(FamilytreePerson)
+    date = models.DateField()
+    text = models.CharField(max_length=512)
+    title = models.CharField(max_length=32)
+    image = models.CharField(max_length=200, default='/media/milestones/default.jpg')
+
+    def _str_(self):
+        return self.title

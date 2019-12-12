@@ -1,0 +1,16 @@
+.modal-header{
+  position: sticky;
+  top: 0px;
+  background: white;
+  width: 100%;
+  z-index: 99;
+}
+
+.modal-title{
+  width: 100%;
+}
+
+.rt-arrow, 
+.rt-dot{
+  z-index: 0 !important;
+}
