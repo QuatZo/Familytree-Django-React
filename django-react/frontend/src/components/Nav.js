@@ -18,7 +18,7 @@ function Nav(props) {
     </React.Fragment>
   );
   return (
-    <nav className="navbar sticky-top navbar-dark bg-dark">
+    <nav className="navbar sticky-top navbar-dark bg-dark" id="nav">
       <a className="navbar-brand" href="#">Familytree</a>
       {props.logged_in ? logged_in_nav : logged_out_nav}
     </nav>
