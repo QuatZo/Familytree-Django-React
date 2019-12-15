@@ -1,4 +1,4 @@
-// frontend/src/components/PersonModal.js
+// frontend/src/components/PersonAddModal.js
 /*eslint no-useless-computed-key: 0*/
 
     import React, { Component } from "react";

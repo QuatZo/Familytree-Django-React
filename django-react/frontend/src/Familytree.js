@@ -17,7 +17,6 @@
       constructor(props) {
         super(props);
         this.state = {
-          viewCompleted: false,
           activePersonData: {
             user_id: localStorage.getItem('user_id'),
             first_name: '',
@@ -329,7 +328,6 @@
           }
           this.setState({activePersons: array});
       }
-
 
       deleteEverything(){
         // since relationships are connected w/ persons, we don't need to delete any relationship. Just persons.

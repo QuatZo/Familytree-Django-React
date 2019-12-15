@@ -17,7 +17,7 @@
             break;
 
           case NOTIFY.ERROR:
-              toast.error("Something went wrong! Try again later! If it doesn't help, contact administrator.");
+              toast.error("Something went wrong! Refresh page or try again later! If it doesn't help, contact administrator.");
               break;
           case NOTIFY.ERROR_LOGIN:
               toast.error("Incorrect username and/or password!");
@@ -39,6 +39,9 @@
           case NOTIFY.SAVE_COORDS:
               toast.success("New coords have been saved!");
               break;
+          case NOTIFY.SAVE_MILESTONE:
+              toast.success("New milestone have been saved!");
+              break;
           case NOTIFY.SAVING:
               toast.info("Saving coordinates... Do not leave the page until the saving process is finished!");
               break;
@@ -48,6 +51,9 @@
               break;
           case NOTIFY.ADD_RELATIONSHIP:
               toast.success("New relationship has been added, it should be visible. If not, try to move something around!");
+              break;
+          case NOTIFY.ADD_MILESTONE:
+              toast.success("New milestone has been added, it should be visible. If not, try to reopen Edit Person modal!");
               break;
 
           case NOTIFY.DELETE:

@@ -1,4 +1,4 @@
-// frontend/src/components/PersonModal.js
+// frontend/src/components/PersonEditTimelineModal.js
 /*eslint array-callback-return: 0*/
 /*eslint no-useless-computed-key: 0*/
 
@@ -12,6 +12,7 @@
     import NOTIFY from '../Enums.ts';
     import ShowNotification from './Notification';
     import Switch from "react-switch";
+    import ModalMilestone from './MilestoneModal'
     
     import {
       Button,
@@ -111,6 +112,49 @@
         });
       }
 
+      handleSubmitMilestone = item => {
+        this.toggleMilestoneModal();
+        if (item.id) {
+          const options = {
+            url: `http://localhost:8000/api/familytreemilestone/${item.id}/`,
+            content: item,
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `JWT ${localStorage.getItem('token')}`
+            },
+            data: item
+          };
+          axios(options)
+            .then(() => this.downloadTimelineData())
+            .then(() => ShowNotification(NOTIFY.SAVE_MILESTONE))
+            .catch(err => {
+              console.log(err);
+              ShowNotification(NOTIFY.ERROR);
+            });
+          return;
+        }
+
+        const options = {
+          url: 'http://localhost:8000/api/familytreemilestone/',
+          content: item,
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept : 'application/json',
+            Authorization: `JWT ${localStorage.getItem('token')}`
+          },
+          data: item
+        };
+        axios(options)
+          .then(() => this.downloadTimelineData())
+          .then(() => ShowNotification(NOTIFY.ADD_MILESTONE))
+          .catch(err => {
+            console.log(err);
+            ShowNotification(NOTIFY.ERROR);
+          });
+      };
+
       handleChange = (e) => {
         let { name, value } = e.target;
         const activeItem = { ...this.state.activeItem, [name]: value};
@@ -139,150 +183,159 @@
         });
       }
 
+      toggleMilestoneModal = () => {
+        this.setState({ ModalMilestone: !this.state.ModalMilestone });
+      };
+
       render() {
         const { toggle, onSave } = this.props;
         const errors = this.validate(this.state.activeItem.first_name, this.state.activeItem.last_name);
         const isEnabled = !Object.keys(errors).some(x => errors[x]);
         return (
-          <Modal 
-          isOpen={true} 
-          toggle={toggle}
-          size="lg"
-          >
-            <ModalHeader toggle={toggle}> 
-              Person
-              <Form>
-                <FormGroup>
-                  <Input
-                  type="number"
-                  name="user_id"
-                  value={localStorage.getItem('user_id')}
-                  hidden
-                  readOnly
-                  >
-                  </Input>
-                </FormGroup>
-                <Row form>
-                  <Col md={4}>
-                    <FormGroup>
-                      <Label for="first_name">First Name</Label>
-                      <Input
-                        type="text"
-                        name="first_name"
-                        className={errors.first_name?"error":""}
-                        onBlur={this.handleBlur('first_name')}
-                        value={this.state.activeItem.first_name}
-                        onChange={this.handleChange}
-                        placeholder="First Name"
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col md={4}>
-                    <FormGroup>
-                      <Label for="last_name">Last Name</Label>
-                      <Input
-                        type="text"
-                        name="last_name"
-                        className={errors.last_name?"error":""}
-                        onBlur={this.handleBlur('last_name')}
-                        value={this.state.activeItem.last_name}
-                        onChange={this.handleChange}
-                        placeholder="Last Name"
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col md={4}>
-                    <FormGroup>
-                      <Label for="sex_choices">Sex</Label>
-                      <select
-                        className="form-control"
-                        name = "sex_choices"
-                        value={this.state.activeItem.sex_choices}
-                        onChange={this.handleChange}
-                      >
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                        <option value="other">Other</option>
-                      </select>
-                    </FormGroup>
-                  </Col>
-                </Row>
-                <Row form>
-                  <Col md={4}>
-                    <FormGroup>
-                      <Label for="status_choices">Status of life</Label>
-                      <select
-                        className="form-control"
-                        name = "status_choices"
-                        value={this.state.activeItem.status_choices}
-                        onChange={this.handleChange}
-                      >
-                        <option value="living">Living</option>
-                        <option value="deceased">Deceased</option>
-                        <option value="unknown">Unknown</option>
-                      </select>
-                    </FormGroup>
-                  </Col>
-                  <Col md={4}>
-                    <FormGroup>
-                      <Label for="birth_date">Birth Date</Label><br />
-                      <DatePicker 
-                        className="form-control"
-                        name="birth_date"
-                        value={this.state.activeItem.birth_date}
-                        onChange={ this.handleChangeDate} 
-                        peekNextMonth
-                        showMonthDropdown
-                        showYearDropdown
-                        dropdownMode="select"
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col md={4}>
-                    <FormGroup>
-                      <Label for="birth_place">Birthplace</Label>
-                      <Input
-                        type="text"
-                        name="birth_place"
-                        value={this.state.activeItem.birth_place}
-                        onChange={this.handleChange}
-                        placeholder="Place of birth"
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <FormGroup style={{display: 'flex'}}>
-                      <Label for="switch-delete-mode" style={{marginRight: '10px'}}>Delete Mode</Label>
-                      <Switch 
-                        name="switch-delete-mode" 
-                        onChange={this.handleChangeMode} 
-                        checked={this.state.deleteMode} 
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col>
-                    <Button color="success" onClick={() => console.log("Add Milestone modal here")} style={{float: 'right'}}>
-                      Add Milestone
-                    </Button>
-                  </Col>
-                </Row>
-              </Form>
-            </ModalHeader>
-            {this.state.timelineData.length < 1 ? null : 
-            <ModalBody>
-              <div className="personModalTimeline">
-              <Timeline events={this.state.timelineData} />
-              </div>
-            </ModalBody>
-            }
-            <ModalFooter>
-              <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem)}>
-                Save
-              </Button>
-            </ModalFooter>
-          </Modal>
+          <React.Fragment>
+            <Modal isOpen={true} toggle={toggle} size="lg" >
+              <ModalHeader toggle={toggle}> 
+                Person
+                <Form>
+                  <FormGroup>
+                    <Input
+                    type="number"
+                    name="user_id"
+                    value={localStorage.getItem('user_id')}
+                    hidden
+                    readOnly
+                    >
+                    </Input>
+                  </FormGroup>
+                  <Row form>
+                    <Col md={4}>
+                      <FormGroup>
+                        <Label for="first_name">First Name</Label>
+                        <Input
+                          type="text"
+                          name="first_name"
+                          className={errors.first_name?"error":""}
+                          onBlur={this.handleBlur('first_name')}
+                          value={this.state.activeItem.first_name}
+                          onChange={this.handleChange}
+                          placeholder="First Name"
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md={4}>
+                      <FormGroup>
+                        <Label for="last_name">Last Name</Label>
+                        <Input
+                          type="text"
+                          name="last_name"
+                          className={errors.last_name?"error":""}
+                          onBlur={this.handleBlur('last_name')}
+                          value={this.state.activeItem.last_name}
+                          onChange={this.handleChange}
+                          placeholder="Last Name"
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md={4}>
+                      <FormGroup>
+                        <Label for="sex_choices">Sex</Label>
+                        <select
+                          className="form-control"
+                          name = "sex_choices"
+                          value={this.state.activeItem.sex_choices}
+                          onChange={this.handleChange}
+                        >
+                          <option value="male">Male</option>
+                          <option value="female">Female</option>
+                          <option value="other">Other</option>
+                        </select>
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row form>
+                    <Col md={4}>
+                      <FormGroup>
+                        <Label for="status_choices">Status of life</Label>
+                        <select
+                          className="form-control"
+                          name = "status_choices"
+                          value={this.state.activeItem.status_choices}
+                          onChange={this.handleChange}
+                        >
+                          <option value="living">Living</option>
+                          <option value="deceased">Deceased</option>
+                          <option value="unknown">Unknown</option>
+                        </select>
+                      </FormGroup>
+                    </Col>
+                    <Col md={4}>
+                      <FormGroup>
+                        <Label for="birth_date">Birth Date</Label><br />
+                        <DatePicker 
+                          className="form-control"
+                          name="birth_date"
+                          value={this.state.activeItem.birth_date}
+                          onChange={ this.handleChangeDate} 
+                          peekNextMonth
+                          showMonthDropdown
+                          showYearDropdown
+                          dropdownMode="select"
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md={4}>
+                      <FormGroup>
+                        <Label for="birth_place">Birthplace</Label>
+                        <Input
+                          type="text"
+                          name="birth_place"
+                          value={this.state.activeItem.birth_place}
+                          onChange={this.handleChange}
+                          placeholder="Place of birth"
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <FormGroup style={{display: 'flex'}}>
+                        <Label for="switch-delete-mode" style={{marginRight: '10px'}}>Delete Mode</Label>
+                        <Switch 
+                          name="switch-delete-mode" 
+                          onChange={this.handleChangeMode} 
+                          checked={this.state.deleteMode} 
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col>
+                      <Button color="success" onClick={() => this.toggleMilestoneModal()} style={{float: 'right'}}>
+                        Add Milestone
+                      </Button>
+                    </Col>
+                  </Row>
+                </Form>
+              </ModalHeader>
+              {this.state.timelineData.length < 1 ? null : 
+              <ModalBody>
+                <div className="personModalTimeline">
+                  <Timeline events={this.state.timelineData} />
+                </div>
+              </ModalBody>
+              }
+              <ModalFooter>
+                <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem)}>
+                  Save
+                </Button>
+              </ModalFooter>
+            </Modal>
+            {this.state.ModalMilestone ? (
+              <ModalMilestone
+                id={this.props.activeItem.id}
+                toggle={this.toggleMilestoneModal}
+                onSave={this.handleSubmitMilestone}
+              />
+            ) : null}
+          </React.Fragment>
         );
       }
     }
