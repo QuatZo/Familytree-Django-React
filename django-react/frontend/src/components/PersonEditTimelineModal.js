@@ -11,6 +11,7 @@
     import axios from "axios";
     import NOTIFY from '../Enums.ts';
     import ShowNotification from './Notification';
+    import Switch from "react-switch";
     
     import {
       Button,
@@ -36,6 +37,7 @@
             last_name: false,
           },
           timelineData: [],
+          deleteMode: false,
         };
       }
 
@@ -57,9 +59,9 @@
               date: new Date(parseInt(dateStr[0]), parseInt(dateStr[1]) - 1, parseInt(dateStr[2])), // new Date uses months indexes, so 0-11 instead of 1-12; strange but true
               text: item.text,
               title: item.title,
-              buttonText: "Edit Milestone",
+              buttonText: (this.state.deleteMode ? "Delete" : "Edit") + " Milestone",
               imageUrl: item.image,
-              onClick: () => { console.log(item);} // here will be the Edit Milestone button click event
+              onClick: () => { this.state.deleteMode ? console.log("Delete mode!") : console.log("Edit mode!")} // here will be the Edit Milestone button click event
             });
           });
         })
@@ -75,9 +77,9 @@
                 date: new Date(1999, 11, 11), // temporarily
                 text: "It is nice relationship, temp text fyi. First person FTW.", // temporarily, in the text should be the end date of relationship, if ended
                 title: "Is " + item.relationships, // temporarily
-                buttonText: "Edit Relationship",
+                buttonText: (this.state.deleteMode ? "Delete" : "Edit") + " Relationship",
                 imageUrl: "/media/milestones/default.jpg",
-                onClick: () => { console.log(item);} // here will be the Edit Relationship button click event
+                onClick: () => { this.state.deleteMode ? console.log("Delete mode!") : console.log("Edit mode!")} // here will be the Edit Relationship button click event
               })
             })
           })
@@ -93,9 +95,9 @@
                   date: new Date(1999, 11, 11), // temporarily
                   text: "It is nice relationship, temp text fyi. Second person FTW.", // temporarily, in the text should be the end date of relationship, if ended
                   title: "Has " + item.relationships, // temporarily
-                  buttonText: "Edit Relationship",
+                  buttonText: (this.state.deleteMode ? "Delete" : "Edit") + " Relationship",
                   imageUrl: "/media/milestones/default.jpg",
-                  onClick: () => { console.log(item);} // here will be the Edit Relationship button click event
+                  onClick: () => { this.state.deleteMode ? console.log("Delete mode!") : console.log("Edit mode!")} // here will be the Edit Relationship button click event
                 })
               });
               this.setState({timelineData: data});
@@ -120,6 +122,10 @@
         this.setState({activeItem});
       };
 
+      handleChangeMode = checked => {
+        this.setState({ deleteMode: checked }, () => this.downloadTimelineData());
+      }
+      
       validate(first_name, last_name){
         return{
           first_name: first_name.trim().length === 0,
@@ -243,6 +249,23 @@
                         placeholder="Place of birth"
                       />
                     </FormGroup>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <FormGroup style={{display: 'flex'}}>
+                      <Label for="switch-delete-mode" style={{marginRight: '10px'}}>Delete Mode</Label>
+                      <Switch 
+                        name="switch-delete-mode" 
+                        onChange={this.handleChangeMode} 
+                        checked={this.state.deleteMode} 
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col>
+                    <Button color="success" onClick={() => console.log("Add Milestone modal here")} style={{float: 'right'}}>
+                      Add Milestone
+                    </Button>
                   </Col>
                 </Row>
               </Form>
