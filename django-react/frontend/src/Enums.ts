@@ -22,6 +22,7 @@ enum NOTIFY {
     DELETE,
     DELETE_PERSON,
     DELETE_RELATIONSHIP,
+    DELETE_MILESTONE,
 }
 
 export default NOTIFY;

@@ -65,6 +65,9 @@
           case NOTIFY.DELETE_RELATIONSHIP:
               toast.warn("Relationship has been deleted!");
               break;
+          case NOTIFY.DELETE_MILESTONE:
+              toast.warn("Milestone has been deleted!");
+              break;
           default:
             toast.error("Why is it empty? Contact administrator, please.");
             break;

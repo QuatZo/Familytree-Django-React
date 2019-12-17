@@ -33,6 +33,7 @@
         super(props);
         this.state = {
           activeItem: this.props.activeItem,
+          activeMilestone: [],
           touched: {
             first_name: false,
             last_name: false,
@@ -62,7 +63,7 @@
               title: item.title,
               buttonText: (this.state.deleteMode ? "Delete" : "Edit") + " Milestone",
               imageUrl: item.image,
-              onClick: () => { this.state.deleteMode ? console.log("Delete mode!") : console.log("Edit mode!")} // here will be the Edit Milestone button click event
+              onClick: () => { this.state.deleteMode ? this.handleDeleteMilestone(item) : this.editMilestone(item) }
             });
           });
         })
@@ -80,7 +81,7 @@
                 title: "Is " + item.relationships, // temporarily
                 buttonText: (this.state.deleteMode ? "Delete" : "Edit") + " Relationship",
                 imageUrl: "/media/milestones/default.jpg",
-                onClick: () => { this.state.deleteMode ? console.log("Delete mode!") : console.log("Edit mode!")} // here will be the Edit Relationship button click event
+                onClick: () => { this.state.deleteMode ? this.handleDeleteRelationship(item) : console.log("Edit mode!")} // here will be the Edit Relationship button click event
               })
             })
           })
@@ -98,7 +99,7 @@
                   title: "Has " + item.relationships, // temporarily
                   buttonText: (this.state.deleteMode ? "Delete" : "Edit") + " Relationship",
                   imageUrl: "/media/milestones/default.jpg",
-                  onClick: () => { this.state.deleteMode ? console.log("Delete mode!") : console.log("Edit mode!")} // here will be the Edit Relationship button click event
+                  onClick: () => { this.state.deleteMode ? this.handleDeleteRelationship(item) : console.log("Edit mode!")} // here will be the Edit Relationship button click event
                 })
               });
               this.setState({timelineData: data});
@@ -112,6 +113,21 @@
         });
       }
 
+      createMilestone = () => {
+        this.setState({ activeMilestone: {
+          user_id: localStorage.getItem("user_id"),
+          person_id: [this.props.id],
+          date: "",
+          title: "",
+          text: "",
+          image: "/media/milestones/default.jpg"
+        }, ModalMilestone: !this.state.ModalMilestone });
+      }
+
+      editMilestone = item => {
+        this.setState({ activeMilestone: item, ModalMilestone: !this.state.ModalMilestone });
+      };
+      
       handleSubmitMilestone = item => {
         this.toggleMilestoneModal();
         if (item.id) {
@@ -149,6 +165,33 @@
         axios(options)
           .then(() => this.downloadTimelineData())
           .then(() => ShowNotification(NOTIFY.ADD_MILESTONE))
+          .catch(err => {
+            console.log(err);
+            ShowNotification(NOTIFY.ERROR);
+          });
+      };
+
+      handleDeleteMilestone = item => {
+        axios
+          .delete(`http://localhost:8000/api/familytreemilestone/${item.id}`, {
+            headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
+          })
+          .then(() => this.downloadTimelineData())
+          .then(() => ShowNotification(NOTIFY.DELETE_MILESTONE))
+          .catch(err => {
+            console.log(err);
+            ShowNotification(NOTIFY.ERROR);
+          });
+      };
+
+      handleDeleteRelationship = item => {
+        axios
+          .delete(`http://localhost:8000/api/familytreerelationship/${item.id}`, {
+            headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
+          })
+          .then(() => this.downloadTimelineData())
+          .then(() => this.props.refreshRelationships())
+          .then(() => ShowNotification(NOTIFY.DELETE_RELATIONSHIP))
           .catch(err => {
             console.log(err);
             ShowNotification(NOTIFY.ERROR);
@@ -308,7 +351,7 @@
                       </FormGroup>
                     </Col>
                     <Col>
-                      <Button color="success" onClick={() => this.toggleMilestoneModal()} style={{float: 'right'}}>
+                      <Button color="success" onClick={() => this.createMilestone()} style={{float: 'right'}}>
                         Add Milestone
                       </Button>
                     </Col>
@@ -331,6 +374,7 @@
             {this.state.ModalMilestone ? (
               <ModalMilestone
                 id={this.props.activeItem.id}
+                activeItem={this.state.activeMilestone}
                 toggle={this.toggleMilestoneModal}
                 onSave={this.handleSubmitMilestone}
               />

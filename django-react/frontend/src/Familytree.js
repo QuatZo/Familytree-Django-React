@@ -90,27 +90,6 @@
 
       handleSubmitPerson = item => {
         this.togglePersonModal();
-        if (item.id) {
-          const options = {
-            url: `http://localhost:8000/api/familytreepersons/${item.id}/`,
-            content: item,
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `JWT ${localStorage.getItem('token')}`
-            },
-            data: item
-          };
-          axios(options)
-            .then(() => this.refreshPersonList())
-            .then(() => ShowNotification(NOTIFY.SAVE_PERSON))
-            .catch(err => {
-              console.log(err);
-              ShowNotification(NOTIFY.ERROR);
-            });
-          return;
-        }
-
         const options = {
           url: 'http://localhost:8000/api/familytreepersons/',
           content: item,
@@ -355,37 +334,6 @@
             ShowNotification(NOTIFY.ERROR);
           });
       }
-      
-      // it will be useful in the future, after some rework
-      /* deleteRelationships(id){
-        var relationships = [];
-        axios
-          .get("http://localhost:8000/api/familytreerelationship/", {
-            headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
-          })
-          .then(res => relationships = res.data )
-          .then(() => {
-            relationships.map(item => {
-              if(parseInt(id)===parseInt(item.id_1) || parseInt(id)===parseInt(item.id_2)){
-                axios
-                .delete(`http://localhost:8000/api/familytreerelationship/${item.id}`, {
-                  headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
-                })
-                .then(() => this.refreshRelationshipList())
-                .then(() => ShowNotification(NOTIFY.DELETE_RELATIONSHIP)))
-                .catch(err => {
-                  console.log(item)
-                  console.log(err);
-                  ShowNotification(NOTIFY.ERROR);
-                });
-              }
-            })
-          })
-          .catch(err => {
-            console.log(err);
-            ShowNotification(NOTIFY.ERROR);
-          });
-      } */
     
       calcSideCenters(first, second){
         const nav = document.getElementById("nav").getBoundingClientRect().height - 5;

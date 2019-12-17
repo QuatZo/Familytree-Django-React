@@ -40,21 +40,7 @@
               console.log(err);
               ShowNotification(NOTIFY.ERROR);
             });
-          return;
         }
-        
-        axios.post('http://localhost:8000/api/familytreepersons/', item, {
-          headers: {
-          'Content-Type': 'application/json',
-          Accept : 'application/json',
-          Authorization: `JWT ${localStorage.getItem('token')}`
-        }})
-          .then(() => this.props.refresh())
-          .then(() => ShowNotification(NOTIFY.SAVE_PERSON))
-          .catch(err => {
-            console.log(err);
-            ShowNotification(NOTIFY.ERROR);
-          });
       };
 
       toggle = () => {
@@ -152,6 +138,7 @@
                 activeItem={this.props.person}
                 toggle={this.toggle}
                 onSave={this.handleSubmit}
+                refreshRelationships={this.props.refreshRelationships.bind(this)}
               />
             ) : null}
           </React.Fragment>

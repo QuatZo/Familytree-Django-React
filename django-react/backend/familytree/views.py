@@ -58,4 +58,4 @@ class FamilytreeMilestoneView(viewsets.ModelViewSet):
         user = self.request.user
         if person is not None:
             return FamilytreeMilestone.objects.filter(user_id=user, person_id=person)
-        return None
+        return FamilytreeMilestone.objects.filter(user_id=user)

@@ -25,14 +25,7 @@
       constructor(props) {
         super(props);
         this.state = {
-          activeItem: {
-            user_id: localStorage.getItem("user_id"),
-            person_id: [this.props.id],
-            date: "",
-            title: "",
-            text: "",
-            image: "/media/milestones/default.jpg"
-          },
+          activeItem: this.props.activeItem,
           touched: {
             title: false,
             date: false,
@@ -74,6 +67,7 @@
       };
 
       validate(title, date, person_id){
+        person_id = person_id.filter(el => el !== undefined);
         return{
           title: title.trim().length === 0,
           date: date.toString().trim().length === 0,
