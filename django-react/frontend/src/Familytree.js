@@ -4,13 +4,12 @@
 
     import React, { Component } from "react";
     import axios from "axios";
-    import Person from "./Person";
-    import ModalRelationship from "./components/RelationshipModal";
-    import ModalPerson from "./components/PersonAddModal";
-    import { Tooltip } from 'react-svg-tooltip';
-    import NOTIFY from './Enums.ts';
-    import ShowNotification from './components/Notification';
-    
+    import Person from "./components/person/Person";
+    import Relationship from "./components/relationship/Relationship"
+    import ModalRelationship from "./components/relationship/RelationshipModal";
+    import ModalPerson from "./components/person/PersonAddModal";
+    import {NOTIFY} from './components/Enums.ts';
+    import ShowNotification from './components/notification/Notification';
     import './Familytree.css';
 
     class Familytree extends Component {    
@@ -34,7 +33,6 @@
           personSize: [],
           windowSize: {width: 0, height: 0},
           saving: false,
-          relationshipMarkers: [],
         };
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
       }  
@@ -112,27 +110,6 @@
 
       handleSubmitRelationship = item => {
         this.toggleRelationshipModal();
-        if (item.id) {
-          const options = {
-            url: `http://localhost:8000/api/familytreerelationship/${item.id}/`,
-            content: item,
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `JWT ${localStorage.getItem('token')}`
-            },
-            data: item
-          };
-          axios(options)
-            .then(() => this.refreshRelationshipList())
-            .then(() => ShowNotification(NOTIFY.SAVE_RELATIONSHIP))
-            .catch(err => {
-              console.log(err);
-              ShowNotification(NOTIFY.ERROR);
-            });
-          return;
-        }
-
         const options = {
           url: 'http://localhost:8000/api/familytreerelationship/',
           content: item,
@@ -334,160 +311,6 @@
             ShowNotification(NOTIFY.ERROR);
           });
       }
-    
-      calcSideCenters(first, second){
-        const nav = document.getElementById("nav").getBoundingClientRect().height - 5;
-
-        var relationshipPoints = {
-          top: [
-            {x: first.screen.x + this.state.personSize.width / 2, y: first.screen.y},
-            {x: second.screen.x + this.state.personSize.width / 2, y: second.screen.y}
-          ],
-          right: [
-            {x: first.screen.x + this.state.personSize.width, y: first.screen.y + this.state.personSize.height / 2},
-            {x: second.screen.x + this.state.personSize.width, y: second.screen.y + this.state.personSize.height / 2}
-          ],
-          bottom: [
-            {x: first.screen.x + this.state.personSize.width / 2, y: first.screen.y + this.state.personSize.height},
-            {x: second.screen.x + this.state.personSize.width / 2, y: second.screen.y + this.state.personSize.height}
-          ],
-          left: [
-            {x: first.screen.x, y: first.screen.y + this.state.personSize.height / 2},
-            {x: second.screen.x, y: second.screen.y + this.state.personSize.height / 2}
-          ],
-          mid: [
-            {x: first.screen.x + this.state.personSize.width / 2, y: first.screen.y + this.state.personSize.height / 2},
-            {x: second.screen.x + this.state.personSize.width / 2, y:second.screen.y + this.state.personSize.height / 2}
-          ],
-        };
-
-        var x1Temp, y1Temp, x2Temp, y2Temp;
-        var horizontalTemp = false;
-
-        if(relationshipPoints.top[0].y > relationshipPoints.bottom[1].y + 10){
-          x1Temp = relationshipPoints.top[0].x + 5;
-          y1Temp = relationshipPoints.top[0].y + nav + 10;
-          x2Temp = relationshipPoints.bottom[1].x + 5;
-          y2Temp = relationshipPoints.bottom[1].y + nav + 20;
-        }
-        else if(relationshipPoints.bottom[0].y < relationshipPoints.top[1].y - 10){
-          x1Temp = relationshipPoints.bottom[0].x + 5;
-          y1Temp = relationshipPoints.bottom[0].y + nav + 5;
-          x2Temp = relationshipPoints.top[1].x + 5;
-          y2Temp = relationshipPoints.top[1].y + nav;
-        }
-        else if(relationshipPoints.right[0].x < relationshipPoints.left[1].x){
-          x1Temp = relationshipPoints.right[0].x + 5;
-          y1Temp = relationshipPoints.right[0].y + nav + 5;
-          x2Temp = relationshipPoints.left[1].x + 5;
-          y2Temp = relationshipPoints.left[1].y + nav + 5;
-          horizontalTemp = true;
-        }
-        else if(relationshipPoints.left[0].x > relationshipPoints.right[1].x){
-          x1Temp = relationshipPoints.left[0].x + 5;
-          y1Temp = relationshipPoints.left[0].y + nav + 5;
-          x2Temp = relationshipPoints.right[1].x + 5;
-          y2Temp = relationshipPoints.right[1].y + nav + 5;
-          horizontalTemp = true;
-        }
-        else{
-          x1Temp = relationshipPoints.mid[0].x;
-          y1Temp = relationshipPoints.mid[0].y;
-          x2Temp = relationshipPoints.mid[0].x;
-          y2Temp = relationshipPoints.mid[0].y;
-        }
-
-        return {x1: x1Temp, y1: y1Temp, x2: x2Temp, y2: y2Temp, horizontal: horizontalTemp};
-      }
-
-      calcTextWidth(text, font) {
-        var canvas = this.calcTextWidth.canvas || (this.calcTextWidth.canvas = document.createElement("canvas"));
-        var context = canvas.getContext("2d");
-        context.font = font;
-        var metrics = context.measureText(text);
-        return metrics.width;
-      }
-
-      renderRelationships = () => {
-          var relationshipPairList = [];
-          var relationshipPersonList = [];
-          var relationshipsNames = [];
-          var relationshipList = [...this.state.relationshipList]
-          var relationshipColor = [];
-
-          relationshipList.map(relationship => {
-            this.state.personClassCoordinates.map(person => {
-              if(parseInt(relationship.id_1) === parseInt(person.id) || parseInt(relationship.id_2) === parseInt(person.id)){
-                relationshipPersonList.push(person);
-                relationshipsNames.push(relationship.relationships);
-                relationshipColor.push(relationship.color);
-              }
-            });
-          });
-          for (var i = 0; i < relationshipPersonList.length; i += 2){
-            var sideCoords = this.calcSideCenters(relationshipPersonList[i], relationshipPersonList[i + 1]);
-
-            var pointsTemp = Math.round(sideCoords.x1) + " " + Math.round(sideCoords.y1) +
-            ", " + Math.round(sideCoords.x1) + " " + Math.round((Math.round(sideCoords.y1) + Math.round(sideCoords.y2))/2) +
-            ", " + Math.round(sideCoords.x2) + " " + Math.round((Math.round(sideCoords.y1) + Math.round(sideCoords.y2))/2) +
-            ", " + Math.round(sideCoords.x2) + " " + Math.round(sideCoords.y2)
-
-            if(sideCoords.horizontal){
-              pointsTemp = Math.round(sideCoords.x1) + " " + Math.round(sideCoords.y1) +
-              ", " + Math.round((Math.round(sideCoords.x1) + Math.round(sideCoords.x2))/2) + " " + Math.round(sideCoords.y1) +
-              ", " + Math.round((Math.round(sideCoords.x1) + Math.round(sideCoords.x2))/2) + " " + Math.round(sideCoords.y2) +
-              ", " + Math.round(sideCoords.x2) + " " + Math.round(sideCoords.y2);
-            }
-
-            relationshipPairList.push({ 
-              id: i / 2,
-              relationship: relationshipsNames[i],
-              id1: relationshipPersonList[i].id, id2: relationshipPersonList[i+1].id, 
-              color: relationshipColor[i],
-              points: pointsTemp,
-            });
-          }
-
-          var reference = [];
-
-          relationshipPairList.map( () => {
-            const lineRef = React.createRef();
-            reference.push(lineRef);
-          })
-
-          this.setState({
-            relationshipMarkers: (relationshipPairList.map(item => (
-              <marker 
-              id={'head_' + item.color.substring(1)} 
-              key={'head_' + item.color.substring(1)} 
-              orient="auto"
-              markerWidth='6' markerHeight='6'
-              refX='0.1' refY='3'
-              >
-                <path d='M0,0 V6 L3,3 Z' fill={item.color} stroke={item.color}/>
-              </marker>
-            ))),
-            relationships: (relationshipPairList.map(item => (
-              <React.Fragment
-              key={"fragment_" + item.id1 + "_" + item.id2}
-              >
-                <polyline 
-                ref={reference[item.id]}
-                id={"path_" + item.id1 + "_" + item.id2}
-                markerEnd={'url(#head_' + item.color.substring(1) + ')'}
-                points={item.points} 
-                stroke = {item.color}
-                strokeWidth="3" 
-                fill="none"/>
-                <Tooltip triggerRef={reference[item.id]}>
-                    <rect x={0} y={-35} width={this.calcTextWidth(item.relationship, "16pt arial")+29} height={35} rx={5} ry={5} fill='black'/>
-                    <text x={15} y={-10} fontSize={"16pt"} fill='white'>{item.relationship}</text>
-                </Tooltip>
-              </React.Fragment>
-              )
-            )
-          )});
-      }
 
       renderItems = () => {
         const newItems = this.state.personList;
@@ -505,14 +328,29 @@
         ));
       };
 
+      renderRelationships = () => {
+        var relationshipList = [...this.state.relationshipList];
+        var coordinates = [...this.state.personClassCoordinates];
+        var personSize = this.state.personSize;
+
+        this.setState({
+          relationships: (relationshipList.map(item => (
+            <Relationship
+              key={"relationship_" + item.id + Date.now()} // it forces our app to re-render relationships whenever person is dragged
+              relationship={item}
+              personClassCoordinates={coordinates}
+              personSize={personSize}
+            />
+            )
+          )
+        )});
+      }
+
       render() {
         return (
           <React.Fragment>
             <div className="contentPerson">
               <svg height={this.state.windowSize.height} width={this.state.windowSize.width}>
-              <defs>
-                {this.state.relationshipMarkers}
-              </defs>
                 {this.state.relationships}
               </svg>
               {this.renderItems()}     

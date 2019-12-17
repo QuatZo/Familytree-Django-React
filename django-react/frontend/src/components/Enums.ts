@@ -1,4 +1,4 @@
-enum NOTIFY {
+export enum NOTIFY {
     SUCCESS_LOGIN,
     SUCCESS_REGISTER,
     SUCCESS_LOGOUT,

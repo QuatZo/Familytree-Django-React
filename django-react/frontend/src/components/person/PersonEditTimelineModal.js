@@ -6,11 +6,11 @@
     import DatePicker from "react-datepicker";
     import Timeline from 'react-image-timeline';
     import 'react-datepicker/dist/react-datepicker.css';
-    import '../PersonEdit.css'
+    import './PersonEdit.css'
     import 'react-image-timeline/dist/timeline.css';
     import axios from "axios";
-    import NOTIFY from '../Enums.ts';
-    import ShowNotification from './Notification';
+    import {NOTIFY} from '../Enums.ts';
+    import ShowNotification from '../notification/Notification';
     import Switch from "react-switch";
     import ModalMilestone from './MilestoneModal'
     
@@ -119,7 +119,7 @@
           person_id: [this.props.id],
           date: "",
           title: "",
-          text: "",
+          text: "Some random text",
           image: "/media/milestones/default.jpg"
         }, ModalMilestone: !this.state.ModalMilestone });
       }
@@ -169,6 +169,31 @@
             console.log(err);
             ShowNotification(NOTIFY.ERROR);
           });
+      };
+
+      handleSubmitRelationship = item => {
+        this.toggleRelationshipModal();
+        // it'll be useful here once relationship will have the date of the beginning and (optional) end
+        if (item.id) {
+          const options = {
+            url: `http://localhost:8000/api/familytreerelationship/${item.id}/`,
+            content: item,
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `JWT ${localStorage.getItem('token')}`
+            },
+            data: item
+          };
+          axios(options)
+            .then(() => this.refreshRelationshipList())
+            .then(() => ShowNotification(NOTIFY.SAVE_RELATIONSHIP))
+            .catch(err => {
+              console.log(err);
+              ShowNotification(NOTIFY.ERROR);
+            });
+          return;
+        } 
       };
 
       handleDeleteMilestone = item => {

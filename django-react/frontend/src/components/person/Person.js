@@ -2,13 +2,13 @@
 
     import React, { Component } from "react";
     import Draggable from 'react-draggable';
-    import ModalPerson from "./components/PersonEditTimelineModal"
+    import ModalPerson from "./PersonEditTimelineModal"
     import axios from "axios";
     import './Person.css';
-    import NOTIFY from './Enums.ts';
-    import ShowNotification from './components/Notification';
+    import {NOTIFY} from '../Enums.ts';
+    import ShowNotification from '../notification/Notification';
 
-    class App extends Component {
+    class Person extends Component {
       constructor(props) {
         super(props);
         this.state = {
@@ -145,4 +145,4 @@
         );
       }
     }
-    export default App;
+    export default Person;

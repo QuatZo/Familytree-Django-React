@@ -1,13 +1,14 @@
 // frontend/src/components/MilestoneAddModal.js
 /*eslint no-useless-computed-key: 0*/
+/*eslint array-callback-return: 0*/
 
     import React, { Component } from "react";
     import axios from "axios";
     import DatePicker from "react-datepicker";
     import 'react-datepicker/dist/react-datepicker.css';
     import MultiSelect from "@khanacademy/react-multi-select";    
-    import NOTIFY from '../Enums.ts';
-    import ShowNotification from './Notification';
+    import {NOTIFY} from '../Enums.ts';
+    import ShowNotification from '../notification/Notification';
     
     import {
       Button,

@@ -1,7 +1,7 @@
 // frontend/src/components/Notification.js
 
     import {toast} from 'react-toastify';
-    import NOTIFY from '../Enums.ts';
+    import {NOTIFY} from '../Enums.ts';
     import 'react-toastify/dist/ReactToastify.css';
 
      function ShowNotification(notifyEnum) {
