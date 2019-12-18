@@ -52,3 +52,7 @@ svg{
   font-family: fantasy;
   font-style: oblique;
 }
+
+ul.select-list li{
+  margin: 0px;
+}
