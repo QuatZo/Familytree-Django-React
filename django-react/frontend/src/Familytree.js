@@ -430,14 +430,14 @@
           x2Temp = relationshipPoints.top[1].x + 5;
           y2Temp = relationshipPoints.top[1].y + nav;
         }
-        else if(relationshipPoints.right[0].x < relationshipPoints.left[1].x){
+        else if(relationshipPoints.right[0].x < relationshipPoints.left[1].x - 10){
           x1Temp = relationshipPoints.right[0].x + 5;
           y1Temp = relationshipPoints.right[0].y + nav + 5;
           x2Temp = relationshipPoints.left[1].x + 5;
           y2Temp = relationshipPoints.left[1].y + nav + 5;
           horizontalTemp = true;
         }
-        else if(relationshipPoints.left[0].x > relationshipPoints.right[1].x){
+        else if(relationshipPoints.left[0].x > relationshipPoints.right[1].x + 10){
           x1Temp = relationshipPoints.left[0].x + 5;
           y1Temp = relationshipPoints.left[0].y + nav + 5;
           x2Temp = relationshipPoints.right[1].x + 5;
@@ -499,6 +499,7 @@
               id1: relationshipPersonList[i].id, id2: relationshipPersonList[i+1].id, 
               color: relationshipColor[i],
               points: pointsTemp,
+              horizontal: sideCoords.horizontal,
             });
           }
 
@@ -510,13 +511,14 @@
           })
 
           this.setState({
+            
             relationshipMarkers: (relationshipPairList.map(item => (
               <marker 
               id={'head_' + item.color.substring(1)} 
               key={'head_' + item.color.substring(1)} 
               orient="auto"
               markerWidth='6' markerHeight='6'
-              refX='0.1' refY='3'
+              refX={item.horizontal?'3.2':'0.1'} refY='3'
               >
                 <path d='M0,0 V6 L3,3 Z' fill={item.color} stroke={item.color}/>
               </marker>
