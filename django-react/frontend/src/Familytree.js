@@ -4,20 +4,18 @@
 
     import React, { Component } from "react";
     import axios from "axios";
-    import Person from "./Person";
-    import ModalRelationship from "./components/RelationshipModal";
-    import ModalPerson from "./components/PersonAddModal";
-    import { Tooltip } from 'react-svg-tooltip';
-    import NOTIFY from './Enums.ts';
-    import ShowNotification from './components/Notification';
-    
+    import Person from "./components/person/Person";
+    import Relationship from "./components/relationship/Relationship"
+    import ModalRelationship from "./components/relationship/RelationshipModal";
+    import ModalPerson from "./components/person/PersonAddModal";
+    import {NOTIFY} from './components/Enums.ts';
+    import ShowNotification from './components/notification/Notification';
     import './Familytree.css';
 
     class Familytree extends Component {    
       constructor(props) {
         super(props);
         this.state = {
-          viewCompleted: false,
           activePersonData: {
             user_id: localStorage.getItem('user_id'),
             first_name: '',
@@ -34,7 +32,7 @@
           relationshipList: this.props.relationshipList,
           personSize: [],
           windowSize: {width: 0, height: 0},
-          saving: false
+          saving: false,
         };
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
       }  
@@ -90,27 +88,6 @@
 
       handleSubmitPerson = item => {
         this.togglePersonModal();
-        if (item.id) {
-          const options = {
-            url: `http://localhost:8000/api/familytreepersons/${item.id}/`,
-            content: item,
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `JWT ${localStorage.getItem('token')}`
-            },
-            data: item
-          };
-          axios(options)
-            .then(() => this.refreshPersonList())
-            .then(() => ShowNotification(NOTIFY.SAVE_PERSON))
-            .catch(err => {
-              console.log(err);
-              ShowNotification(NOTIFY.ERROR);
-            });
-          return;
-        }
-
         const options = {
           url: 'http://localhost:8000/api/familytreepersons/',
           content: item,
@@ -133,27 +110,6 @@
 
       handleSubmitRelationship = item => {
         this.toggleRelationshipModal();
-        if (item.id) {
-          const options = {
-            url: `http://localhost:8000/api/familytreerelationship/${item.id}/`,
-            content: item,
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `JWT ${localStorage.getItem('token')}`
-            },
-            data: item
-          };
-          axios(options)
-            .then(() => this.refreshRelationshipList())
-            .then(() => ShowNotification(NOTIFY.SAVE_RELATIONSHIP))
-            .catch(err => {
-              console.log(err);
-              ShowNotification(NOTIFY.ERROR);
-            });
-          return;
-        }
-
         const options = {
           url: 'http://localhost:8000/api/familytreerelationship/',
           content: item,
@@ -329,7 +285,6 @@
           this.setState({activePersons: array});
       }
 
-
       deleteEverything(){
         // since relationships are connected w/ persons, we don't need to delete any relationship. Just persons.
         axios
@@ -356,107 +311,6 @@
             ShowNotification(NOTIFY.ERROR);
           });
       }
-      
-      // it will be useful in the future, after some rework
-      /* deleteRelationships(id){
-        var relationships = [];
-        axios
-          .get("http://localhost:8000/api/familytreerelationship/", {
-            headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
-          })
-          .then(res => relationships = res.data )
-          .then(() => {
-            relationships.map(item => {
-              if(parseInt(id)===parseInt(item.id_1) || parseInt(id)===parseInt(item.id_2)){
-                axios
-                .delete(`http://localhost:8000/api/familytreerelationship/${item.id}`, {
-                  headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
-                })
-                .then(() => this.refreshRelationshipList())
-                .then(() => ShowNotification(NOTIFY.DELETE_RELATIONSHIP)))
-                .catch(err => {
-                  console.log(item)
-                  console.log(err);
-                  ShowNotification(NOTIFY.ERROR);
-                });
-              }
-            })
-          })
-          .catch(err => {
-            console.log(err);
-            ShowNotification(NOTIFY.ERROR);
-          });
-      } */
-
-      renderRelationships = () => {
-          var relationshipPairList = [];
-          var relationshipPersonList = [];
-          var relationshipsNames = [];
-          var relationshipList = [...this.state.relationshipList]
-          var relationshipColor = [];
-
-          relationshipList.map(relationship => {
-            this.state.personClassCoordinates.map(person => {
-              if(parseInt(relationship.id_1) === parseInt(person.id) || parseInt(relationship.id_2) === parseInt(person.id)){
-                relationshipPersonList.push(person);
-                relationshipsNames.push(relationship.relationships);
-                relationshipColor.push(relationship.color);
-              }
-            });
-          });
-          for (var i = 0; i < relationshipPersonList.length; i+=2){
-            relationshipPairList.push({ 
-              relationship: relationshipsNames[i],
-              id: i / 2,
-              id1: relationshipPersonList[i].id, 
-              id2: relationshipPersonList[i+1].id, 
-              x1: relationshipPersonList[i].screen.x + this.state.personSize.width / 2, 
-              y1: relationshipPersonList[i].screen.y + this.state.personSize.height / 2, 
-              x2: relationshipPersonList[i+1].screen.x + this.state.personSize.width / 2, 
-              y2: relationshipPersonList[i+1].screen.y + this.state.personSize.height / 2,
-              color: relationshipColor[i]
-            });
-          }
-
-          var reference = [];
-
-          relationshipPairList.map( () => {
-            const lineRef = React.createRef();
-            reference.push(lineRef);
-          })
-
-          function getTextWidth(text, font) {
-            var canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
-            var context = canvas.getContext("2d");
-            context.font = font;
-            var metrics = context.measureText(text);
-            return metrics.width;
-        }
-
-          this.setState({
-            relationships: (relationshipPairList.map(item => (
-              <React.Fragment
-              key={"fragment_" + item.id1 + "_" + item.id2}
-              >
-                <polyline 
-                ref={reference[item.id]}
-                id={"path_" + item.id1 + "_" + item.id2}
-                points={Math.round(item.x1) + " " + Math.round(item.y1) +
-                ", " + Math.round(item.x1) + " " + Math.round((Math.round(item.y1) + Math.round(item.y2))/2) +
-                ", " + Math.round(item.x2) + " " + Math.round((Math.round(item.y1) + Math.round(item.y2))/2) +
-                ", " + Math.round(item.x2) + " " + Math.round(item.y2)} 
-                stroke = {item.color}
-                strokeWidth="3" 
-                fill="none"/>
-                <Tooltip triggerRef={reference[item.id]}>
-                    <rect x={0} y={-35} width={getTextWidth(item.relationship, "16pt arial")+29} height={35} rx={5} ry={5} fill='black'/>
-                    <text x={15} y={-10} fontSize={"16pt"} fill='white'>{item.relationship}</text>
-                </Tooltip>
-              </React.Fragment>
-              )
-            )
-          )});
-      }
 
       renderItems = () => {
         const newItems = this.state.personList;
@@ -474,11 +328,29 @@
         ));
       };
 
+      renderRelationships = () => {
+        var relationshipList = [...this.state.relationshipList];
+        var coordinates = [...this.state.personClassCoordinates];
+        var personSize = this.state.personSize;
+
+        this.setState({
+          relationships: (relationshipList.map(item => (
+            <Relationship
+              key={"relationship_" + item.id + Date.now()} // it forces our app to re-render relationships whenever person is dragged
+              relationship={item}
+              personClassCoordinates={coordinates}
+              personSize={personSize}
+            />
+            )
+          )
+        )});
+      }
+
       render() {
         return (
           <React.Fragment>
             <div className="contentPerson">
-              <svg height="1080" width="1920">
+              <svg height={this.state.windowSize.height} width={this.state.windowSize.width}>
                 {this.state.relationships}
               </svg>
               {this.renderItems()}     

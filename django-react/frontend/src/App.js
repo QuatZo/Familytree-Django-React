@@ -2,18 +2,18 @@
 
     import React, { Component } from "react";
     import './App.css';
-    import Nav from './components/Nav';
-    import LoginForm from './components/LoginForm';
-    import SignupForm from './components/SignupForm';
+    import Nav from './components/nav/Nav';
+    import LoginForm from './components/auth/LoginForm';
+    import SignupForm from './components/auth/SignupForm';
     import Familytree from "./Familytree";
     import axios from "axios";
     import FadeIn from "react-fade-in";
     import Lottie from "react-lottie";
-    import * as stillLoadingData from "./stillloading.json";
-    import * as doneLoadingData from "./doneloading.json";
+    import * as stillLoadingData from "./components/loading/stillloading.json";
+    import * as doneLoadingData from "./components/loading/doneloading.json";
     import { ToastContainer} from 'react-toastify';
-    import NOTIFY from './Enums.ts';
-    import ShowNotification from './components/Notification';
+    import {NOTIFY} from './components/Enums.ts';
+    import ShowNotification from './components/notification/Notification';
     
     const defaultOptionsLoading = {
         loop: true,
