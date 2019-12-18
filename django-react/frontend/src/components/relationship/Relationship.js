@@ -122,6 +122,7 @@
             id1: relationshipPersonList[i].id, id2: relationshipPersonList[i+1].id, 
             color: relationshipColor[i],
             points: pointsTemp,
+            horizontal: sideCoords.horizontal,
           });
         }
 
@@ -139,7 +140,7 @@
             key={'head_' + item.color.substring(1)} 
             orient="auto"
             markerWidth='6' markerHeight='6'
-            refX='0.1' refY='3'
+            refX={item.horizontal ? '3.2' : '0.1'} refY='3'
             >
               <path d='M0,0 V6 L3,3 Z' fill={item.color} stroke={item.color}/>
             </marker>
