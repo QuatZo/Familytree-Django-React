@@ -51,10 +51,11 @@
         const { toggle, onSave } = this.props;
         const errors = this.validate(this.state.activeItem.first_name, this.state.activeItem.last_name);
         const isEnabled = !Object.keys(errors).some(x => errors[x]);
+        var modelTheme= this.props.theme;
         return (
-          
+        
           <Modal  isOpen={true} toggle={toggle}>
-            <div class="bg-dark text-light">
+            <div className="modal-info">
             <ModalHeader toggle={toggle}> Person </ModalHeader>
             
             <ModalBody>

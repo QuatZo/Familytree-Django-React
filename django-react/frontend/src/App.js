@@ -15,6 +15,7 @@
     import { ToastContainer} from 'react-toastify';
     import NOTIFY from './Enums.ts';
     import ShowNotification from './components/Notification';
+    import CustomModal from "./components/PersonModal";
     
     const defaultOptionsLoading = {
         loop: true,
@@ -111,6 +112,7 @@
       }
 
       handle_login = (e, data) => {
+        
         e.preventDefault();
         const options = {
           url: 'http://localhost:8000/token-auth/',
@@ -199,61 +201,66 @@
       };
 
       render() {
+        var them ="bg-dark";
         let form;
         switch (this.state.displayed_form) {
           case 'login':
-            form = <LoginForm handle_login={this.handle_login} />;
+            form = <LoginForm handle_login={this.handle_login} theme={this.state.theme}/>;
             break;
           case 'signup':
-            form = <SignupForm handle_signup={this.handle_signup} />;
+            form = <SignupForm handle_signup={this.handle_signup} theme={this.state.theme} />;
             break;
           default:
             form = null;
         }
+        let modal;
+        modal = <CustomModal theme={this.state.theme}/>;
+        
         const toggleBackgroundColorHandler = () => {
           const body = document.querySelector('body');
           const navigation = document.querySelector('nav');
           const formElement = document.querySelector('form');
           const changeColorButton = document.querySelector('#changeColorButton');
-          const button = document.querySelector('button');
           
-          
-          const currentColor = this.state.backgroundColor;
+const currentColor = this.state.backgroundColor;
           let newColor;
          // #343a40
           if (currentColor === '#262626') {
             newColor = '#cbd1d1';
+            them ="bg-light text-dark";
             navigation.classList.remove('bg-dark');
             navigation.classList.remove('navbar-dark');
             navigation.classList.add('bg-light');
             navigation.classList.add('navbar-light');
-            button.classList.add('btn-danger');
+            /*button.classList.add('btn-danger');
             button.classList.remove('btn-outline-danger');
             if(formElement){
               formElement.classList.add('bg-light');
               formElement.classList.remove('bg-dark');
-            }
-            changeColorButton.classList.remove('btn-dark')
-            changeColorButton.classList.add('btn-light')
+            }*/
+            changeColorButton.classList.add('btn-outline-dark');
+            changeColorButton.classList.remove('btn-outline-light');
           } else {
             newColor = '#262626';
+            them ="bg-dark";
             navigation.classList.add('bg-dark');
             navigation.classList.add('navbar-dark');
             navigation.classList.remove('bg-light');
             navigation.classList.remove('navbar-light');
-            button.classList.remove('btn-danger');
+            /*button.classList.remove('btn-danger');
             button.classList.add('btn-outline-danger');
            if(formElement){
               formElement.classList.remove('bg-light')
               formElement.classList.add('bg-dark');
-            }
-            changeColorButton.classList.add('btn-dark')
-            changeColorButton.classList.remove('btn-light')
+            }*/
+            changeColorButton.classList.remove('btn-outline-dark');
+            changeColorButton.classList.add('btn-outline-light');
           }
           body.style.backgroundColor = newColor;
           this.setState({
             ...this.state,
-            backgroundColor: newColor
+            backgroundColor: newColor,
+            theme: them
           });
         }
 
@@ -266,8 +273,8 @@
               handle_logout={this.handle_logout}
               username={this.state.username}
             >
-          <button id="changeColorButton" className="btn btn-dark change-color-button" onClick={toggleBackgroundColorHandler}>
-            {this.state.backgroundColor === '#262626' ? "Enable light theme" : "Enable dark theme"}
+          <button id="changeColorButton" className="btn btn-outline-light btn-xl change-color-button nav_button" onClick={toggleBackgroundColorHandler}>
+            {this.state.backgroundColor === '#262626' ? "Light theme" : "Dark theme"}
           </button>
             </Nav>
 

@@ -18,7 +18,7 @@
 }
 
 .loading{
-  color: white;
+  color: grey;
   text-align: center;
 }
 
@@ -30,6 +30,7 @@
   margin-left: 10px;
 }
 .change-color-button{
+  margin-right: auto;
   /* width: 200px;
   height: 40px;
   display: block;

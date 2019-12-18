@@ -22,7 +22,7 @@ class LoginForm extends React.Component {
   render() {
     return (
       <div id="login" className="login-dark">
-        <form method="post" onSubmit={e => this.props.handle_login(e, this.state)}>
+        <form className={this.props.theme} method="post" onSubmit={e => this.props.handle_login(e, this.state)}>
             <h2 className="sr-only">Login Form</h2>
             <div className="illustration"><i className="far fa-user"></i></div>
             <div className="form-group">

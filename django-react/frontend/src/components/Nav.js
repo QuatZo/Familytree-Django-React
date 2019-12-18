@@ -9,13 +9,16 @@ function Nav(props) {
     <div className="nav_buttons">
       <button onClick={() => props.display_form('login')} className="btn btn-outline-success my-2 my-sm-0 nav_button">Login</button>
       <button onClick={() => props.display_form('signup')} className="btn btn-outline-info my-2 my-sm-0  nav_button">Register</button>
+      
     </div>
   );
 
   const logged_in_nav = (
     <React.Fragment>
-      <a className="navbar-brand" href="#"> | {props.username} | </a>
-        <button onClick={props.handle_logout} className="btn btn-outline-danger my-2 my-sm-0">Logout</button>
+      
+      <button onClick={"#"} className="btn btn-secondary my-2 my-sm-0 disabled nav_button">User: {props.username}</button>
+      <button onClick={props.handle_logout} className="btn btn-outline-danger my-2 my-sm-0 nav_button">Logout</button>
+      
     </React.Fragment>
   );
   return (

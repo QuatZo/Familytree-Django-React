@@ -494,19 +494,19 @@
             </div>
             
             <div className="buttons">
-			
-              <button onClick={() => {if(window.confirm("Are you sure you want to delete WHOLE Family Tree?")) this.deleteEverything()}} className="btn btn-outline-danger btn-circle btn-xl">
-                <i className="fas fa-times"></i>
-              </button>
-              <button onClick={this.resetCoords.bind(this)} className="btn btn-outline-warning btn-circle btn-xl">
-                <i className="fas fa-redo"></i>
-              </button>
-              <button disabled={this.state.saving} onClick={() => {if(window.confirm("Are you sure you want to save the coordinates?")) this.saveCoords()}} className="btn btn-outline-info btn-circle btn-xl">
-                <i className="far fa-save"></i>
-              </button>
-              <button onClick={this.createPerson} className="btn btn-outline-success btn-circle btn-xl">
+              <button onClick={this.createPerson} className="btn btn-success btn-circle btn-xl">
                 <i className="fas fa-plus"></i>
               </button>
+			        <button onClick={this.resetCoords.bind(this)} className="btn btn-secondary btn-circle btn-xl">
+                <i className="fas fa-redo"></i>
+              </button>
+              <button disabled={this.state.saving} onClick={() => {if(window.confirm("Are you sure you want to save the coordinates?")) this.saveCoords()}} className="btn btn-info btn-circle btn-xl">
+                <i className="far fa-save"></i>
+              </button>
+              <button onClick={() => {if(window.confirm("Are you sure you want to delete WHOLE Family Tree?")) this.deleteEverything()}} className="btn btn-danger btn-circle btn-xl">
+                <i className="fas fa-times"></i>
+              </button>
+              
             </div>
           </React.Fragment>
         );
