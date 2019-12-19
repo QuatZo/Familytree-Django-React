@@ -14,3 +14,7 @@
 .rt-dot{
   z-index: 0 !important;
 }
+
+.rt-timeline{
+  min-width: 100%;
+}

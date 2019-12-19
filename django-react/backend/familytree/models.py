@@ -67,7 +67,7 @@ class FamilytreeMilestone(models.Model):
     person_id = models.ManyToManyField(FamilytreePerson)
     date = models.DateField()
     text = models.CharField(max_length=512)
-    title = models.CharField(max_length=32)
+    title = models.CharField(max_length=64)
     image = models.ImageField(upload_to='milestones', default='milestones/default.jpg')
 
     def _str_(self):

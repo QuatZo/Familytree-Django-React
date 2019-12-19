@@ -130,20 +130,31 @@
         this.setState({ activeMilestone: item, ModalMilestone: !this.state.ModalMilestone });
       };
       
-      handleSubmitMilestone = item => {
+      handleSubmitMilestone = (item, file) => {
         this.toggleMilestoneModal();
         if (item.id) {
-          const options = {
-            url: `http://localhost:8000/api/familytreemilestone/${item.id}/`,
-            content: item,
-            method: 'PUT',
+          var SHA256 = require("crypto-js/sha256");
+          var newFilename = file !== null ? SHA256(Date.now().toString() + file.name) + file.name.substring(file.name.indexOf(".")) : null;
+          var oldItem = this.props.activeItem;
+
+          let data = new FormData();
+        
+          if(oldItem.user_id !== item.user_id) data.append('user_id', item.user_id);
+          for(var i = 0; i < item.person_id.length; i++){
+            data.append('person_id', item.person_id[i]);
+          }
+          if(oldItem.date !== item.date) data.append('date', item.date);
+          if(oldItem.text !== item.text) data.append('text', item.text);
+          if(oldItem.title !== item.title) data.append('title', item.title);
+          if(oldItem.image !== file && file !== null) data.append('image', file, newFilename); // sha256 encryption
+
+          axios
+          .patch(`http://localhost:8000/api/familytreemilestone/${item.id}/`, data, {
             headers: {
-              'Content-Type': 'application/json',
+              'Content-Type': 'multipart/form-data',
               Authorization: `JWT ${localStorage.getItem('token')}`
-            },
-            data: item
-          };
-          axios(options)
+            }
+          })
             .then(() => this.downloadTimelineData())
             .then(() => ShowNotification(NOTIFY.SAVE_MILESTONE))
             .catch(err => {
@@ -153,18 +164,27 @@
           return;
         }
 
-        const options = {
-          url: 'http://localhost:8000/api/familytreemilestone/',
-          content: item,
-          method: 'POST',
+        var SHA256 = require("crypto-js/sha256");
+        var newFilename = SHA256(Date.now().toString() + file.name) + file.name.substring(file.name.indexOf("."));
+
+        let data = new FormData();
+        data.append('user_id', item.user_id);
+        
+        for(var i = 0; i < item.person_id.length; i++){
+          data.append('person_id', item.person_id[i]);
+        }
+
+        data.append('date', item.date);
+        data.append('text', item.text);
+        data.append('title', item.title);
+        data.append('image', file, newFilename); // sha256 encryption
+
+        axios.post('http://localhost:8000/api/familytreemilestone/', data, {
           headers: {
-            'Content-Type': 'application/json',
-            Accept : 'application/json',
+            'Content-Type': 'multipart/form-data',
             Authorization: `JWT ${localStorage.getItem('token')}`
-          },
-          data: item
-        };
-        axios(options)
+          }
+        })
           .then(() => this.downloadTimelineData())
           .then(() => ShowNotification(NOTIFY.ADD_MILESTONE))
           .catch(err => {

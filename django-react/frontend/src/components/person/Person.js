@@ -25,7 +25,7 @@
 
         if (item.id) {
           var SHA256 = require("crypto-js/sha256");
-          var newFilename = file !== null ? SHA256(file.name) + file.name.substring(file.name.indexOf(".")) : null;
+          var newFilename = file !== null ? SHA256(Date.now().toString() + file.name) + file.name.substring(file.name.indexOf(".")) : null;
           var oldItem = this.props.person;
 
           let data = new FormData();

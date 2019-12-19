@@ -89,7 +89,7 @@
       handleSubmitPerson = (item, file) => {
         this.togglePersonModal();
         var SHA256 = require("crypto-js/sha256");
-        var newFilename = SHA256(file.name) + file.name.substring(file.name.indexOf("."));
+        var newFilename = SHA256(Date.now().toString() + file.name) + file.name.substring(file.name.indexOf("."));
 
         let data = new FormData();
         data.append('user_id', item.user_id);
@@ -108,7 +108,6 @@
             Authorization: `JWT ${localStorage.getItem('token')}`
           }
         })
-        .then(res=>console.log(res))
         .then(() => this.refreshPersonList())
         .then(() => ShowNotification(NOTIFY.ADD_PERSON))
         .catch(err => {
