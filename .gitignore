@@ -121,3 +121,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Custom
+media/
+migrations/
+node_modules/

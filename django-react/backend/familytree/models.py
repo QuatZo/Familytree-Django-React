@@ -13,7 +13,7 @@ class FamilytreePerson(models.Model):
     last_name = models.CharField(max_length=50)
     birth_date = models.CharField(max_length=10, blank=True, default='')
     birth_place = models.CharField(max_length=50, blank=True, default='')
-    avatar = models.CharField(max_length=200, default='/media/avatars/0.png')
+    avatar = models.ImageField(upload_to='avatars', default='avatars/0.png')
     
     living = 'living'
     deceased = 'deceased'
@@ -67,8 +67,8 @@ class FamilytreeMilestone(models.Model):
     person_id = models.ManyToManyField(FamilytreePerson)
     date = models.DateField()
     text = models.CharField(max_length=512)
-    title = models.CharField(max_length=32)
-    image = models.CharField(max_length=200, default='/media/milestones/default.jpg')
+    title = models.CharField(max_length=64)
+    image = models.ImageField(upload_to='milestones', default='milestones/default.jpg')
 
     def _str_(self):
         return self.title

@@ -143,3 +143,6 @@ JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER': 'backend.utils.my_jwt_response_handler',
     'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=1),
 }
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

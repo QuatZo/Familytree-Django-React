@@ -43,6 +43,8 @@
         };
       }
 
+      file = null;
+
       componentDidMount(){
         this.downloadTimelineData();
       }
@@ -128,20 +130,35 @@
         this.setState({ activeMilestone: item, ModalMilestone: !this.state.ModalMilestone });
       };
       
-      handleSubmitMilestone = item => {
+      handleSubmitMilestone = (item, file) => {
         this.toggleMilestoneModal();
+        var SHA256, newFilename, oldItem, i;
+
+        item.person_id = item.person_id.filter(el => el !== undefined);
+
         if (item.id) {
-          const options = {
-            url: `http://localhost:8000/api/familytreemilestone/${item.id}/`,
-            content: item,
-            method: 'PUT',
+          SHA256 = require("crypto-js/sha256");
+          newFilename = file !== null ? SHA256(Date.now().toString() + file.name) + file.name.substring(file.name.indexOf(".")) : null;
+          oldItem = this.props.activeItem;
+
+          let data = new FormData();
+        
+          if(oldItem.user_id !== item.user_id) data.append('user_id', item.user_id);
+          for(i = 0; i < item.person_id.length; i++){
+            data.append('person_id', item.person_id[i]);
+          }
+          if(oldItem.date !== item.date) data.append('date', item.date);
+          if(oldItem.text !== item.text) data.append('text', item.text);
+          if(oldItem.title !== item.title) data.append('title', item.title);
+          if(oldItem.image !== file && file !== null) data.append('image', file, newFilename); // sha256 encryption
+
+          axios
+          .patch(`http://localhost:8000/api/familytreemilestone/${item.id}/`, data, {
             headers: {
-              'Content-Type': 'application/json',
+              'Content-Type': 'multipart/form-data',
               Authorization: `JWT ${localStorage.getItem('token')}`
-            },
-            data: item
-          };
-          axios(options)
+            }
+          })
             .then(() => this.downloadTimelineData())
             .then(() => ShowNotification(NOTIFY.SAVE_MILESTONE))
             .catch(err => {
@@ -151,18 +168,27 @@
           return;
         }
 
-        const options = {
-          url: 'http://localhost:8000/api/familytreemilestone/',
-          content: item,
-          method: 'POST',
+        SHA256 = require("crypto-js/sha256");
+        newFilename = SHA256(Date.now().toString() + file.name) + file.name.substring(file.name.indexOf("."));
+
+        let data = new FormData();
+        data.append('user_id', item.user_id);
+        
+        for(i = 0; i < item.person_id.length; i++){
+          data.append('person_id', item.person_id[i]);
+        }
+
+        data.append('date', item.date);
+        data.append('text', item.text);
+        data.append('title', item.title);
+        data.append('image', file, newFilename); // sha256 encryption
+
+        axios.post('http://localhost:8000/api/familytreemilestone/', data, {
           headers: {
-            'Content-Type': 'application/json',
-            Accept : 'application/json',
+            'Content-Type': 'multipart/form-data',
             Authorization: `JWT ${localStorage.getItem('token')}`
-          },
-          data: item
-        };
-        axios(options)
+          }
+        })
           .then(() => this.downloadTimelineData())
           .then(() => ShowNotification(NOTIFY.ADD_MILESTONE))
           .catch(err => {
@@ -243,6 +269,10 @@
           first_name: first_name.trim().length === 0,
           last_name: last_name.trim().length === 0
         }
+      }
+      
+      handleChangeFile = (e) => {
+        this.file = e.target.files[0];
       }
 
       handleBlur = (field) => (evt) => {
@@ -366,6 +396,16 @@
                   </Row>
                   <Row>
                     <Col>
+                    <FormGroup style={{display: 'flex'}}>
+                      <Label for="avatar">Change Avatar</Label>
+                      <Input
+                        type="file"
+                        name="avatar"
+                        onChange={this.handleChangeFile}
+                      />
+                    </FormGroup>
+                    </Col>
+                    <Col>
                       <FormGroup style={{display: 'flex'}}>
                         <Label for="switch-delete-mode" style={{marginRight: '10px'}}>Delete Mode</Label>
                         <Switch 
@@ -391,7 +431,7 @@
               </ModalBody>
               }
               <ModalFooter>
-                <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem)}>
+                <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem, this.file)}>
                   Save
                 </Button>
               </ModalFooter>

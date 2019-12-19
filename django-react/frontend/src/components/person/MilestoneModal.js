@@ -35,6 +35,8 @@
         };
       }
 
+      file = null;
+
       componentDidMount(){
         var options = [];
         axios
@@ -67,13 +69,8 @@
         this.setState({activeItem});
       };
 
-      validate(title, date, person_id){
-        person_id = person_id.filter(el => el !== undefined);
-        return{
-          title: title.trim().length === 0,
-          date: date.toString().trim().length === 0,
-          person_id: person_id.length === 0
-        }
+      handleChangeFile = (e) => {
+        this.file = e.target.files[0];
       }
 
       handleBlur = (field) => (evt) => {
@@ -82,9 +79,19 @@
         });
       }
       
+      validate(title, date, person_id, file){
+        person_id = person_id.filter(el => el !== undefined);
+        return{
+          title: title.trim().length === 0,
+          date: date.toString().trim().length === 0,
+          person_id: person_id.length === 0,
+          file: file === null && this.state.activeItem.id === undefined,
+        }
+      }
+
       render() {
         const { toggle, onSave } = this.props;
-        const errors = this.validate(this.state.activeItem.title, this.state.activeItem.date, this.state.activeItem.person_id);
+        const errors = this.validate(this.state.activeItem.title, this.state.activeItem.date, this.state.activeItem.person_id, this.file);
         const isEnabled = !Object.keys(errors).some(x => errors[x]);
         return (
           <Modal isOpen={true} toggle={toggle}>
@@ -131,11 +138,12 @@
                   <Label for="person_id">Persons {errors.person_id ? " (please, choose at least one person from the list)" : null}</Label><br />
                   <MultiSelect
                     options={this.state.personSelectOptions}
-                    className={"form-control " + (errors.person_id ? "error" : "")}
+                    className={"form-control " + (errors.person_id && this.state.activeItem.id === undefined ? "error" : "")}
                     selected={this.state.activeItem.person_id}
                     onSelectedChanged={selected => this.setState({ activeItem: {
+                        id: this.state.activeItem.id,
                         user_id: this.state.activeItem.user_id,
-                        person_id: selected,
+                        person_id: selected.filter(el => el !== undefined),
                         date: this.state.activeItem.date,
                         title: this.state.activeItem.title,
                         text: this.state.activeItem.text,
@@ -143,13 +151,20 @@
                       }})}
                   />
                   </FormGroup>
-                {/* Missing: 
-                  - File upload
-                */}
+                  <FormGroup>
+                    <Label for="imageUrl">Avatar</Label>
+                    <Input
+                      type="file"
+                      name="imageUrl"
+                      className={errors.file ? "error" : ""}
+                      onBlur={this.handleBlur('imageUrl')}
+                      onChange={this.handleChangeFile}
+                    />
+                  </FormGroup>
               </Form>
             </ModalBody>
             <ModalFooter>
-              <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem)}>
+              <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem, this.file)}>
                 Save
               </Button>
             </ModalFooter>
