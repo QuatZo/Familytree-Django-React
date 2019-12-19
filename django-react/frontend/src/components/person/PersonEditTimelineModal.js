@@ -43,6 +43,8 @@
         };
       }
 
+      file = null;
+
       componentDidMount(){
         this.downloadTimelineData();
       }
@@ -244,6 +246,10 @@
           last_name: last_name.trim().length === 0
         }
       }
+      
+      handleChangeFile = (e) => {
+        this.file = e.target.files[0];
+      }
 
       handleBlur = (field) => (evt) => {
         this.setState({
@@ -366,6 +372,16 @@
                   </Row>
                   <Row>
                     <Col>
+                    <FormGroup style={{display: 'flex'}}>
+                      <Label for="avatar">Change Avatar</Label>
+                      <Input
+                        type="file"
+                        name="avatar"
+                        onChange={this.handleChangeFile}
+                      />
+                    </FormGroup>
+                    </Col>
+                    <Col>
                       <FormGroup style={{display: 'flex'}}>
                         <Label for="switch-delete-mode" style={{marginRight: '10px'}}>Delete Mode</Label>
                         <Switch 
@@ -391,7 +407,7 @@
               </ModalBody>
               }
               <ModalFooter>
-                <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem)}>
+                <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem, this.file)}>
                   Save
                 </Button>
               </ModalFooter>

@@ -20,20 +20,32 @@
         this.setState({ activeItem: item, modal: !this.state.modal });
       };
 
-      handleSubmit = item => {
+      handleSubmit = (item, file) => {
         this.toggle();
+
         if (item.id) {
-          const options = {
-            url: `http://localhost:8000/api/familytreepersons/${item.id}/`,
-            content: item,
-            method: 'PUT',
+          var SHA256 = require("crypto-js/sha256");
+          var newFilename = file !== null ? SHA256(file.name) + file.name.substring(file.name.indexOf(".")) : null;
+          var oldItem = this.props.person;
+
+          let data = new FormData();
+          if(oldItem.user_id !== item.user_id) data.append('user_id', item.user_id);
+          if(oldItem.first_name !== item.first_name) data.append('first_name', item.first_name);
+          if(oldItem.last_name !== item.last_name) data.append('last_name', item.last_name);
+          if(oldItem.birth_date !== item.birth_date) data.append('birth_date', item.birth_date);
+          if(oldItem.status_choices !== item.status_choices) data.append('status_choices', item.status_choices);
+          if(oldItem.sex_choices !== item.sex_choices) data.append('sex_choices', item.sex_choices);
+          if(oldItem.birth_place !== item.birth_place) data.append('birth_place', item.birth_place);
+          if(oldItem.relationship_choices !== item.relationship_choices) data.append('relationship_choices', item.relationship_choices);
+          if(oldItem.avatar !== file && file !== null) data.append('avatar', file, newFilename); // sha256 encryption
+
+          axios
+          .patch(`http://localhost:8000/api/familytreepersons/${item.id}/`, data, {
             headers: {
-              'Content-Type': 'application/json',
+              'Content-Type': 'multipart/form-data',
               Authorization: `JWT ${localStorage.getItem('token')}`
-            },
-            data: item
-          };
-          axios(options)
+            }
+          })
             .then(() => this.props.refresh())
             .then(() => ShowNotification(NOTIFY.SAVE_PERSON))
             .catch(err => {

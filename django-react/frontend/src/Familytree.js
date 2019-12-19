@@ -95,7 +95,7 @@
         data.append('user_id', item.user_id);
         data.append('first_name', item.first_name);
         data.append('last_name', item.last_name);
-        data.append('birth_data', item.birth_date);
+        data.append('birth_date', item.birth_date);
         data.append('status_choices', item.status_choices);
         data.append('sex_choices', item.sex_choices);
         data.append('birth_place', item.birth_place);
@@ -232,40 +232,30 @@
       saveCoords(){
         ShowNotification(NOTIFY.SAVING)
         var saved = true;
-        var personListHTML = Array.from(document.querySelectorAll("div.person"));
         var personListCoords = [...this.state.personClassCoordinates]
-        personListHTML.map(item => {
-          var personNew = [];
+
+        personListCoords.map(item => {
+          var coords = {x: item.screen.x / this.state.windowSize.width, y: item.screen.y / this.state.windowSize.height};
+          let formData = new FormData();
+          formData.append('x', coords.x);
+          formData.append('y', coords.y);
           axios
-          .get(`http://localhost:8000/api/familytreepersons/${item.id}/`, { 
-            headers: { Authorization: `JWT ${localStorage.getItem('token')}` }
-          })
-          .then(res => {
-            personNew = res.data;
-            personListCoords.map(coords => {
-            if(coords.id === res.data.id){
-              personNew.x = coords.screen.x / this.state.windowSize.width;
-              personNew.y = coords.screen.y / this.state.windowSize.height;
+          .patch(`http://localhost:8000/api/familytreepersons/${item.id}/`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Authorization: `JWT ${localStorage.getItem('token')}`
             }
-            })
           })
-          .then(() => axios.put(`http://localhost:8000/api/familytreepersons/${personNew.id}/`, personNew, {
-            headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
-          }))
-          .catch(err => {
-            console.log(err);
-            saved = false;
-            ShowNotification(NOTIFY.ERROR);
-          });        
+            .catch(err => {
+              console.log(err);
+              saved = false;
+              ShowNotification(NOTIFY.ERROR);
+            })
         })
-        this.setState({
-          saving: true,
-        }, () => {
-          setTimeout(() => {
-            this.setState({saving: false});
-            if (saved) { ShowNotification(NOTIFY.SAVE_COORDS) };
-          }, 5000);
-        })
+        setTimeout(() => {
+          this.setState({saving: false});
+          if (saved) { ShowNotification(NOTIFY.SAVE_COORDS) };
+        }, 5000);
       }
 
       setActivePerson(id) {

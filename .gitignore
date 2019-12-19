@@ -125,3 +125,4 @@ dmypy.json
 # Custom
 media/
 migrations/
+node_modules/
