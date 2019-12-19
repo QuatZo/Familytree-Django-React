@@ -29,6 +29,8 @@
         };
       }
 
+      file = null;
+
       handleChange = (e) => {
         let { name, value } = e.target;
         const activeItem = { ...this.state.activeItem, [name]: value};
@@ -40,10 +42,15 @@
         this.setState({activeItem});
       };
 
-      validate(first_name, last_name){
+      handleChangeFile = (e) => {
+        this.file = e.target.files[0];
+      }
+
+      validate(first_name, last_name, file){
         return{
           first_name: first_name.trim().length === 0,
-          last_name: last_name.trim().length === 0
+          last_name: last_name.trim().length === 0,
+          file: file === null,
         }
       }
 
@@ -55,7 +62,7 @@
       
       render() {
         const { toggle, onSave } = this.props;
-        const errors = this.validate(this.state.activeItem.first_name, this.state.activeItem.last_name);
+        const errors = this.validate(this.state.activeItem.first_name, this.state.activeItem.last_name, this.file);
         const isEnabled = !Object.keys(errors).some(x => errors[x]);
         return (
           <Modal isOpen={true} toggle={toggle}>
@@ -144,10 +151,20 @@
                     placeholder="Place of birth"
                   />
                 </FormGroup>
+                <FormGroup>
+                  <Label for="avatar">Avatar</Label>
+                  <Input
+                    type="file"
+                    name="avatar"
+                    className={errors.file ? "error" : ""}
+                    onBlur={this.handleBlur('avatar')}
+                    onChange={this.handleChangeFile}
+                  />
+                </FormGroup>
               </Form>
             </ModalBody>
             <ModalFooter>
-              <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem)}>
+              <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem, this.file)}>
                 Save
               </Button>
             </ModalFooter>

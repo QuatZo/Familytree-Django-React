@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.views import APIView
 
 from .serializers import FamilytreePersonSerializer, FamilytreeRelationshipSerializer, UserSerializer, UserSerializerWithToken, FamilytreeMilestoneSerializer
@@ -29,6 +30,21 @@ class UserList(APIView):
 
 class FamilytreePersonView(viewsets.ModelViewSet):
     serializer_class = FamilytreePersonSerializer
+    parser_classes = (MultiPartParser, FormParser)
+
+    def get(self, request, *args, **kwargs):
+        persons = FamilytreePerson.objects.all()
+        serializer = FamilytreePersonSerializer(posts, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, *args, **kwargs):
+        persons_serializer = FamilytreePersonSerializer(data=request.data)
+        if persons_serializer.is_valid():
+            persons_serializer.save()
+            return Response(persons_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            print('error', persons_serializer.errors)
+            return Response(persons_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get_queryset(self):
         user = self.request.user
@@ -52,7 +68,22 @@ class FamilytreeRelationshipView(viewsets.ModelViewSet):
 
 class FamilytreeMilestoneView(viewsets.ModelViewSet):
     serializer_class = FamilytreeMilestoneSerializer
+    parser_classes = (MultiPartParser, FormParser)
 
+    def get(self, request, *args, **kwargs):
+        milestones = FamilytreeMilestone.objects.all()
+        serializer = FamilytreeMilestoneSerializer(posts, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, *args, **kwargs):
+        milestones_serializer = FamilytreeMilestoneSerializer(data=request.data)
+        if milestones_serializer.is_valid():
+            milestones_serializer.save()
+            return Response(milestones_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            print('error', milestones_serializer.errors)
+            return Response(milestones_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
     def get_queryset(self):
         person = self.request.query_params.get('person_id', None)
         user = self.request.user

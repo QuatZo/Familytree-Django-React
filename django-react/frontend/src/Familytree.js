@@ -86,26 +86,35 @@
         this.setState({ ModalRelationship: !this.state.ModalRelationship });
       };
 
-      handleSubmitPerson = item => {
+      handleSubmitPerson = (item, file) => {
         this.togglePersonModal();
-        const options = {
-          url: 'http://localhost:8000/api/familytreepersons/',
-          content: item,
-          method: 'POST',
+        var SHA256 = require("crypto-js/sha256");
+        var newFilename = SHA256(file.name) + file.name.substring(file.name.indexOf("."));
+
+        let data = new FormData();
+        data.append('user_id', item.user_id);
+        data.append('first_name', item.first_name);
+        data.append('last_name', item.last_name);
+        data.append('birth_data', item.birth_date);
+        data.append('status_choices', item.status_choices);
+        data.append('sex_choices', item.sex_choices);
+        data.append('birth_place', item.birth_place);
+        data.append('relationship_choices', item.relationship_choices);
+        data.append('avatar', file, newFilename); // sha256 encryption
+    
+        axios.post('http://localhost:8000/api/familytreepersons/', data, {
           headers: {
-            'Content-Type': 'application/json',
-            Accept : 'application/json',
+            'Content-Type': 'multipart/form-data',
             Authorization: `JWT ${localStorage.getItem('token')}`
-          },
-          data: item
-        };
-        axios(options)
-          .then(() => this.refreshPersonList())
-          .then(() => ShowNotification(NOTIFY.ADD_PERSON))
-          .catch(err => {
-            console.log(err);
-            ShowNotification(NOTIFY.ERROR);
-          });
+          }
+        })
+        .then(res=>console.log(res))
+        .then(() => this.refreshPersonList())
+        .then(() => ShowNotification(NOTIFY.ADD_PERSON))
+        .catch(err => {
+          console.log(err);
+          ShowNotification(NOTIFY.ERROR);
+        });
       };
 
       handleSubmitRelationship = item => {
