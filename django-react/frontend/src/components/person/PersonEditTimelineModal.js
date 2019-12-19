@@ -132,15 +132,19 @@
       
       handleSubmitMilestone = (item, file) => {
         this.toggleMilestoneModal();
+        var SHA256, newFilename, oldItem, i;
+
+        item.person_id = item.person_id.filter(el => el !== undefined);
+
         if (item.id) {
-          var SHA256 = require("crypto-js/sha256");
-          var newFilename = file !== null ? SHA256(Date.now().toString() + file.name) + file.name.substring(file.name.indexOf(".")) : null;
-          var oldItem = this.props.activeItem;
+          SHA256 = require("crypto-js/sha256");
+          newFilename = file !== null ? SHA256(Date.now().toString() + file.name) + file.name.substring(file.name.indexOf(".")) : null;
+          oldItem = this.props.activeItem;
 
           let data = new FormData();
         
           if(oldItem.user_id !== item.user_id) data.append('user_id', item.user_id);
-          for(var i = 0; i < item.person_id.length; i++){
+          for(i = 0; i < item.person_id.length; i++){
             data.append('person_id', item.person_id[i]);
           }
           if(oldItem.date !== item.date) data.append('date', item.date);
@@ -164,13 +168,13 @@
           return;
         }
 
-        var SHA256 = require("crypto-js/sha256");
-        var newFilename = SHA256(Date.now().toString() + file.name) + file.name.substring(file.name.indexOf("."));
+        SHA256 = require("crypto-js/sha256");
+        newFilename = SHA256(Date.now().toString() + file.name) + file.name.substring(file.name.indexOf("."));
 
         let data = new FormData();
         data.append('user_id', item.user_id);
         
-        for(var i = 0; i < item.person_id.length; i++){
+        for(i = 0; i < item.person_id.length; i++){
           data.append('person_id', item.person_id[i]);
         }
 

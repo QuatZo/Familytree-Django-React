@@ -143,7 +143,7 @@
                     onSelectedChanged={selected => this.setState({ activeItem: {
                         id: this.state.activeItem.id,
                         user_id: this.state.activeItem.user_id,
-                        person_id: selected,
+                        person_id: selected.filter(el => el !== undefined),
                         date: this.state.activeItem.date,
                         title: this.state.activeItem.title,
                         text: this.state.activeItem.text,
