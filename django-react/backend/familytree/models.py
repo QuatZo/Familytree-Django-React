@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 import datetime
 from django.conf import settings
+from django.core.validators import FileExtensionValidator
 
 AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 
@@ -63,12 +64,13 @@ class FamilytreeRelationship(models.Model):
         return self.relationships
 
 class FamilytreeMilestone(models.Model):
+    extensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'raw', 'mp4', 'webm', 'wmv', 'avi', 'wav', 'mp3']
     user_id = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
     person_id = models.ManyToManyField(FamilytreePerson)
     date = models.DateField()
     text = models.CharField(max_length=512)
     title = models.CharField(max_length=64)
-    image = models.ImageField(upload_to='milestones', default='milestones/default.jpg')
+    image = models.FileField(upload_to='milestones', default='milestones/default.jpg', validators=[FileExtensionValidator(extensions)])
 
     def _str_(self):
         return self.title

@@ -13,6 +13,7 @@
     import ShowNotification from '../notification/Notification';
     import Switch from "react-switch";
     import ModalMilestone from './MilestoneModal'
+    import ReactPlayer from 'react-player'
     
     import {
       Button,
@@ -27,6 +28,16 @@
       Input,
       Label,
     } from "reactstrap";
+
+    const CustomImageBody = (props) => {
+      const { imageUrl } = props.event;
+      return (
+        <div className="custom-image-body">
+          {ReactPlayer.canPlay(imageUrl) ? <ReactPlayer url={imageUrl} controls={true} width='100%' height='100%'/> : <img src={imageUrl} alt="" className="rt-image" />}
+        </div>
+      );
+    };
+
 
     export default class CustomModal extends Component {
       constructor(props) {
@@ -291,7 +302,11 @@
         const isEnabled = !Object.keys(errors).some(x => errors[x]);
         return (
           <React.Fragment>
-            <Modal isOpen={true} toggle={toggle} size="lg" >
+            <Modal 
+              isOpen={true} 
+              toggle={toggle} 
+              size="xl"
+            >
               <ModalHeader toggle={toggle}> 
                 Person
                 <Form>
@@ -426,7 +441,7 @@
               {this.state.timelineData.length < 1 ? null : 
               <ModalBody>
                 <div className="personModalTimeline">
-                  <Timeline events={this.state.timelineData} />
+                  <Timeline events={this.state.timelineData} customComponents={{imageBody: CustomImageBody}}/>
                 </div>
               </ModalBody>
               }

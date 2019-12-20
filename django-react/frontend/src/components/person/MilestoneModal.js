@@ -152,7 +152,7 @@
                   />
                   </FormGroup>
                   <FormGroup>
-                    <Label for="imageUrl">Avatar</Label>
+                    <Label for="imageUrl">Image/Movie</Label>
                     <Input
                       type="file"
                       name="imageUrl"
