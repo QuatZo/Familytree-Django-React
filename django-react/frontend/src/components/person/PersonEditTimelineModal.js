@@ -132,7 +132,7 @@
           person_id: [this.props.id],
           date: "",
           title: "",
-          text: "Some random text",
+          text: "",
           image: "/media/milestones/default.jpg"
         }, ModalMilestone: !this.state.ModalMilestone });
       }

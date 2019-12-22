@@ -30,6 +30,8 @@
           touched: {
             title: false,
             date: false,
+            person_id: false,
+            file: false,
           },
           personSelectOptions: [],
         };

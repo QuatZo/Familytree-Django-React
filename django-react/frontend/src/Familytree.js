@@ -33,6 +33,7 @@
           personSize: [],
           windowSize: {width: 0, height: 0},
           saving: false,
+          activeRelationship: [],
         };
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
       }  
@@ -83,7 +84,19 @@
       };
 
       toggleRelationshipModal = () => {
-        this.setState({ ModalRelationship: !this.state.ModalRelationship });
+        this.setState({ activeRelationship: {
+          user_id: localStorage.getItem('user_id'),
+          id_1: this.state.activePersons[0],
+          id_2: this.state.activePersons[1],
+          color: "",
+          title: "",
+          description: "",
+          begin_date: "",
+          end_date: null,
+          descendant: false,
+          relationships: 'father',
+        },
+        ModalRelationship: !this.state.ModalRelationship });
       };
 
       handleSubmitPerson = (item, file) => {
@@ -277,7 +290,7 @@
               if(array.includes(parseInt(item.id_1)) && array.includes(parseInt(item.id_2)))
                 exists = true;
             })
-            if(!exists) this.toggleRelationshipModal();
+            if(!exists) this.setState({activePersons: array}, () => this.toggleRelationshipModal());
             // else - delete/edit relationship OR if above toggle 
           }
           this.setState({activePersons: array});
@@ -362,9 +375,9 @@
               {this.state.ModalRelationship ? (
                 <ModalRelationship
                   personList={this.state.personList}
-                  activePersons={this.state.activePersons}
                   toggle={this.toggleRelationshipModal}
                   onSave={this.handleSubmitRelationship}
+                  activeRelationship={this.state.activeRelationship}
                 />
               ) : null}
             </div>
