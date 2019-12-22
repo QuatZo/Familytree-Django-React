@@ -4,7 +4,10 @@
     import React, { Component } from "react";
     import DatePicker from "react-datepicker";
     import 'react-datepicker/dist/react-datepicker.css';
-    
+    import axios from "axios";
+    import {NOTIFY} from '../Enums.ts';
+    import ShowNotification from '../notification/Notification';
+
     import {
       Button,
       Modal,
@@ -21,14 +24,18 @@
       constructor(props) {
         super(props);
         this.state = { 
-          activeItem: this.props.activeRelationship,
+          activeItem: this.props.activeItem,
           touched: {
             title: false,
             begin_date: false,
             end_date: false,
           },
-          personList: this.props.personList,
+          personList: [],
         };
+      }
+
+      componentWillMount(){
+        this.refreshPersonList();
       }
 
       componentDidMount(){
@@ -38,6 +45,18 @@
         }
       }
 
+      refreshPersonList = () => {
+        axios
+          .get("http://localhost:8000/api/familytreepersons/", {
+            headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
+          })
+          .then(res => this.setState({ personList: res.data }))
+          .catch(err => {
+            console.log(err);
+            ShowNotification(NOTIFY.ERROR);
+          });
+      };
+
       handleChange = (e) => {
         let { name, value } = e.target;
         const activeItem = { ...this.state.activeItem, [name]: value};
@@ -45,6 +64,7 @@
       };
 
       getPerson(idPerson){
+        if(this.state.personList.length === 0){ return "" }
         var targetPerson = this.state.personList.find(item => item.id === idPerson);
         return targetPerson.first_name + " " + targetPerson.last_name;
       }
@@ -136,12 +156,12 @@
                     dropdownMode="select"/>
                 </FormGroup>
                 <FormGroup>
-                  <Label for="relationship_choices">What's {this.getPerson(this.state.activeItem.id_1)} to the {this.getPerson(this.state.activeItem.id_2)}</Label>
+                  <Label for="relationships">What's {this.getPerson(this.state.activeItem.id_1)} to the {this.getPerson(this.state.activeItem.id_2)}</Label>
                   <select
                     className="form-control"
-                    name = "relationship_choices"
+                    name = "relationships"
                     onChange={this.handleChange}
-                    defaultValue="father"
+                    value={this.state.activeItem.relationships}
                   >
                     <option value="father">Father</option>
                     <option value="mother">Mother</option>

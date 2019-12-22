@@ -24,7 +24,6 @@
             status_choices: 'living',
             sex_choices:  'male',
             birth_place: '',
-            relationship_choices: 'father'
           },
           personList: this.props.personList,
           activePersons: [],
@@ -374,10 +373,9 @@
               ) : null}
               {this.state.ModalRelationship ? (
                 <ModalRelationship
-                  personList={this.state.personList}
+                  activeItem={this.state.activeRelationship}
                   toggle={this.toggleRelationshipModal}
                   onSave={this.handleSubmitRelationship}
-                  activeRelationship={this.state.activeRelationship}
                 />
               ) : null}
             </div>
