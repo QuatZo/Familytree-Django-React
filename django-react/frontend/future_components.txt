@@ -1,5 +1,1 @@
-Dropzone for images:
-	https://www.npmjs.com/package/react-dropzone
-	
-Movie player:
-	https://www.npmjs.com/package/react-player
+Nothing here
