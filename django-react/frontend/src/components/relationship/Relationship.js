@@ -89,49 +89,34 @@
 
       renderRelationship(){
         var relationshipPairList = [];
-        var relationshipPersonList = [];
-        var relationshipsNames = [];
-        var relationshipColor = [];
 
-        this.props.personClassCoordinates.map(person => {
-          if(parseInt(this.props.relationship.id_1) === parseInt(person.id) || parseInt(this.props.relationship.id_2) === parseInt(person.id)){
-            relationshipPersonList.push(person);
-            relationshipsNames.push(this.props.relationship.relationships);
-            relationshipColor.push(this.props.relationship.color);
-          }
-        });
+        var first = (this.props.personClassCoordinates.filter(el => parseInt(el.id) === parseInt(this.props.relationship.id_1)))[0];
+        var second = (this.props.personClassCoordinates.filter(el => parseInt(el.id) === parseInt(this.props.relationship.id_2)))[0];
 
-        for (var i = 0; i < relationshipPersonList.length; i += 2){
-          var sideCoords = this.calcSideCenters(relationshipPersonList[i], relationshipPersonList[i + 1]);
+        var sideCoords = this.calcSideCenters(first, second);
 
-          var pointsTemp = Math.round(sideCoords.x1) + " " + Math.round(sideCoords.y1) +
-          ", " + Math.round(sideCoords.x1) + " " + Math.round((Math.round(sideCoords.y1) + Math.round(sideCoords.y2))/2) +
-          ", " + Math.round(sideCoords.x2) + " " + Math.round((Math.round(sideCoords.y1) + Math.round(sideCoords.y2))/2) +
-          ", " + Math.round(sideCoords.x2) + " " + Math.round(sideCoords.y2)
+        var pointsTemp = Math.round(sideCoords.x1) + " " + Math.round(sideCoords.y1) +
+        ", " + Math.round(sideCoords.x1) + " " + Math.round((Math.round(sideCoords.y1) + Math.round(sideCoords.y2))/2) +
+        ", " + Math.round(sideCoords.x2) + " " + Math.round((Math.round(sideCoords.y1) + Math.round(sideCoords.y2))/2) +
+        ", " + Math.round(sideCoords.x2) + " " + Math.round(sideCoords.y2)
 
-          if(sideCoords.horizontal){
-            pointsTemp = Math.round(sideCoords.x1) + " " + Math.round(sideCoords.y1) +
-            ", " + Math.round((Math.round(sideCoords.x1) + Math.round(sideCoords.x2))/2) + " " + Math.round(sideCoords.y1) +
-            ", " + Math.round((Math.round(sideCoords.x1) + Math.round(sideCoords.x2))/2) + " " + Math.round(sideCoords.y2) +
-            ", " + Math.round(sideCoords.x2) + " " + Math.round(sideCoords.y2);
-          }
-
-          relationshipPairList.push({ 
-            id: i / 2,
-            relationship: relationshipsNames[i],
-            id1: relationshipPersonList[i].id, id2: relationshipPersonList[i+1].id, 
-            color: relationshipColor[i],
-            points: pointsTemp,
-            horizontal: sideCoords.horizontal,
-          });
+        if(sideCoords.horizontal){
+          pointsTemp = Math.round(sideCoords.x1) + " " + Math.round(sideCoords.y1) +
+          ", " + Math.round((Math.round(sideCoords.x1) + Math.round(sideCoords.x2))/2) + " " + Math.round(sideCoords.y1) +
+          ", " + Math.round((Math.round(sideCoords.x1) + Math.round(sideCoords.x2))/2) + " " + Math.round(sideCoords.y2) +
+          ", " + Math.round(sideCoords.x2) + " " + Math.round(sideCoords.y2);
         }
 
-        var reference = [];
+        relationshipPairList.push({ 
+          id: this.props.relationship.id,
+          relationship: this.props.relationship.relationships,
+          id1: first.id, id2: second.id, 
+          color: this.props.relationship.color,
+          points: pointsTemp,
+          horizontal: sideCoords.horizontal,
+        });
 
-        relationshipPairList.map( () => {
-          const lineRef = React.createRef();
-          reference.push(lineRef);
-        })
+        var reference = React.createRef();
 
         this.setState({
           relationshipMarker: (relationshipPairList.map(item => (
@@ -150,15 +135,15 @@
             key={"fragment_" + item.id1 + "_" + item.id2}
             >
               <polyline 
-              ref={reference[item.id]}
+              ref={reference}
               id={"path_" + item.id1 + "_" + item.id2}
               markerEnd={'url(#head_' + item.color.substring(1) + ')'}
               points={item.points} 
               stroke = {item.color}
               strokeWidth="3" 
               fill="none"/>
-              <Tooltip triggerRef={reference[item.id]}>
-                  <rect x={0} y={-35} width={this.calcTextWidth(item.relationship, "16pt arial")+29} height={35} rx={5} ry={5} fill='black'/>
+              <Tooltip triggerRef={reference}>
+                  <rect x={0} y={-35} width={this.calcTextWidth(item.relationship, "16pt arial") + 29} height={35} rx={5} ry={5} fill='black'/>
                   <text x={15} y={-10} fontSize={"16pt"} fill='white'>{item.relationship}</text>
               </Tooltip>
             </React.Fragment>
