@@ -37,14 +37,14 @@ class UserSerializerWithToken(serializers.ModelSerializer):
 class FamilytreePersonSerializer(serializers.ModelSerializer):
     class Meta:
         model = FamilytreePerson
-        fields = ('id', 'avatar', 'user_id', 'first_name', 'last_name', 'birth_date', 'status_choices', 'sex_choices', 'birth_place', 'x', 'y')
+        fields = '__all__'
 
 class FamilytreeRelationshipSerializer(serializers.ModelSerializer):
     class Meta:
         model = FamilytreeRelationship
-        fields = ('id', 'user_id', 'id_1', 'id_2', 'relationships', 'color')
+        fields = '__all__'
 
 class FamilytreeMilestoneSerializer(serializers.ModelSerializer):
     class Meta:
         model = FamilytreeMilestone
-        fields = ('id', 'user_id', 'person_id', 'date', 'title', 'text', 'image')
+        fields = '__all__'

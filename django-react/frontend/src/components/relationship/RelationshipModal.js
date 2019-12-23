@@ -1,7 +1,13 @@
 // frontend/src/components/RelationshipModal.js
+/*eslint no-useless-computed-key: 0*/
 
     import React, { Component } from "react";
-    
+    import DatePicker from "react-datepicker";
+    import 'react-datepicker/dist/react-datepicker.css';
+    import axios from "axios";
+    import {NOTIFY} from '../Enums.ts';
+    import ShowNotification from '../notification/Notification';
+
     import {
       Button,
       Modal,
@@ -10,6 +16,7 @@
       ModalFooter,
       Form,
       FormGroup,
+      Input,
       Label
     } from "reactstrap";
 
@@ -17,33 +24,47 @@
       constructor(props) {
         super(props);
         this.state = { 
-          activeItem: {
-            user_id: localStorage.getItem("user_id"),
-            id_1: this.props.activePersons[0],
-            id_2: this.props.activePersons[1],
-            relationships: 'father',
-            color: this.genColor()
+          activeItem: this.props.activeItem,
+          touched: {
+            title: false,
+            begin_date: false,
+            end_date: false,
           },
-          personList: this.props.personList,
+          personList: [],
         };
       }
-      
+
+      componentWillMount(){
+        this.refreshPersonList();
+      }
+
+      componentDidMount(){
+        if(this.state.activeItem.color === ""){
+          const activeItem = { ...this.state.activeItem, ["color"]: this.genColor()};
+          this.setState({ activeItem });
+        }
+      }
+
+      refreshPersonList = () => {
+        axios
+          .get("http://localhost:8000/api/familytreepersons/", {
+            headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
+          })
+          .then(res => this.setState({ personList: res.data }))
+          .catch(err => {
+            console.log(err);
+            ShowNotification(NOTIFY.ERROR);
+          });
+      };
+
       handleChange = (e) => {
-        var relationship = [...this.state.activeItem.relationships];
-        relationship = e.target.value;
-        
-        this.setState({
-          activeItem: {
-            user_id: this.state.activeItem.user_id, 
-            id_1: this.state.activeItem.id_1, 
-            id_2: this.state.activeItem.id_2, 
-            relationships: relationship, 
-            color: this.state.activeItem.color
-          }
-        });
+        let { name, value } = e.target;
+        const activeItem = { ...this.state.activeItem, [name]: value};
+        this.setState({ activeItem });
       };
 
       getPerson(idPerson){
+        if(this.state.personList.length === 0){ return "" }
         var targetPerson = this.state.personList.find(item => item.id === idPerson);
         return targetPerson.first_name + " " + targetPerson.last_name;
       }
@@ -54,20 +75,93 @@
         return color.hexString();
       }
 
+      handleBlur = (field) => (evt) => {
+        this.setState({
+          touched: { ...this.state.touched, [field]: true },
+        });
+      }
+
+      handleChangeBeginDate = date => {
+        const activeItem = { ...this.state.activeItem, ["begin_date"]: (new Date(date)).toISOString().slice(0, 10)};
+        this.setState({activeItem});
+      };
+
+      handleChangeEndDate = date => {
+        const activeItem = { ...this.state.activeItem, ["end_date"]: (new Date(date)).toISOString().slice(0, 10)};
+        this.setState({activeItem});
+      };
+
+      validate(title, begin_date){
+        return{
+          title: title.trim().length === 0,
+          begin_date: begin_date.toString().trim().length === 0,
+        }
+      }
+
       render() {
         const { toggle, onSave } = this.props;
+        const errors = this.validate(this.state.activeItem.title, this.state.activeItem.begin_date);
+        const isEnabled = !Object.keys(errors).some(x => errors[x]);
         return (
           <Modal isOpen={true} toggle={toggle}>
             <ModalHeader toggle={toggle}> Relationship</ModalHeader>
             <ModalBody>
               <Form>
                 <FormGroup>
-                  <Label for="relationship_choices">What's {this.getPerson(this.state.activeItem.id_1)} to the {this.getPerson(this.state.activeItem.id_2)}</Label>
+                  <Label for="title">Title</Label>
+                  <Input
+                    type="text"
+                    name="title"
+                    className={errors.title?"error":""}
+                    onBlur={this.handleBlur('title')}
+                    value={this.state.activeItem.title}
+                    onChange={this.handleChange}
+                    placeholder="Title"
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label for="description">Description</Label>
+                  <Input
+                    type="text"
+                    name="description"
+                    className="form-control"
+                    value={this.state.activeItem.description}
+                    onChange={this.handleChange}
+                    placeholder="Description"
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label for="begin_date">Begin Date</Label><br />
+                  <DatePicker 
+                    name="begin_date"
+                    className={"form-control " + (errors.begin_date ? "error" : "")}
+                    value={this.state.activeItem.begin_date}
+                    onChange={ this.handleChangeBeginDate} 
+                    onBlur={this.handleBlur('begin_date')}
+                    peekNextMonth
+                    showMonthDropdown
+                    showYearDropdown
+                    dropdownMode="select"/>
+                </FormGroup>
+                <FormGroup>
+                  <Label for="end_date">End date (optional)</Label><br />
+                  <DatePicker 
+                    name="end_date"
+                    className="form-control"
+                    value={this.state.activeItem.end_date}
+                    onChange={ this.handleChangeEndDate} 
+                    peekNextMonth
+                    showMonthDropdown
+                    showYearDropdown
+                    dropdownMode="select"/>
+                </FormGroup>
+                <FormGroup>
+                  <Label for="relationships">What's {this.getPerson(this.state.activeItem.id_1)} to the {this.getPerson(this.state.activeItem.id_2)}</Label>
                   <select
                     className="form-control"
-                    name = "relationship_choices"
+                    name = "relationships"
                     onChange={this.handleChange}
-                    defaultValue="father"
+                    value={this.state.activeItem.relationships}
                   >
                     <option value="father">Father</option>
                     <option value="mother">Mother</option>
@@ -88,7 +182,7 @@
               </Form>
             </ModalBody>
             <ModalFooter>
-              <Button color="success" onClick={() => onSave(this.state.activeItem)}>
+              <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem)}>
                 Save
               </Button>
             </ModalFooter>

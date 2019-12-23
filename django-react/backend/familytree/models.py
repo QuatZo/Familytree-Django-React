@@ -41,6 +41,11 @@ class FamilytreeRelationship(models.Model):
     id_1 = models.ForeignKey(FamilytreePerson, on_delete=models.CASCADE, related_name="id_1")
     id_2 = models.ForeignKey(FamilytreePerson, on_delete=models.CASCADE, related_name="id_2")
     color = models.CharField(max_length = 7, default = '#ffffff')
+    title = models.CharField(max_length=64)
+    description = models.CharField(max_length=512, blank=True)
+    begin_date = models.DateField()
+    end_date = models.DateField(default=None, blank=True, null=True)
+    descendant = models.BooleanField(default=False)
 
     father = 'father'
     mother = 'mother'
@@ -68,7 +73,7 @@ class FamilytreeMilestone(models.Model):
     user_id = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
     person_id = models.ManyToManyField(FamilytreePerson)
     date = models.DateField()
-    text = models.CharField(max_length=512)
+    text = models.CharField(max_length=512, blank=True)
     title = models.CharField(max_length=64)
     image = models.FileField(upload_to='milestones', default='milestones/default.jpg', validators=[FileExtensionValidator(extensions)])
 

@@ -24,7 +24,6 @@
             status_choices: 'living',
             sex_choices:  'male',
             birth_place: '',
-            relationship_choices: 'father'
           },
           personList: this.props.personList,
           activePersons: [],
@@ -33,6 +32,7 @@
           personSize: [],
           windowSize: {width: 0, height: 0},
           saving: false,
+          activeRelationship: [],
         };
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
       }  
@@ -83,7 +83,19 @@
       };
 
       toggleRelationshipModal = () => {
-        this.setState({ ModalRelationship: !this.state.ModalRelationship });
+        this.setState({ activeRelationship: {
+          user_id: localStorage.getItem('user_id'),
+          id_1: this.state.activePersons[0],
+          id_2: this.state.activePersons[1],
+          color: "",
+          title: "",
+          description: "",
+          begin_date: "",
+          end_date: null,
+          descendant: false,
+          relationships: 'father',
+        },
+        ModalRelationship: !this.state.ModalRelationship });
       };
 
       handleSubmitPerson = (item, file) => {
@@ -258,9 +270,7 @@
       }
 
       setActivePerson(id) {
-        // multiple relationships per pair === 'exists' variable is garbage
         var array = [...this.state.activePersons];
-        var relationshipList = [...this.state.relationshipList]
 
           if(array.includes(id)){
             var index = array.indexOf(id);
@@ -272,19 +282,16 @@
           if(array.length > 2)
               array.splice(0, 1);
           if(array.length === 2){
-            var exists = false;
-            relationshipList.map(item => {
-              if(array.includes(parseInt(item.id_1)) && array.includes(parseInt(item.id_2)))
-                exists = true;
-            })
-            if(!exists) this.toggleRelationshipModal();
-            // else - delete/edit relationship OR if above toggle 
+            this.setState({activePersons: array}, () => {
+              this.toggleRelationshipModal();
+              this.setState({activePersons: []});
+            });
           }
           this.setState({activePersons: array});
       }
 
+      // since relationships are connected w/ persons, we don't need to delete any relationship. Just persons.
       deleteEverything(){
-        // since relationships are connected w/ persons, we don't need to delete any relationship. Just persons.
         axios
           .get("http://localhost:8000/api/familytreepersons/", {
             headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
@@ -330,9 +337,31 @@
         var relationshipList = [...this.state.relationshipList];
         var coordinates = [...this.state.personClassCoordinates];
         var personSize = this.state.personSize;
+        var pairs = [];
+        
+        // date - if older, then lower. i.e. 2019-01-01 < 2019-12-31 means true, 2019-12-31 < 2019-01-01 means false
+        relationshipList.map(item => {
+          var exists = false
+          if(pairs.length){
+            for(var i = 0; i < pairs.length; i++){
+              if((item.id_1 === pairs[i].id_1 || item.id_1 === pairs[i].id_2) && (item.id_2 === pairs[i].id_2 || item.id_2 === pairs[i].id_1)){
+                if(
+                  (pairs[i].end_date === null && item.end_date === null && pairs[i].begin_date < item.begin_date) 
+                  || 
+                  (pairs[i].end_date !== null && item.end_date === null)
+                  ||
+                  (pairs[i].end_date !== null && item.end_date != null && pairs[i].end_date < item.end_date)
+                ){ pairs[i] = item }
+                exists = true;
+                break;
+              }
+            }
+          }
+          if(!exists){ pairs.push(item); }
+        })
 
         this.setState({
-          relationships: (relationshipList.map(item => (
+          relationships: (pairs.map(item => (
             <Relationship
               key={"relationship_" + item.id + Date.now()} // it forces our app to re-render relationships whenever person is dragged
               relationship={item}
@@ -361,8 +390,7 @@
               ) : null}
               {this.state.ModalRelationship ? (
                 <ModalRelationship
-                  personList={this.state.personList}
-                  activePersons={this.state.activePersons}
+                  activeItem={this.state.activeRelationship}
                   toggle={this.toggleRelationshipModal}
                   onSave={this.handleSubmitRelationship}
                 />

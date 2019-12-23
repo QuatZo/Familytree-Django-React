@@ -13,6 +13,7 @@
     import ShowNotification from '../notification/Notification';
     import Switch from "react-switch";
     import ModalMilestone from './MilestoneModal'
+    import ModalRelationship from '../relationship/RelationshipModal'
     import ReactPlayer from 'react-player'
     
     import {
@@ -29,6 +30,16 @@
       Label,
     } from "reactstrap";
 
+    const CustomHeader = (props) => {
+      const {title, date} = props.event;
+      return (
+        <div className="custom-header">
+          <h2 className="rt-title">{title}</h2>
+          <p className="rt-date">{(new Date(date)).toISOString().slice(0, 10)}</p>
+        </div>
+      )
+    }
+
     const CustomImageBody = (props) => {
       const { imageUrl } = props.event;
       return (
@@ -38,6 +49,18 @@
       );
     };
 
+    const CustomTextBody = (props) => {
+      const {text, extras} = props.event;
+      return (
+        <div className="custom-text-body">
+          <p>{text}</p>
+          <p><b>{extras !== null && extras.end_date !== undefined && extras.end_date !== null? "End: " + extras.end_date + "\n": ""}</b></p>
+          <p><b>{extras !== null && extras.relationship !== undefined ? "Type: " + extras.relationship : ""}</b></p>
+          <p><b>{extras !== null && extras.together_with !== undefined ? "Together with: " + extras.together_with.join(", ") : ""}</b></p>
+        </div>
+      );
+    }
+
 
     export default class CustomModal extends Component {
       constructor(props) {
@@ -45,20 +68,35 @@
         this.state = {
           activeItem: this.props.activeItem,
           activeMilestone: [],
+          activeRelationship: [],
           touched: {
             first_name: false,
             last_name: false,
           },
           timelineData: [],
           deleteMode: false,
+          personList: [],
         };
       }
 
       file = null;
 
       componentDidMount(){
-        this.downloadTimelineData();
+        this.refreshPersonList();
       }
+
+      refreshPersonList = () => {
+        axios
+          .get("http://localhost:8000/api/familytreepersons/", {
+            headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
+          })
+          .then(res => this.setState({ personList: res.data }))
+          .then(this.downloadTimelineData())
+          .catch(err => {
+            console.log(err);
+            ShowNotification(NOTIFY.ERROR);
+          });
+      };
 
       downloadTimelineData(){
         var data = [];
@@ -70,12 +108,22 @@
         .then(res => {
           res.data.map(item => {
             var dateStr = item.date.split("-");
+            var togetherWithNames = [];
+            var togetherWith = this.state.personList.filter(el => el.id !== this.props.activeItem.id && item.person_id.includes(el.id));
+
+            togetherWith.map(person => {
+              togetherWithNames.push(person.first_name + " " + person.last_name);
+            })
+
             data.push({
               date: new Date(parseInt(dateStr[0]), parseInt(dateStr[1]) - 1, parseInt(dateStr[2])), // new Date uses months indexes, so 0-11 instead of 1-12; strange but true
               text: item.text,
               title: item.title,
               buttonText: (this.state.deleteMode ? "Delete" : "Edit") + " Milestone",
               imageUrl: item.image,
+              extras: {
+                together_with: togetherWithNames,
+              },
               onClick: () => { this.state.deleteMode ? this.handleDeleteMilestone(item) : this.editMilestone(item) }
             });
           });
@@ -88,13 +136,26 @@
           })
           .then(res => {
             res.data.map(item => {
+              var dateStr = item.begin_date.split("-");
+              var togetherWithNames = [];
+              var togetherWith = this.state.personList.filter(el => el.id !== this.props.activeItem.id && el.id === item.id_2);
+
+              togetherWith.map(person => {
+                togetherWithNames.push(person.first_name + " " + person.last_name);
+              })
+
               data.push({
-                date: new Date(1999, 11, 11), // temporarily
-                text: "It is nice relationship, temp text fyi. First person FTW.", // temporarily, in the text should be the end date of relationship, if ended
-                title: "Is " + item.relationships, // temporarily
+                date: new Date(parseInt(dateStr[0]), parseInt(dateStr[1]) - 1, parseInt(dateStr[2])), // new Date uses months indexes, so 0-11 instead of 1-12; strange but true
+                text: item.description,
+                title: item.title,
                 buttonText: (this.state.deleteMode ? "Delete" : "Edit") + " Relationship",
                 imageUrl: "/media/milestones/default.jpg",
-                onClick: () => { this.state.deleteMode ? this.handleDeleteRelationship(item) : console.log("Edit mode!")} // here will be the Edit Relationship button click event
+                extras: {
+                  end_date: item.end_date,
+                  relationship: item.relationships,
+                  together_with: togetherWithNames,
+                },
+                onClick: () => { this.state.deleteMode ? this.handleDeleteRelationship(item) : this.editRelationship(item)}
               })
             })
           })
@@ -106,13 +167,26 @@
             })
             .then(res => {
               res.data.map(item => {
+                var dateStr = item.begin_date.split("-");
+                var togetherWithNames = [];
+                var togetherWith = this.state.personList.filter(el => el.id !== this.props.activeItem.id && el.id === item.id_1);
+
+                togetherWith.map(person => {
+                  togetherWithNames.push(person.first_name + " " + person.last_name);
+                })
+
                 data.push({
-                  date: new Date(1999, 11, 11), // temporarily
-                  text: "It is nice relationship, temp text fyi. Second person FTW.", // temporarily, in the text should be the end date of relationship, if ended
-                  title: "Has " + item.relationships, // temporarily
+                  date: new Date(parseInt(dateStr[0]), parseInt(dateStr[1]) - 1, parseInt(dateStr[2])), // new Date uses months indexes, so 0-11 instead of 1-12; strange but true
+                  text: item.description,
+                  title: item.title,
                   buttonText: (this.state.deleteMode ? "Delete" : "Edit") + " Relationship",
                   imageUrl: "/media/milestones/default.jpg",
-                  onClick: () => { this.state.deleteMode ? this.handleDeleteRelationship(item) : console.log("Edit mode!")} // here will be the Edit Relationship button click event
+                  extras: {
+                    end_date: item.end_date,
+                    relationship: item.relationships,
+                    together_with: togetherWithNames,
+                  },
+                  onClick: () => { this.state.deleteMode ? this.handleDeleteRelationship(item) : this.editRelationship(item)}
                 })
               });
               this.setState({timelineData: data});
@@ -132,13 +206,17 @@
           person_id: [this.props.id],
           date: "",
           title: "",
-          text: "Some random text",
+          text: "",
           image: "/media/milestones/default.jpg"
         }, ModalMilestone: !this.state.ModalMilestone });
       }
 
       editMilestone = item => {
         this.setState({ activeMilestone: item, ModalMilestone: !this.state.ModalMilestone });
+      };
+
+      editRelationship = item => {
+        this.setState({ activeRelationship: item, ModalRelationship: !this.state.ModalRelationship });
       };
       
       handleSubmitMilestone = (item, file) => {
@@ -209,8 +287,8 @@
       };
 
       handleSubmitRelationship = item => {
-        this.toggleRelationshipModal();
-        // it'll be useful here once relationship will have the date of the beginning and (optional) end
+        console.log(item);
+        this.toggleRelationshipModal();        
         if (item.id) {
           const options = {
             url: `http://localhost:8000/api/familytreerelationship/${item.id}/`,
@@ -223,7 +301,8 @@
             data: item
           };
           axios(options)
-            .then(() => this.refreshRelationshipList())
+            .then(() => this.downloadTimelineData())
+            .then(() => this.props.refreshRelationships())
             .then(() => ShowNotification(NOTIFY.SAVE_RELATIONSHIP))
             .catch(err => {
               console.log(err);
@@ -294,6 +373,10 @@
 
       toggleMilestoneModal = () => {
         this.setState({ ModalMilestone: !this.state.ModalMilestone });
+      };
+
+      toggleRelationshipModal = () => {
+        this.setState({ ModalRelationship : !this.state.ModalRelationship });
       };
 
       render() {
@@ -441,7 +524,7 @@
               {this.state.timelineData.length < 1 ? null : 
               <ModalBody>
                 <div className="personModalTimeline">
-                  <Timeline events={this.state.timelineData} customComponents={{imageBody: CustomImageBody}}/>
+                  <Timeline events={this.state.timelineData} customComponents={{header: CustomHeader, imageBody: CustomImageBody, textBody: CustomTextBody}}/>
                 </div>
               </ModalBody>
               }
@@ -457,6 +540,13 @@
                 activeItem={this.state.activeMilestone}
                 toggle={this.toggleMilestoneModal}
                 onSave={this.handleSubmitMilestone}
+              />
+            ) : null}
+            {this.state.ModalRelationship ? (
+              <ModalRelationship
+                activeItem={this.state.activeRelationship}
+                toggle={this.toggleRelationshipModal}
+                onSave={this.handleSubmitRelationship}
               />
             ) : null}
           </React.Fragment>
