@@ -27,9 +27,9 @@ router.register(r'familytreerelationship', views.FamilytreeRelationshipView, 'fa
 router.register(r'familytreemilestone', views.FamilytreeMilestoneView, 'familytreemilestone')
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include(router.urls)),
-    path('token-auth/', obtain_jwt_token),
-    path('current_user/', views.current_user),
-    path('users/', views.UserList.as_view()),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('admin/', admin.site.urls), # admin page
+    path('api/', include(router.urls)), # API pages: person, relationship, milestone
+    path('token-auth/', obtain_jwt_token), # page to get the token
+    path('current_user/', views.current_user), # page to check if logged in
+    path('users/', views.UserList.as_view()), # list of users, page to check if specific user exists
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # media (files)

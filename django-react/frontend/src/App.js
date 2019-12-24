@@ -15,6 +15,7 @@
     import {NOTIFY} from './components/Enums.ts';
     import ShowNotification from './components/notification/Notification';
     
+    // options for animation, when API is loading
     const defaultOptionsLoading = {
         loop: true,
         autoplay: true,
@@ -23,7 +24,8 @@
           preserveAspectRatio: "xMidYMid meet"
         }
       }
-    
+
+    // options for animation, when API has been loaded
     const defaultOptionsLoaded = {
         loop: false,
         autoplay: true,
@@ -37,23 +39,22 @@
       constructor(props) {
         super(props);
         this.state = {
-          personList: [],
-          relationshipList: [],
-          relationships: [],
-          loadingPersonList: undefined,
-          donePersonList: undefined,
-          loadingRelationshipList: undefined,
-          doneRelationshipList: undefined,
-          displayed_form: localStorage.getItem('token') ? '' : 'login',
-          logged_in: localStorage.getItem('token') ? true : false,
+          personList: [], // list of persons
+          relationshipList: [], // list of relationships
+          loadingPersonList: undefined, // flag, if it's still loading personList
+          donePersonList: undefined, // flag, if it already loaded personList
+          loadingRelationshipList: undefined, // flag, if it's still loading relationshipList
+          doneRelationshipList: undefined, // flag, if it already loaded relationshipList
+          displayed_form: localStorage.getItem('token') ? '' : 'login', // form to display
+          logged_in: localStorage.getItem('token') ? true : false, // flag, if user is already logged in
           username: '',
         };
       }
 
-      loginCounter = 0;
+      loginCounter = 0; // it makes sure noone will log into 2 different accounts from one browser (probably simple flag should be enough)
 
       componentDidMount() {
-        if (this.state.logged_in) {
+        if (this.state.logged_in) { // if person is logged in, dont force user to relog
           axios
             .get('http://localhost:8000/current_user/', {
               headers: { Authorization: `JWT ${localStorage.getItem('token')}`},
@@ -87,6 +88,7 @@
         }
       }
 
+      // get list of Relationships from API, while loading page
       fetchRelationshipList = () => {
         this.setState({ donePersonList: true });
         setTimeout(() => {
@@ -104,6 +106,7 @@
         }, 1200);
       }
 
+      // check in API, if provided credentials are correct
       handle_login = (e, data) => {
         e.preventDefault();
         const options = {
@@ -116,18 +119,18 @@
         };
         axios(options)
           .then(res => {
-            // we store the user's ID under res.data.user.id
-            localStorage.setItem('token', res.data.token);
-            localStorage.setItem('user_id', res.data.user.id);
+            localStorage.setItem('token', res.data.token); // store user's login token
+            localStorage.setItem('user_id', res.data.user.id); // store user's id
             this.setState({
               logged_in: true,
-              displayed_form: '',
+              displayed_form: '', // familytree page
               username: res.data.user.username,
             }, () => ShowNotification(NOTIFY.SUCCESS_LOGIN));
           })
           .catch(() => ShowNotification(NOTIFY.ERROR_LOGIN));
       };
     
+      // register user to website; throws error when username already exists
       handle_signup = (e, data) => {
         e.preventDefault();
         const options = {
@@ -142,18 +145,19 @@
           .then(res => {
             this.setState({
               logged_in: false,
-              displayed_form: 'login',
+              displayed_form: 'login', // redirect to login page
               username: res.data.username
             }, () => ShowNotification(NOTIFY.SUCCESS_REGISTER));
           })
           .catch(() => ShowNotification(NOTIFY.ERROR_LOGIN));
       };
     
+      // log out user from website
       handle_logout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user_id');
-        this.loginCounter = 0;
-        this.setState({ 
+        localStorage.removeItem('token'); // remove token from local storage
+        localStorage.removeItem('user_id'); // remove user's id from local storage
+        this.loginCounter = 0; // let website know that no one is logged in by using this browser
+        this.setState({ // reset all variables
           logged_in: false, 
           username: '',
           personList: [],
@@ -161,18 +165,20 @@
           relationships: [],
           loadingPersonList: undefined,
           donePersonList: undefined,
-          displayed_form: 'login',
+          displayed_form: 'login', // redirect to login page
           loadingRelationshipList: undefined,
           doneRelationshipList: undefined,
         }, () => ShowNotification(NOTIFY.SUCCESS_LOGOUT));
       };
     
+      // display specific form (login/signup)
       display_form = form => {
         this.setState({
           displayed_form: form
         });
       };
 
+      // refresh Person's list
       refreshPersonList = () => {
         axios
           .get("http://localhost:8000/api/familytreepersons/", {
@@ -183,6 +189,7 @@
           .catch(err => ShowNotification(NOTIFY.ERROR));
       };
 
+      // refresh Relationship's list
       refreshRelationshipList = () => {
         axios
         .get("http://localhost:8000/api/familytreerelationship/", {
@@ -192,6 +199,7 @@
           .catch(err => ShowNotification(NOTIFY.ERROR));
       };
 
+      // render page (nav bar + login/signup form if not logged in; else Familytree.js)
       render() {
         let form;
         switch (this.state.displayed_form) {

@@ -12,14 +12,16 @@
       constructor(props) {
         super(props);
         this.state = {
-          dragging: false,
+          dragging: false, // flag, which says if user is draggin person or not
          };
       }
 
+      // prepares data for Edit Person Modal
       editItem = item => {
         this.setState({ activeItem: item, modal: !this.state.modal });
       };
 
+      // handles Person's submission for existing person (changes its data in API)
       handleSubmit = (item, file) => {
         this.toggle();
 
@@ -29,6 +31,7 @@
           var oldItem = this.props.person;
 
           let data = new FormData();
+          // following conditional instructions are to patch (update) only the data that has been changed, it makes the transfer data lower, especially while having media files
           if(oldItem.user_id !== item.user_id) data.append('user_id', item.user_id);
           if(oldItem.first_name !== item.first_name) data.append('first_name', item.first_name);
           if(oldItem.last_name !== item.last_name) data.append('last_name', item.last_name);
@@ -55,10 +58,12 @@
         }
       };
 
+      // toggles the Edit Person Modal
       toggle = () => {
         this.setState({ modal: !this.state.modal });
       };
 
+      // handles deletion of existing Person
       handleDelete = item => {
         // Django's foreign key & on_delete param handles the deletion of relationships, so it's no longer needed to do this manually
         // Delete Relationship function hasn't been deleted from familytree.js, because it'll probably be used for single relationship delete
@@ -76,7 +81,7 @@
           });
       };
 
-
+      // handles click on existing Person (tells if user wants to drag a person or no)
       handleClick = e => {
         if(e.type === "mousedown"){
           this.setState({
@@ -90,6 +95,7 @@
         }
       }
 
+      // handles person movement; updates coords & relationships only when person container is moving (react can't decide because of changing CSS Transform values, not states)
       handleMovement(){
         if(this.state.dragging){
           this.props.getCoordinates()

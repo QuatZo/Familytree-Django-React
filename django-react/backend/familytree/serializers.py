@@ -9,12 +9,11 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'username')
 
-
 class UserSerializerWithToken(serializers.ModelSerializer):
     token = serializers.SerializerMethodField()
     password = serializers.CharField(write_only=True)
 
-    def get_token(self, obj):
+    def get_token(self, obj): # use token
         jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
         jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
@@ -37,14 +36,14 @@ class UserSerializerWithToken(serializers.ModelSerializer):
 class FamilytreePersonSerializer(serializers.ModelSerializer):
     class Meta:
         model = FamilytreePerson
-        fields = '__all__'
+        fields = '__all__' # all fields for Person model
 
 class FamilytreeRelationshipSerializer(serializers.ModelSerializer):
     class Meta:
         model = FamilytreeRelationship
-        fields = '__all__'
+        fields = '__all__' # all fields for Relationship model
 
 class FamilytreeMilestoneSerializer(serializers.ModelSerializer):
     class Meta:
         model = FamilytreeMilestone
-        fields = '__all__'
+        fields = '__all__' # all fields for Milestone model

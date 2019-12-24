@@ -16,7 +16,7 @@
       constructor(props) {
         super(props);
         this.state = {
-          activePersonData: {
+          activePersonData: { // person
             user_id: localStorage.getItem('user_id'),
             first_name: '',
             last_name: '',
@@ -25,14 +25,14 @@
             sex_choices:  'male',
             birth_place: '',
           },
-          personList: this.props.personList,
-          activePersons: [],
-          personClassCoordinates: [],
-          relationshipList: this.props.relationshipList,
-          personSize: [],
-          windowSize: {width: 0, height: 0},
-          saving: false,
-          activeRelationship: [],
+          personList: this.props.personList, // list of persons
+          activePersons: [], // list of active persons (double-clicked)
+          personClassCoordinates: [], // list of person's coordinates
+          relationshipList: this.props.relationshipList, // list of relationships
+          personSize: [], // size of person's container (to calculate middle)
+          windowSize: {width: 0, height: 0}, // size of the window
+          saving: false, // flag, if it's saving coordinates
+          activeRelationship: [], // relationship
         };
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
       }  
@@ -51,6 +51,7 @@
         this.setState({ windowSize: winSize }, () => this.getCoordinates());
       }
 
+      // refreshes persons list and then gets their coords
       refreshPersonList = () => {
         axios
           .get("http://localhost:8000/api/familytreepersons/", {
@@ -64,6 +65,7 @@
           });
       };
 
+      // refreshes relationships list
       refreshRelationshipList = () => {
         axios
           .get("http://localhost:8000/api/familytreerelationship/", {
@@ -77,32 +79,35 @@
           });
       };
 
+      // toggles Person Add modal
       togglePersonModal = () => {
         this.setState({ modal: !this.state.modal });
       };
 
+      // toggles Relationship Add modal
       toggleRelationshipModal = () => {
         this.setState({ activeRelationship: {
           user_id: localStorage.getItem('user_id'),
-          id_1: this.state.activePersons[0],
-          id_2: this.state.activePersons[1],
+          id_1: this.state.activePersons[0], // 1st active person
+          id_2: this.state.activePersons[1], // 2nd active person
           color: "",
           title: "",
           description: "",
           begin_date: "",
           end_date: null,
-          descendant: false,
-          relationships: 'father',
+          descendant: false, // flag, if it's a 2-level relationship
+          relationships: 'father', // default value for select
         },
         ModalRelationship: !this.state.ModalRelationship });
       };
 
+      // handles new Person submission
       handleSubmitPerson = (item, file) => {
         this.togglePersonModal();
-        var SHA256 = require("crypto-js/sha256");
-        var newFilename = SHA256(Date.now().toString() + file.name) + file.name.substring(file.name.indexOf("."));
+        var SHA256 = require("crypto-js/sha256"); // SHA256 encryption
+        var newFilename = SHA256(Date.now().toString() + file.name) + file.name.substring(file.name.indexOf(".")); // encrypted avatar's filename
 
-        let data = new FormData();
+        let data = new FormData(); // creates a data based on form, w/ values mentioned below
         data.append('user_id', item.user_id);
         data.append('first_name', item.first_name);
         data.append('last_name', item.last_name);
@@ -111,7 +116,7 @@
         data.append('sex_choices', item.sex_choices);
         data.append('birth_place', item.birth_place);
         data.append('relationship_choices', item.relationship_choices);
-        data.append('avatar', file, newFilename); // sha256 encryption
+        data.append('avatar', file, newFilename); // SHA256 encryption
     
         axios.post('http://localhost:8000/api/familytreepersons/', data, {
           headers: {
@@ -127,6 +132,7 @@
         });
       };
 
+      // handles new Relationship submission
       handleSubmitRelationship = item => {
         this.toggleRelationshipModal();
         const options = {
@@ -149,19 +155,21 @@
           });
       };
       
+      // prepares activePersonData for new Person
       createPerson = () => {
         const item = { user_id: localStorage.getItem('user_id'), first_name: "", last_name: "", birth_date: "", status_choices: 'living', sex_choices: 'male', birth_place: ""};
         this.setState({ activeItem: item, modal: !this.state.modal });
       };
 
+      // gets the CSS Transform values for HTML element & its parent
       getCSSTransformValues(personHTML){
-        // get parent coords (because of draggable)
-        var personParentCoords = personHTML.parentElement.style.transform;
-        var personParentX = parseFloat(personParentCoords.slice(10, personParentCoords.indexOf("px")))
-        var personParentY = personParentCoords.slice(personParentCoords.indexOf("px") + 4, personParentCoords.length)
-        personParentY = parseFloat(personParentY.slice(0, personParentY.indexOf("px")))
+        // get parent coords (because of Draggable)
+        var personParentCoords = personHTML.parentElement.style.transform; // get CSS Transform as string
+        var personParentX = parseFloat(personParentCoords.slice(10, personParentCoords.indexOf("px"))) // value between '(' and 'px'
+        var personParentY = personParentCoords.slice(personParentCoords.indexOf("px") + 4, personParentCoords.length) // string between 'px, ' and EOF
+        personParentY = parseFloat(personParentY.slice(0, personParentY.indexOf("px"))) // value between 'px, ' and 'px)'
 
-        // get transform coords (because of draggable)
+        // same as above, but for HTML element (because of Draggable)
         var personTransformCoords = personHTML.style.transform;
         var personTransformX = parseFloat(personTransformCoords.slice(10, personTransformCoords.indexOf("px")))
         var personTransformY = personTransformCoords.slice(personTransformCoords.indexOf("px") + 4, personTransformCoords.length)
@@ -170,10 +178,11 @@
         return {parent: {x: personParentX, y: personParentY}, person: {x: personTransformX, y: personTransformY}};
       }
 
+      // gets coords for every Person element
       getCoordinates(){
         var personList = [...this.state.personList]
         var personListCoords = [...this.state.personClassCoordinates]
-        var personListHTML = Array.from(document.querySelectorAll("div.person"));
+        var personListHTML = Array.from(document.querySelectorAll("div.person")); // all HTML element of DIV type, w/ 'person' in className
         var personCoords = [];
 
         personList.map(person => { // for every person in personList
@@ -202,10 +211,11 @@
         }, () => this.renderRelationships());
       }
 
+      // resets the Person's coords to the initial (the ones from API)
       resetCoords(){
         var personList = [...this.state.personList]
         var personListCoords = [...this.state.personClassCoordinates]
-        var personListHTML = Array.from(document.querySelectorAll("div.person"));
+        var personListHTML = Array.from(document.querySelectorAll("div.person")); // all HTML element of DIV type, w/ 'person' in className
 
         personList.map(person => { // for every person in personList
           var personHTML = document.getElementById(personListHTML.find(el => parseInt(el.id) === person.id).classList[1].split("_").pop()); // get HTML Element
@@ -232,13 +242,15 @@
         });
       }
       
+      // saves new Person's coords to the API
       saveCoords(){
         ShowNotification(NOTIFY.SAVING)
         var saved = true;
         var personListCoords = [...this.state.personClassCoordinates]
 
         personListCoords.map(item => {
-          var coords = {x: item.screen.x / this.state.windowSize.width, y: item.screen.y / this.state.windowSize.height};
+          var coords = {x: item.screen.x / this.state.windowSize.width, y: item.screen.y / this.state.windowSize.height}; // calculates new coords
+
           let formData = new FormData();
           formData.append('x', coords.x);
           formData.append('y', coords.y);
@@ -261,19 +273,21 @@
         }, 5000);
       }
 
+      // sets the Person to be active, if double-clicked
       setActivePerson(id) {
         var array = [...this.state.activePersons];
 
-          if(array.includes(id)){
+          if(array.includes(id)){ // if it is active, then make it inactive
             var index = array.indexOf(id);
             array.splice(index, 1);
           }
-          else{
+          else{ // if it's not active, then make it active
             array.push(id);
           }
-          if(array.length > 2)
+          if(array.length > 2) // if we have more than 2 active elements, delete the first one (should be unnecessary)
               array.splice(0, 1);
-          if(array.length === 2){
+
+          if(array.length === 2){ // if we already got 2 active elements, then toggle New Relationship modal
             this.setState({activePersons: array}, () => {
               this.toggleRelationshipModal();
               this.setState({activePersons: []});
@@ -282,7 +296,7 @@
           this.setState({activePersons: array});
       }
 
-      // since relationships are connected w/ persons, we don't need to delete any relationship. Just persons.
+      // delete whole familytree; since relationships are connected w/ persons, we don't need to delete any relationship. Just persons.
       deleteEverything(){
         axios
           .get("http://localhost:8000/api/familytreepersons/", {
@@ -309,6 +323,7 @@
           });
       }
 
+      // render persons by using Person component
       renderItems = () => {
         const newItems = this.state.personList;
         return newItems.map(item => (
@@ -325,6 +340,7 @@
         ));
       };
 
+      // render Relationships by using Relationship component
       renderRelationships = () => {
         var relationshipList = [...this.state.relationshipList];
         var coordinates = [...this.state.personClassCoordinates];
@@ -337,6 +353,7 @@
           if(pairs.length){
             for(var i = 0; i < pairs.length; i++){
               if((item.id_1 === pairs[i].id_1 || item.id_1 === pairs[i].id_2) && (item.id_2 === pairs[i].id_2 || item.id_2 === pairs[i].id_1)){
+                // draw only the newest one of certain pair
                 if(
                   (pairs[i].end_date === null && item.end_date === null && pairs[i].begin_date < item.begin_date) 
                   || 
@@ -365,6 +382,7 @@
         )});
       }
 
+      // renders whole Familytree page, which is visible after log-in (content + buttons, no nav bar)
       render() {
         return (
           <React.Fragment>

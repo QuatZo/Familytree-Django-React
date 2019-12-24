@@ -4,6 +4,7 @@
     import {NOTIFY} from '../Enums.ts';
     import 'react-toastify/dist/ReactToastify.css';
 
+    // function which shows specific notification, depending on given NOTIFY enum
      function ShowNotification(notifyEnum) {
         switch(notifyEnum){
           case NOTIFY.SUCCESS_LOGIN:

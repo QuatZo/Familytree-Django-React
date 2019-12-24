@@ -38,13 +38,15 @@
         this.refreshPersonList();
       }
 
-      componentDidMount(){
+      // if it's new relationship, then generate color
+      componentDidMount(){ 
         if(this.state.activeItem.color === ""){
           const activeItem = { ...this.state.activeItem, ["color"]: this.genColor()};
           this.setState({ activeItem });
         }
       }
 
+      // used only to get person's names from their ID's
       refreshPersonList = () => {
         axios
           .get("http://localhost:8000/api/familytreepersons/", {
@@ -57,40 +59,47 @@
           });
       };
 
+      // handles Form changes for any field except date & select
       handleChange = (e) => {
         let { name, value } = e.target;
         const activeItem = { ...this.state.activeItem, [name]: value};
         this.setState({ activeItem });
       };
 
+      // gets person's first & last name by using only its ID
       getPerson(idPerson){
         if(this.state.personList.length === 0){ return "" }
-        var targetPerson = this.state.personList.find(item => item.id === idPerson);
+        var targetPerson = this.state.personList.find(item => item.id === idPerson); // find certain person in personList
         return targetPerson.first_name + " " + targetPerson.last_name;
       }
 
+      // generates color for relationship
       genColor(){
         var randomColor = require('random-color');
-        var color = randomColor(0.3, 0.99);
+        var color = randomColor(0.3, 0.99); // light color
         return color.hexString();
       }
 
+      // error handling
       handleBlur = (field) => (evt) => {
         this.setState({
           touched: { ...this.state.touched, [field]: true },
         });
       }
 
+      // handle Form changes for Begin Date field
       handleChangeBeginDate = date => {
         const activeItem = { ...this.state.activeItem, ["begin_date"]: (new Date(date)).toISOString().slice(0, 10)};
         this.setState({activeItem});
       };
 
+      // handle Form changes for End Date field
       handleChangeEndDate = date => {
         const activeItem = { ...this.state.activeItem, ["end_date"]: (new Date(date)).toISOString().slice(0, 10)};
         this.setState({activeItem});
       };
 
+      // error handling, validates fields
       validate(title, begin_date){
         return{
           title: title.trim().length === 0,
@@ -101,7 +110,7 @@
       render() {
         const { toggle, onSave } = this.props;
         const errors = this.validate(this.state.activeItem.title, this.state.activeItem.begin_date);
-        const isEnabled = !Object.keys(errors).some(x => errors[x]);
+        const isEnabled = !Object.keys(errors).some(x => errors[x]); // button is disabled as long as error exists
         return (
           <Modal isOpen={true} toggle={toggle}>
             <ModalHeader toggle={toggle}> Relationship</ModalHeader>

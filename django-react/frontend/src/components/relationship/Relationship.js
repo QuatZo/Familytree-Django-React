@@ -22,10 +22,11 @@
         this.setState({ modal: !this.state.modal });
       };
 
+      // calculate side centers w/ direction for 2 given person containers
       calcSideCenters(first, second){
-        const nav = document.getElementById("nav").getBoundingClientRect().height - 5;
+        const nav = document.getElementById("nav").getBoundingClientRect().height - 5; // get height of nav bar
 
-        var relationshipPoints = {
+        var relationshipPoints = { // contains side centers for 2 give person containers
           top: [
             {x: first.screen.x + this.state.personSize.width / 2, y: first.screen.y},
             {x: second.screen.x + this.state.personSize.width / 2, y: second.screen.y}
@@ -51,18 +52,21 @@
         var x1Temp, y1Temp, x2Temp, y2Temp;
         var horizontalTemp = false;
 
+        // if first person is under second person
         if(relationshipPoints.top[0].y > relationshipPoints.bottom[1].y + 10){
           x1Temp = relationshipPoints.top[0].x + 5;
           y1Temp = relationshipPoints.top[0].y + nav + 10;
           x2Temp = relationshipPoints.bottom[1].x + 5;
           y2Temp = relationshipPoints.bottom[1].y + nav + 20;
         }
+        // if first person is above second person
         else if(relationshipPoints.bottom[0].y < relationshipPoints.top[1].y - 10){
           x1Temp = relationshipPoints.bottom[0].x + 5;
           y1Temp = relationshipPoints.bottom[0].y + nav + 5;
           x2Temp = relationshipPoints.top[1].x + 5;
           y2Temp = relationshipPoints.top[1].y + nav;
         }
+        // if first person is on the left of second person
         else if(relationshipPoints.right[0].x < relationshipPoints.left[1].x){
           x1Temp = relationshipPoints.right[0].x + 5;
           y1Temp = relationshipPoints.right[0].y + nav + 5;
@@ -70,6 +74,7 @@
           y2Temp = relationshipPoints.left[1].y + nav + 5;
           horizontalTemp = true;
         }
+        // if first person is on the right of second person
         else if(relationshipPoints.left[0].x > relationshipPoints.right[1].x){
           x1Temp = relationshipPoints.left[0].x + 5;
           y1Temp = relationshipPoints.left[0].y + nav + 5;
@@ -77,6 +82,7 @@
           y2Temp = relationshipPoints.right[1].y + nav + 5;
           horizontalTemp = true;
         }
+        // if first person is on second person and vice versa
         else{
           x1Temp = relationshipPoints.mid[0].x;
           y1Temp = relationshipPoints.mid[0].y;
@@ -87,14 +93,16 @@
         return {x1: x1Temp, y1: y1Temp, x2: x2Temp, y2: y2Temp, horizontal: horizontalTemp};
       }
 
+      // renders given relationship
       renderRelationship(){
         var relationshipPairList = [];
 
-        var first = (this.props.personClassCoordinates.filter(el => parseInt(el.id) === parseInt(this.props.relationship.id_1)))[0];
-        var second = (this.props.personClassCoordinates.filter(el => parseInt(el.id) === parseInt(this.props.relationship.id_2)))[0];
+        var first = (this.props.personClassCoordinates.filter(el => parseInt(el.id) === parseInt(this.props.relationship.id_1)))[0]; // get 1st person coordinates
+        var second = (this.props.personClassCoordinates.filter(el => parseInt(el.id) === parseInt(this.props.relationship.id_2)))[0];// get 2nd person coordinates
 
-        var sideCoords = this.calcSideCenters(first, second);
+        var sideCoords = this.calcSideCenters(first, second); // calculate proper side coords for this pair of persons
 
+        // connection between persons has sharp edges, so you need 4 coords; it support horizontal positioning as well
         var pointsTemp = Math.round(sideCoords.x1) + " " + Math.round(sideCoords.y1) +
         ", " + Math.round(sideCoords.x1) + " " + Math.round((Math.round(sideCoords.y1) + Math.round(sideCoords.y2))/2) +
         ", " + Math.round(sideCoords.x2) + " " + Math.round((Math.round(sideCoords.y1) + Math.round(sideCoords.y2))/2) +
@@ -116,10 +124,10 @@
           horizontal: sideCoords.horizontal,
         });
 
-        var reference = React.createRef();
+        var reference = React.createRef(); // reference to relationship for Toolitp (relationship name on hover)
 
         this.setState({
-          relationshipMarker: (relationshipPairList.map(item => (
+          relationshipMarker: (relationshipPairList.map(item => ( // marker - arrow at the end of relationship
             <marker 
             id={'head_' + item.color.substring(1)} 
             key={'head_' + item.color.substring(1)} 
@@ -130,7 +138,7 @@
               <path d='M0,0 V6 L3,3 Z' fill={item.color} stroke={item.color}/>
             </marker>
           ))),
-          relationship: (relationshipPairList.map(item => (
+          relationship: (relationshipPairList.map(item => ( // relationship
             <React.Fragment
             key={"fragment_" + item.id1 + "_" + item.id2}
             >
@@ -142,6 +150,7 @@
               stroke = {item.color}
               strokeWidth="3" 
               fill="none"/>
+              {/* Relationship name on connection hover */}
               <Tooltip triggerRef={reference}>
                   <rect x={0} y={-35} width={this.calcTextWidth(item.relationship, "16pt arial") + 29} height={35} rx={5} ry={5} fill='black'/>
                   <text x={15} y={-10} fontSize={"16pt"} fill='white'>{item.relationship}</text>
@@ -152,7 +161,7 @@
         )});
       }
 
-
+      // calculate the text width for Tooltip Component, by using text length (relationship name on hover)
       calcTextWidth(text, font) {
         var canvas = this.calcTextWidth.canvas || (this.calcTextWidth.canvas = document.createElement("canvas"));
         var context = canvas.getContext("2d");

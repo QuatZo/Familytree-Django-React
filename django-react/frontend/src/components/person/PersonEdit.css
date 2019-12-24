@@ -1,3 +1,6 @@
+/* Person Edit Modal */
+
+/* Header */
 .modal-header{
   position: sticky;
   top: 0px;
@@ -6,15 +9,18 @@
   z-index: 99;
 }
 
+/* Title */
 .modal-title{
   width: 100%;
 }
 
+/* Arrow & dot in Timeline component */
 .rt-arrow, 
 .rt-dot{
   z-index: 0 !important;
 }
 
+/* Timeline component */
 .rt-timeline{
   min-width: 100%;
 }

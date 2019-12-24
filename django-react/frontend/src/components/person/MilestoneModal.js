@@ -37,7 +37,7 @@
         };
       }
 
-      file = null;
+      file = null; // chosen files
 
       componentDidMount(){
         var options = [];
@@ -60,27 +60,32 @@
           });
       }
 
+      // handles change for form fields except Date, File & Select
       handleChange = (e) => {
         let { name, value } = e.target;
         const activeItem = { ...this.state.activeItem, [name]: value};
         this.setState({ activeItem });
       };
 
+      // handles change for Date Field
       handleChangeDate = date => {
         const activeItem = { ...this.state.activeItem, ["date"]: (new Date(date)).toISOString().slice(0, 10)};
         this.setState({activeItem});
       };
 
+      // handles change for File Field
       handleChangeFile = (e) => {
         this.file = e.target.files[0];
       }
 
+      // error handling
       handleBlur = (field) => (evt) => {
         this.setState({
           touched: { ...this.state.touched, [field]: true },
         });
       }
       
+      // error handling, validates given fields
       validate(title, date, person_id, file){
         person_id = person_id.filter(el => el !== undefined);
         return{
@@ -94,7 +99,7 @@
       render() {
         const { toggle, onSave } = this.props;
         const errors = this.validate(this.state.activeItem.title, this.state.activeItem.date, this.state.activeItem.person_id, this.file);
-        const isEnabled = !Object.keys(errors).some(x => errors[x]);
+        const isEnabled = !Object.keys(errors).some(x => errors[x]); // button is disables as long as error exists
         return (
           <Modal isOpen={true} toggle={toggle}>
             <ModalHeader toggle={toggle}> Milestone </ModalHeader>

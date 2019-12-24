@@ -8,6 +8,7 @@ class SignupForm extends React.Component {
     password: ''
   };
 
+  // handles change for any Form Field
   handle_change = e => {
     const name = e.target.name;
     const value = e.target.value;

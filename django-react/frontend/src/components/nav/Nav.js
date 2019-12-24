@@ -3,6 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+// returns nav bar, depending on login state
 function Nav(props) {
   const logged_out_nav = (
     <div className="nav_buttons">

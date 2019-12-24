@@ -17,15 +17,18 @@
   color: #09d3ac;
 }
 
+/* Loading text */
 .loading{
   color: white;
   text-align: center;
 }
 
+/* Nav bar buttons container*/
 .nav_buttons{
   display: inline-block;
 } 
 
+/* Nav bar button */
 .nav_button{
   margin-left: 10px;
 }

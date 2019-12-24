@@ -12,12 +12,13 @@ from .serializers import FamilytreePersonSerializer, FamilytreeRelationshipSeria
 from .models import FamilytreePerson, FamilytreeRelationship, FamilytreeMilestone
 
 
+# Get current user
 @api_view(['GET'])
 def current_user(request):
     serializer = UserSerializer(request.user)
     return Response(serializer.data)
 
-
+# User login/register
 class UserList(APIView):
     permission_classes = (permissions.AllowAny,)
 
@@ -28,6 +29,7 @@ class UserList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# View for Person
 class FamilytreePersonView(viewsets.ModelViewSet):
     serializer_class = FamilytreePersonSerializer
     parser_classes = (MultiPartParser, FormParser)
@@ -48,7 +50,7 @@ class FamilytreePersonView(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        return FamilytreePerson.objects.filter(user_id=user)
+        return FamilytreePerson.objects.filter(user_id=user) # return only people created by (and for) certain user
 
 class FamilytreeRelationshipView(viewsets.ModelViewSet):
     serializer_class = FamilytreeRelationshipSerializer
@@ -60,11 +62,11 @@ class FamilytreeRelationshipView(viewsets.ModelViewSet):
 
         if id_1 is not None:
             if id_2 is not None:
-                return FamilytreeRelationship.objects.filter(user_id=user, id_1=id_1, id_2=id_2)
-            return FamilytreeRelationship.objects.filter(user_id=user, id_1=id_1)
+                return FamilytreeRelationship.objects.filter(user_id=user, id_1=id_1, id_2=id_2) # return relationship for certain user & pair of people
+            return FamilytreeRelationship.objects.filter(user_id=user, id_1=id_1) # return relationship for certain user & certain 1st person
         if id_2 is not None:
-            return FamilytreeRelationship.objects.filter(user_id=user, id_2=id_2)
-        return FamilytreeRelationship.objects.filter(user_id=user)
+            return FamilytreeRelationship.objects.filter(user_id=user, id_2=id_2) # return relationship for certain user & certain 2nd person
+        return FamilytreeRelationship.objects.filter(user_id=user) # return relationship for certain user
 
 class FamilytreeMilestoneView(viewsets.ModelViewSet):
     serializer_class = FamilytreeMilestoneSerializer
@@ -88,5 +90,5 @@ class FamilytreeMilestoneView(viewsets.ModelViewSet):
         person = self.request.query_params.get('person_id', None)
         user = self.request.user
         if person is not None:
-            return FamilytreeMilestone.objects.filter(user_id=user, person_id=person)
-        return FamilytreeMilestone.objects.filter(user_id=user)
+            return FamilytreeMilestone.objects.filter(user_id=user, person_id=person) # return milestones only for certain user & person
+        return FamilytreeMilestone.objects.filter(user_id=user) # return milestones only for certain user

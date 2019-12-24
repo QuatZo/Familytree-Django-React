@@ -1,11 +1,14 @@
+/* Active person */
 .active{
   border-color: #66ff66 !important;
 }
 
+/* Error in Forms */
 .error {
   border: 1px solid red;
 }
 
+/* Scalable Vector Graphics */
 svg{
   position: fixed;
   top: 0;
@@ -13,6 +16,7 @@ svg{
   z-index: 0;
 }
 
+/* Bottom-Right buttons */
 .btn-circle.btn-xl {
   width: 55px;
   height: 55px;
@@ -23,6 +27,7 @@ svg{
   z-index: 99;
 }
 
+/* Circle for Bottom-Right buttons */
 .btn-circle {
   width: 30px;
   height: 30px;
@@ -35,6 +40,7 @@ svg{
   margin: 2px;
 }
 
+/* Person buttons */
 .buttons{
   display: inline-block;
   position: fixed;
@@ -43,16 +49,19 @@ svg{
   z-index: 99;
 }
 
+/* Datepicker container */
 .react-datepicker-wrapper{
   width: 100%;
 }
 
+/* Relationship names on hover (Tooltip) */
 .relationshipNames{
   font-size: calc(12px + .5vw);
   font-family: fantasy;
   font-style: oblique;
 }
 
+/* List for Form -> Select*/
 ul.select-list li{
   margin: 0px;
 }

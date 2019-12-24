@@ -30,6 +30,7 @@
       Label,
     } from "reactstrap";
 
+    // custom header for Timeline component, consists of different date format (yyyy-mm-dd)
     const CustomHeader = (props) => {
       const {title, date} = props.event;
       return (
@@ -40,6 +41,7 @@
       )
     }
 
+    // custom image body for Timeline to support media type files (ReactPlayer component) along with images
     const CustomImageBody = (props) => {
       const { imageUrl } = props.event;
       return (
@@ -49,6 +51,7 @@
       );
     };
 
+    // custom text body for Timeline to include end date of relationship, type of relationship & comrades
     const CustomTextBody = (props) => {
       const {text, extras} = props.event;
       return (
@@ -61,7 +64,6 @@
       );
     }
 
-
     export default class CustomModal extends Component {
       constructor(props) {
         super(props);
@@ -73,13 +75,13 @@
             first_name: false,
             last_name: false,
           },
-          timelineData: [],
-          deleteMode: false,
-          personList: [],
+          timelineData: [], // data used for Timeline
+          deleteMode: false, // flag, if delete mode is enabled
+          personList: [], // list of Persons
         };
       }
 
-      file = null;
+      file = null; // chosen file
 
       componentDidMount(){
         this.refreshPersonList();
@@ -98,8 +100,10 @@
           });
       };
 
+      // downloads data from API, if it fails to download any type of data, then it don't display anything (to not mix up in users' head)
       downloadTimelineData(){
         var data = [];
+        // firstly, download all milestones for certain Person
         axios
         .get("http://localhost:8000/api/familytreemilestone/", {
           headers: { Authorization: `JWT ${localStorage.getItem('token')}`},
@@ -129,6 +133,7 @@
           });
         })
         .then( () => {
+          // then, download all relationship for certain Person, where it's 1st person in relationship
           axios
           .get("http://localhost:8000/api/familytreerelationship/", {
             headers: { Authorization: `JWT ${localStorage.getItem('token')}`},
@@ -160,6 +165,7 @@
             })
           })
           .then( () => {
+            // then, download remaining relationship for certain Person, where it's 2nd person in relationship
             axios
             .get("http://localhost:8000/api/familytreerelationship/", {
               headers: { Authorization: `JWT ${localStorage.getItem('token')}`},
@@ -200,6 +206,7 @@
         });
       }
 
+      // prepares form for creating new Milestone
       createMilestone = () => {
         this.setState({ activeMilestone: {
           user_id: localStorage.getItem("user_id"),
@@ -211,23 +218,27 @@
         }, ModalMilestone: !this.state.ModalMilestone });
       }
 
+      // prepares form for editing existing Milestone
       editMilestone = item => {
         this.setState({ activeMilestone: item, ModalMilestone: !this.state.ModalMilestone });
       };
 
+      // prepares form for editin existin Relationship
       editRelationship = item => {
         this.setState({ activeRelationship: item, ModalRelationship: !this.state.ModalRelationship });
       };
       
+      // handles new/existing milestone submission
       handleSubmitMilestone = (item, file) => {
         this.toggleMilestoneModal();
         var SHA256, newFilename, oldItem, i;
 
-        item.person_id = item.person_id.filter(el => el !== undefined);
+        item.person_id = item.person_id.filter(el => el !== undefined); // makes sure there is no 'undefined' person i chosen Person List
 
+        // if Milestone already exists
         if (item.id) {
           SHA256 = require("crypto-js/sha256");
-          newFilename = file !== null ? SHA256(Date.now().toString() + file.name) + file.name.substring(file.name.indexOf(".")) : null;
+          newFilename = file !== null ? SHA256(Date.now().toString() + file.name) + file.name.substring(file.name.indexOf(".")) : null; // SHA256 encryption for filename (media/image)
           oldItem = this.props.activeItem;
 
           let data = new FormData();
@@ -257,8 +268,9 @@
           return;
         }
 
-        SHA256 = require("crypto-js/sha256");
-        newFilename = SHA256(Date.now().toString() + file.name) + file.name.substring(file.name.indexOf("."));
+        // if there is no Milestone w/ provided ID
+        SHA256 = require("crypto-js/sha256"); 
+        newFilename = SHA256(Date.now().toString() + file.name) + file.name.substring(file.name.indexOf(".")); // SHA256 encryption for filename (media/image)
 
         let data = new FormData();
         data.append('user_id', item.user_id);
@@ -286,8 +298,8 @@
           });
       };
 
+      // handles submission of existing Relationship
       handleSubmitRelationship = item => {
-        console.log(item);
         this.toggleRelationshipModal();        
         if (item.id) {
           const options = {
@@ -312,6 +324,7 @@
         } 
       };
 
+      // handles deletetion of existing Milestone
       handleDeleteMilestone = item => {
         axios
           .delete(`http://localhost:8000/api/familytreemilestone/${item.id}`, {
@@ -325,6 +338,7 @@
           });
       };
 
+      // handles deletion of existing Relationship
       handleDeleteRelationship = item => {
         axios
           .delete(`http://localhost:8000/api/familytreerelationship/${item.id}`, {
@@ -339,21 +353,25 @@
           });
       };
 
+      // handles change for any form field, except date & select
       handleChange = (e) => {
         let { name, value } = e.target;
         const activeItem = { ...this.state.activeItem, [name]: value};
         this.setState({ activeItem });
       };
 
+      // handles change for Date Fields
       handleChangeDate = date => {
         const activeItem = { ...this.state.activeItem, ["birth_date"]: (new Date(date)).toISOString().slice(0, 10)};
         this.setState({activeItem});
       };
 
+      // handles mode change from Edit to Delete & vice versa
       handleChangeMode = checked => {
         this.setState({ deleteMode: checked }, () => this.downloadTimelineData());
       }
       
+      // error handling, validates value in form fields
       validate(first_name, last_name){
         return{
           first_name: first_name.trim().length === 0,
@@ -361,20 +379,24 @@
         }
       }
       
+      // handles change of file (upload)
       handleChangeFile = (e) => {
         this.file = e.target.files[0];
       }
 
+      // error handling
       handleBlur = (field) => (evt) => {
         this.setState({
           touched: { ...this.state.touched, [field]: true },
         });
       }
 
+      // toggles Milestone modal
       toggleMilestoneModal = () => {
         this.setState({ ModalMilestone: !this.state.ModalMilestone });
       };
 
+      // toggles Relationship modal
       toggleRelationshipModal = () => {
         this.setState({ ModalRelationship : !this.state.ModalRelationship });
       };
@@ -382,7 +404,7 @@
       render() {
         const { toggle, onSave } = this.props;
         const errors = this.validate(this.state.activeItem.first_name, this.state.activeItem.last_name);
-        const isEnabled = !Object.keys(errors).some(x => errors[x]);
+        const isEnabled = !Object.keys(errors).some(x => errors[x]); // button is disables as long as error exists
         return (
           <React.Fragment>
             <Modal 

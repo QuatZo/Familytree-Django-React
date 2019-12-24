@@ -1,3 +1,5 @@
+// File which contains enum types
+
 export enum NOTIFY {
     SUCCESS_LOGIN,
     SUCCESS_REGISTER,

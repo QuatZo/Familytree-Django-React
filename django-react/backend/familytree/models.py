@@ -4,17 +4,17 @@ import datetime
 from django.conf import settings
 from django.core.validators import FileExtensionValidator
 
-AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
+AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User') # list of users
 
 # Create your models here
 
 class FamilytreePerson(models.Model):
-    user_id = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    birth_date = models.CharField(max_length=10, blank=True, default='')
-    birth_place = models.CharField(max_length=50, blank=True, default='')
-    avatar = models.ImageField(upload_to='avatars', default='avatars/0.png')
+    user_id = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE) # user ID, foreign key
+    first_name = models.CharField(max_length=50) # first name
+    last_name = models.CharField(max_length=50) # last name
+    birth_date = models.CharField(max_length=10, blank=True, default='') # date of birth
+    birth_place = models.CharField(max_length=50, blank=True, default='') # place of birth
+    avatar = models.ImageField(upload_to='avatars', default='avatars/0.png') # avatar (IMAGE)
     
     living = 'living'
     deceased = 'deceased'
@@ -28,24 +28,24 @@ class FamilytreePerson(models.Model):
     other = 'other'
 
     sex_choices = [(male, 'male'),(female, 'female'),(other, 'other')]
-    sex_choices = models.CharField(max_length = 35,choices = sex_choices, default = other)
+    sex_choices = models.CharField(max_length = 35,choices = sex_choices, default = other) # choice
 
-    x = models.FloatField(default=0)
-    y = models.FloatField(default=0)
+    x = models.FloatField(default=0) # coords ratio: x
+    y = models.FloatField(default=0) # coords ratio: y
 
     def _str_(self):
         return self.first_name + " " + self.last_name 
 
 class FamilytreeRelationship(models.Model):
-    user_id = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
-    id_1 = models.ForeignKey(FamilytreePerson, on_delete=models.CASCADE, related_name="id_1")
-    id_2 = models.ForeignKey(FamilytreePerson, on_delete=models.CASCADE, related_name="id_2")
-    color = models.CharField(max_length = 7, default = '#ffffff')
-    title = models.CharField(max_length=64)
-    description = models.CharField(max_length=512, blank=True)
-    begin_date = models.DateField()
-    end_date = models.DateField(default=None, blank=True, null=True)
-    descendant = models.BooleanField(default=False)
+    user_id = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE) # user ID, foreign key
+    id_1 = models.ForeignKey(FamilytreePerson, on_delete=models.CASCADE, related_name="id_1") # 1st person ID
+    id_2 = models.ForeignKey(FamilytreePerson, on_delete=models.CASCADE, related_name="id_2") # 2nd person ID
+    color = models.CharField(max_length = 7, default = '#ffffff') # color of relationship
+    title = models.CharField(max_length=64) # title
+    description = models.CharField(max_length=512, blank=True) # description, can be blank
+    begin_date = models.DateField() # begin date
+    end_date = models.DateField(default=None, blank=True, null=True) # end date, can be blank & null, default = None(Null)
+    descendant = models.BooleanField(default=False) # if it's a 2-level relationship
 
     father = 'father'
     mother = 'mother'
@@ -63,19 +63,19 @@ class FamilytreeRelationship(models.Model):
     stepson = 'stepson'
 
     relationships = [(father, 'father'),(mother, 'mother'),(brother, 'brother'),(sister, 'sister'), (son, 'son'), (daughter, 'daughter'), (adoptive_son, 'adoptive son'), (adoptive_daughter, 'adoptive daughter'), (surrogate_father, 'surrogate father'), (surrogate_mother, 'surrogate mother'), (stepbrother, 'stepbrother'), (stepsister,'stepsister'), (stepdaughter, 'stepdaughter'), (stepson, 'stepson')]
-    relationships = models.CharField(max_length = 35,choices = relationships, default = father)
+    relationships = models.CharField(max_length = 35,choices = relationships, default = father) # choice 
 
     def _str_(self):
         return self.relationships
 
 class FamilytreeMilestone(models.Model):
-    extensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'raw', 'mp4', 'webm', 'wmv', 'avi', 'wav', 'mp3']
-    user_id = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
-    person_id = models.ManyToManyField(FamilytreePerson)
-    date = models.DateField()
-    text = models.CharField(max_length=512, blank=True)
-    title = models.CharField(max_length=64)
-    image = models.FileField(upload_to='milestones', default='milestones/default.jpg', validators=[FileExtensionValidator(extensions)])
+    extensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'raw', 'mp4', 'webm', 'wmv', 'avi', 'wav', 'mp3'] # supported media extensions
+    user_id = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE) # user ID, foreign key
+    person_id = models.ManyToManyField(FamilytreePerson) # person ID, n-m field
+    date = models.DateField() # Date of milestone (post) field
+    text = models.CharField(max_length=512, blank=True) # description, can be blank
+    title = models.CharField(max_length=64) # title
+    image = models.FileField(upload_to='milestones', default='milestones/default.jpg', validators=[FileExtensionValidator(extensions)]) # media (MUST BE W/ ABOVE EXTENSION)
 
     def _str_(self):
         return self.title

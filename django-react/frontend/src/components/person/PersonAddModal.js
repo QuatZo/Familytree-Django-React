@@ -29,23 +29,27 @@
         };
       }
 
-      file = null;
+      file = null; // chosen file (avatar)
 
+      // handles change of all fields, except date, file & select
       handleChange = (e) => {
         let { name, value } = e.target;
         const activeItem = { ...this.state.activeItem, [name]: value};
         this.setState({ activeItem });
       };
 
+      // handles change of Date Field
       handleChangeDate = date => {
         const activeItem = { ...this.state.activeItem, ["birth_date"]: (new Date(date)).toISOString().slice(0, 10)};
         this.setState({activeItem});
       };
 
+      // handles change of File Field (upload)
       handleChangeFile = (e) => {
         this.file = e.target.files[0];
       }
 
+      // error handling, validates given form fields
       validate(first_name, last_name, file){
         return{
           first_name: first_name.trim().length === 0,
@@ -54,6 +58,7 @@
         }
       }
 
+      // error handling
       handleBlur = (field) => (evt) => {
         this.setState({
           touched: { ...this.state.touched, [field]: true },
@@ -63,7 +68,7 @@
       render() {
         const { toggle, onSave } = this.props;
         const errors = this.validate(this.state.activeItem.first_name, this.state.activeItem.last_name, this.file);
-        const isEnabled = !Object.keys(errors).some(x => errors[x]);
+        const isEnabled = !Object.keys(errors).some(x => errors[x]); // button is disabled as long as error exists
         return (
           <Modal isOpen={true} toggle={toggle}>
             <ModalHeader toggle={toggle}> Person </ModalHeader>
