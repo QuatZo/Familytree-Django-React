@@ -56,7 +56,7 @@
           <p>{text}</p>
           <p><b>{extras !== null && extras.end_date !== undefined && extras.end_date !== null? "End: " + extras.end_date + "\n": ""}</b></p>
           <p><b>{extras !== null && extras.relationship !== undefined ? "Type: " + extras.relationship : ""}</b></p>
-          <p><b>{extras !== null && extras.together_with !== undefined ? "Together with: " + extras.together_with.join(", ") : ""}</b></p>
+          <p><b>{extras !== null && extras.together_with !== undefined && extras.together_with.length ? "Together with: " + extras.together_with.join(", ") : ""}</b></p>
         </div>
       );
     }

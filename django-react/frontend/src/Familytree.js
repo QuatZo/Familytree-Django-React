@@ -40,7 +40,6 @@
       componentDidMount(){
         this.updateWindowDimensions();
         window.addEventListener('resize', this.updateWindowDimensions);
-        this.getCoordinates();
       }
 
       componentWillUnmount() {
@@ -155,89 +154,82 @@
         this.setState({ activeItem: item, modal: !this.state.modal });
       };
 
-      getCoordinates() {
+      getCSSTransformValues(personHTML){
+        // get parent coords (because of draggable)
+        var personParentCoords = personHTML.parentElement.style.transform;
+        var personParentX = parseFloat(personParentCoords.slice(10, personParentCoords.indexOf("px")))
+        var personParentY = personParentCoords.slice(personParentCoords.indexOf("px") + 4, personParentCoords.length)
+        personParentY = parseFloat(personParentY.slice(0, personParentY.indexOf("px")))
+
+        // get transform coords (because of draggable)
+        var personTransformCoords = personHTML.style.transform;
+        var personTransformX = parseFloat(personTransformCoords.slice(10, personTransformCoords.indexOf("px")))
+        var personTransformY = personTransformCoords.slice(personTransformCoords.indexOf("px") + 4, personTransformCoords.length)
+        personTransformY = parseFloat(personTransformY.slice(0, personTransformY.indexOf("px")))
+
+        return {parent: {x: personParentX, y: personParentY}, person: {x: personTransformX, y: personTransformY}};
+      }
+
+      getCoordinates(){
         var personList = [...this.state.personList]
         var personListCoords = [...this.state.personClassCoordinates]
         var personListHTML = Array.from(document.querySelectorAll("div.person"));
-        var personCoordinates = [];
-        personList.map(person => {
-          for(var i = 0; i < personListHTML.length; i++){
-            if(parseInt(person.id) !== parseInt(personListHTML[i].id)){
-              continue;
-            }    
+        var personCoords = [];
 
-            var personHTML = document.getElementById(personListHTML[i].classList[1].split("_").pop());
-            personCoordinates = personHTML.getBoundingClientRect();
+        personList.map(person => { // for every person in personList
+          var personHTML = document.getElementById(personListHTML.find(el => parseInt(el.id) === person.id).classList[1].split("_").pop()); // get HTML Element
+          personCoords = personHTML.getBoundingClientRect(); // get rectangle of the previously mentioned HTML ELement
 
-            var personParentCoords = personHTML.parentElement.style.transform
-            var firstPx = personParentCoords.indexOf("px")
-            var personParentX = parseInt(personParentCoords.slice(10, firstPx))
-            var personParentY = personParentCoords.slice(firstPx + 4, personParentCoords.length)
-            personParentY = parseInt(personParentY.slice(0, personParentY.indexOf("px")))
+          var transform = this.getCSSTransformValues(personHTML); // use function which gets the CSS values for transform of HTML element & its parent
 
-            var x;
-            var y;
-
-            personHTML.style.transform = "translate(" + (person.x * this.state.windowSize.width - personHTML.offsetLeft + 5) + "px, " + (person.y * this.state.windowSize.height - personHTML.offsetTop + 5) + "px)"  
-            
-            x = person.x * this.state.windowSize.width + personParentX;
-            y = person.y * this.state.windowSize.height + personParentY;
-
-            if(typeof personListCoords !== "undefined"){
-              if(personListCoords.length === 0){
-                personListCoords.push({id: person.id, screen: {x: x, y: y}});
-                break;
-              }
-              var alreadyHasThisPerson = false
-              for(var j = 0; j < personListCoords.length; j++){
-                if(personListCoords[j].id === person.id){
-                  personListCoords[j].screen = {x: x, y: y}
-                  alreadyHasThisPerson = true;
-                }
-              }
-              if(!alreadyHasThisPerson){
-                personListCoords.push({id: person.id, screen: {x: x, y: y}});
-              }
-            }
+          var index = personListCoords.findIndex(el => el.id === person.id); // find index of specific person in personListCoords (state personClassCoordinates) array
+          // calculate new coordinates, if function resetCoords has been called at least once, then it uses the 'previous parent transform' values
+          var x = person.x * this.state.windowSize.width + transform.parent.x - (!isNaN(transform.person.x) ? (person.x * this.state.windowSize.width - transform.person.x) : 0);
+          var y = person.y * this.state.windowSize.height + transform.parent.y - (!isNaN(transform.person.y) ? (person.y * this.state.windowSize.height - transform.person.y) : 0);
+          
+          
+          if(index !== -1){ // if this person already exists in an array which contains coordinates of persons
+            personListCoords[index].screen = {x: x, y: y}; // then overwrite coords with the newest ones
           }
-        });
+          else{ // if not...
+            personListCoords.push({id: person.id, screen: {x: x, y: y}}); // add this person with its coordinates to the array
+            personHTML.style.transform = "translate(" + (x - personHTML.offsetLeft + 5) + "px, " + (y - personHTML.offsetTop + 5) + "px)" // move HTML element to the coords
+          }
+        })
         this.setState({
           personClassCoordinates: personListCoords,
-          personSize: {width: personCoordinates.width, height: personCoordinates.height},
-          init: true
-        }, () => this.renderRelationships())
+          personSize: {width: personCoords.width, height: personCoords.height}
+        }, () => this.renderRelationships());
       }
 
       resetCoords(){
         var personList = [...this.state.personList]
+        var personListCoords = [...this.state.personClassCoordinates]
         var personListHTML = Array.from(document.querySelectorAll("div.person"));
 
-        for(let i = 0; i < personListHTML.length; i++){
-          var personHTML = document.getElementById(personListHTML[i].classList[1].split("_").pop());
+        personList.map(person => { // for every person in personList
+          var personHTML = document.getElementById(personListHTML.find(el => parseInt(el.id) === person.id).classList[1].split("_").pop()); // get HTML Element
 
-          var personParentCoords = personHTML.parentElement.style.transform
-          var firstPx = personParentCoords.indexOf("px")
-          let personParentX = parseInt(personParentCoords.slice(10, firstPx))
-          let personParentY = personParentCoords.slice(firstPx + 4, personParentCoords.length)
-          personParentY = parseInt(personParentY.slice(0, personParentY.indexOf("px")))
+          var transform = this.getCSSTransformValues(personHTML); // use function which gets the CSS values for transform of HTML element & its parent
 
-          this.props.personList.map(person => {
-            if(person.id === personList[i].id){
-              var parentX = 0;
-              var parentY = 0;
-              if(typeof personList[i].parent !== "undefined"){
-                parentX = personList[i].parent.x;
-                parentY = personList[i].parent.y;
-              }
-              personList[i].x = (person.x * this.state.windowSize.width - personParentX + parentX) / this.state.windowSize.width;
-              personList[i].y = (person.y * this.state.windowSize.height - personParentY + parentY) / this.state.windowSize.height;
-              personList[i].parent = {x: personParentX, y: personParentY}
-            }
-          })
-        }
+          var index = personListCoords.findIndex(el => el.id === person.id); // find index of specific person in personListCoords (state personClassCoordinates) array
+          // set the values to the initial ones (ratio donwloaded from API * actual window size)
+          var x = person.x * this.state.windowSize.width;
+          var y = person.y * this.state.windowSize.height;
 
-        this.getCoordinates();
-        ShowNotification(NOTIFY.RESET)
+          var oldPersonParent = {x: x - transform.person.x, y: y - transform.person.y} // calculate old parent CSS transform
+          var needToMove = {x: transform.parent.x - oldPersonParent.x, y: transform.parent.y - oldPersonParent.y} // calculate distance it needs to move, by using actual & old parent CSS transform values
+
+          personHTML.style.transform = "translate(" + (transform.person.x - needToMove.x) + "px, " + (transform.person.y - needToMove.y) + "px)" // move HTML element to the previously calculated forms
+
+          personListCoords[index].screen = {x: x, y: y}; // overwrite coords with the initial ones
+        })
+        this.setState({
+          personClassCoordinates: personListCoords,
+        }, () => {
+          this.renderRelationships();
+          ShowNotification(NOTIFY.RESET);
+        });
       }
       
       saveCoords(){
