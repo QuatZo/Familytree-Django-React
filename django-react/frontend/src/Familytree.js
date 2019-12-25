@@ -382,6 +382,10 @@
         )});
       }
 
+      downloadPDF = () =>{
+        console.log("There should be a download PDF stuff");
+      }
+
       // renders whole Familytree page, which is visible after log-in (content + buttons, no nav bar)
       render() {
         return (
@@ -407,18 +411,25 @@
               ) : null}
             </div>
             <div className="buttons">
-              <button onClick={() => {if(window.confirm("Are you sure you want to delete WHOLE Family Tree?")) this.deleteEverything()}} className="btn btn-outline-danger btn-circle btn-xl">
-                <i className="fas fa-times"></i>
-              </button>
-              <button onClick={this.resetCoords.bind(this)} className="btn btn-outline-warning btn-circle btn-xl">
-                <i className="fas fa-redo"></i>
-              </button>
-              <button disabled={this.state.saving} onClick={() => {if(window.confirm("Are you sure you want to save the coordinates?")) this.saveCoords()}} className="btn btn-outline-info btn-circle btn-xl">
-                <i className="far fa-save"></i>
-              </button>
-              <button onClick={this.createPerson} className="btn btn-outline-success btn-circle btn-xl">
-                <i className="fas fa-plus"></i>
-              </button>
+              <div className="download-buttons">
+                <button onClick={() => this.downloadPDF()} className="btn btn-outline-light btn-circle btn-xl">
+                  <i className="fas fa-download"></i>
+                </button>
+              </div>
+              <div className="operating-buttons">
+                <button onClick={() => {if(window.confirm("Are you sure you want to delete WHOLE Family Tree?")) this.deleteEverything()}} className="btn btn-outline-danger btn-circle btn-xl">
+                  <i className="fas fa-times"></i>
+                </button>
+                <button onClick={this.resetCoords.bind(this)} className="btn btn-outline-warning btn-circle btn-xl">
+                  <i className="fas fa-redo"></i>
+                </button>
+                <button disabled={this.state.saving} onClick={() => {if(window.confirm("Are you sure you want to save the coordinates?")) this.saveCoords()}} className="btn btn-outline-info btn-circle btn-xl">
+                  <i className="far fa-save"></i>
+                </button>
+                <button onClick={this.createPerson} className="btn btn-outline-success btn-circle btn-xl">
+                  <i className="fas fa-plus"></i>
+                </button>
+              </div>
             </div>
           </React.Fragment>
         );
