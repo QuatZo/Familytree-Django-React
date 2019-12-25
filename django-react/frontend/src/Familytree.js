@@ -11,6 +11,7 @@
     import {NOTIFY} from './components/Enums.ts';
     import ShowNotification from './components/notification/Notification';
     import './Familytree.css';
+    import ModalConfirm from './components/ConfirmationModal'
 
     class Familytree extends Component {    
       constructor(props) {
@@ -33,6 +34,9 @@
           windowSize: {width: 0, height: 0}, // size of the window
           saving: false, // flag, if it's saving coordinates
           activeRelationship: [], // relationship
+          activeConfirmData: {
+
+          }
         };
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
       }  
@@ -78,6 +82,19 @@
             ShowNotification(NOTIFY.ERROR);
           });
       };
+
+      toggleConfirmModal = (header="", content="", confirmText="", cancelText="", onConfirm=() => this.toggleConfirmModal) => {
+        this.setState({
+          activeConfirmData: {
+            header: header,
+            content: content,
+            confirmText: confirmText,
+            cancelText: cancelText,
+            onConfirm: onConfirm,
+          },
+          ModalConfirm: !this.state.ModalConfirm,
+        });
+      }
 
       // toggles Person Add modal
       togglePersonModal = () => {
@@ -244,28 +261,32 @@
       
       // saves new Person's coords to the API
       saveCoords(){
+        this.toggleConfirmModal();
         ShowNotification(NOTIFY.SAVING)
         var saved = true;
         var personListCoords = [...this.state.personClassCoordinates]
+        var personList = [...this.state.personList]
 
         personListCoords.map(item => {
           var coords = {x: item.screen.x / this.state.windowSize.width, y: item.screen.y / this.state.windowSize.height}; // calculates new coords
 
-          let formData = new FormData();
-          formData.append('x', coords.x);
-          formData.append('y', coords.y);
-          axios
-          .patch(`http://localhost:8000/api/familytreepersons/${item.id}/`, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              Authorization: `JWT ${localStorage.getItem('token')}`
-            }
-          })
-            .catch(err => {
-              console.log(err);
-              saved = false;
-              ShowNotification(NOTIFY.ERROR);
+          if(personList.findIndex(el => el.id === item.id) !== -1){
+            let formData = new FormData();
+            formData.append('x', coords.x);
+            formData.append('y', coords.y);
+            axios
+            .patch(`http://localhost:8000/api/familytreepersons/${item.id}/`, formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: `JWT ${localStorage.getItem('token')}`
+              }
             })
+              .catch(err => {
+                console.log(err);
+                saved = false;
+                ShowNotification(NOTIFY.ERROR);
+              })
+          }          
         })
         setTimeout(() => {
           this.setState({saving: false});
@@ -298,6 +319,7 @@
 
       // delete whole familytree; since relationships are connected w/ persons, we don't need to delete any relationship. Just persons.
       deleteEverything(){
+        this.toggleConfirmModal();
         axios
           .get("http://localhost:8000/api/familytreepersons/", {
             headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
@@ -336,6 +358,7 @@
             getCoordinates={this.getCoordinates.bind(this)}
             renderRelationships={this.renderRelationships.bind(this)}
             refreshRelationships={this.refreshRelationshipList.bind(this)}
+            toggleConfirmModal={this.toggleConfirmModal.bind(this)}
           />
         ));
       };
@@ -409,6 +432,16 @@
                   onSave={this.handleSubmitRelationship}
                 />
               ) : null}
+              {this.state.ModalConfirm ? (
+                <ModalConfirm 
+                  header={this.state.activeConfirmData.header}
+                  content={this.state.activeConfirmData.content}
+                  confirmText={this.state.activeConfirmData.confirmText}
+                  cancelText={this.state.activeConfirmData.cancelText}
+                  toggle={this.toggleConfirmModal}
+                  onConfirm={this.state.activeConfirmData.onConfirm}
+                />
+              ) : null}
             </div>
             <div className="buttons">
               <div className="download-buttons">
@@ -417,13 +450,13 @@
                 </button>
               </div>
               <div className="operating-buttons">
-                <button onClick={() => {if(window.confirm("Are you sure you want to delete WHOLE Family Tree?")) this.deleteEverything()}} className="btn btn-outline-danger btn-circle btn-xl">
+                <button onClick={() => this.toggleConfirmModal("Delete Familytree", "Are you sure you want to delete WHOLE familytree?", "Delete", "Cancel", () => this.deleteEverything())} className="btn btn-outline-danger btn-circle btn-xl">
                   <i className="fas fa-times"></i>
                 </button>
                 <button onClick={this.resetCoords.bind(this)} className="btn btn-outline-warning btn-circle btn-xl">
                   <i className="fas fa-redo"></i>
                 </button>
-                <button disabled={this.state.saving} onClick={() => {if(window.confirm("Are you sure you want to save the coordinates?")) this.saveCoords()}} className="btn btn-outline-info btn-circle btn-xl">
+                <button disabled={this.state.saving} onClick={() => this.toggleConfirmModal("Save coords", "Are you sure you want to save coords for every person in Familytree?", "Save", "Cancel", () => this.saveCoords())} className="btn btn-outline-info btn-circle btn-xl">
                   <i className="far fa-save"></i>
                 </button>
                 <button onClick={this.createPerson} className="btn btn-outline-success btn-circle btn-xl">
