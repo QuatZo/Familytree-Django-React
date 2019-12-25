@@ -8,6 +8,7 @@
     import Relationship from "./components/relationship/Relationship"
     import ModalRelationship from "./components/relationship/RelationshipModal";
     import ModalPerson from "./components/person/PersonAddModal";
+    import ModalFirstTime from './components/auth/FirstTimeModal';
     import {NOTIFY} from './components/Enums.ts';
     import ShowNotification from './components/notification/Notification';
     import './Familytree.css';
@@ -38,12 +39,20 @@
       }  
 
       componentDidMount(){
+        this.checkNewUserStatus();
         this.updateWindowDimensions();
         window.addEventListener('resize', this.updateWindowDimensions);
       }
 
       componentWillUnmount() {
         window.removeEventListener('resize', this.updateWindowDimensions);
+      }
+
+      checkNewUserStatus(){
+        var registerDate = new Date(localStorage.getItem('date_joined'));
+        if(Date.now() - registerDate <= 86400000){ // 24hrs period since account registration
+          this.toggleFirstTimeModal();
+        }
       }
 
       updateWindowDimensions() {
@@ -79,6 +88,9 @@
           });
       };
 
+      toggleFirstTimeModal = () => {
+        this.setState({ ModalFirstTime: !this.state.ModalFirstTime });
+      }
       // toggles Person Add modal
       togglePersonModal = () => {
         this.setState({ modal: !this.state.modal });
@@ -395,6 +407,12 @@
                 {this.state.relationships}
               </svg>
               {this.renderItems()}     
+              {this.state.ModalFirstTime ? (
+                <ModalFirstTime
+                  toggle={this.toggleFirstTimeModal}
+                  onSave={this.toggleFirstTimeModal}
+                />
+              ) : null}
               {this.state.modal ? (
                 <ModalPerson
                  activeItem={this.state.activePersonData}

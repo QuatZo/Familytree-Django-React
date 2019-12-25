@@ -121,6 +121,8 @@
           .then(res => {
             localStorage.setItem('token', res.data.token); // store user's login token
             localStorage.setItem('user_id', res.data.user.id); // store user's id
+            localStorage.setItem('date_joined', res.data.user.date_joined) // store user's registration date
+
             this.setState({
               logged_in: true,
               displayed_form: '', // familytree page
@@ -156,6 +158,7 @@
       handle_logout = () => {
         localStorage.removeItem('token'); // remove token from local storage
         localStorage.removeItem('user_id'); // remove user's id from local storage
+        localStorage.removeItem('date_joined'); // remove registration date from local storage
         this.loginCounter = 0; // let website know that no one is logged in by using this browser
         this.setState({ // reset all variables
           logged_in: false, 
