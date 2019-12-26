@@ -65,6 +65,7 @@
 
       // handles deletion of existing Person
       handleDelete = item => {
+        this.props.toggleConfirmModal();
         // Django's foreign key & on_delete param handles the deletion of relationships, so it's no longer needed to do this manually
         // Delete Relationship function hasn't been deleted from familytree.js, because it'll probably be used for single relationship delete
         // this.props.deleteRelationships(item.id)
@@ -142,7 +143,7 @@
                       <i className="fas fa-user-edit"></i>
                     </button>
                     <button
-                      onClick={() => {if(window.confirm("Are you sure you want to delete " + this.props.person.first_name + " " + this.props.person.last_name + " with connected relationships from Familytree?")) this.handleDelete(this.props.person)}}
+                      onClick={() => this.props.toggleConfirmModal("Delete Person", "Are you sure you want to delete " + this.props.person.first_name + " " + this.props.person.last_name + " with connected relationships from Familytree?", "Delete", "Cancel", () => this.handleDelete(this.props.person))}
                       className="btn btn-outline-danger btn-xl personbutton"
                     >
                       <i className="fas fa-user-minus"></i>
@@ -157,6 +158,7 @@
                 toggle={this.toggle}
                 onSave={this.handleSubmit}
                 refreshRelationships={this.props.refreshRelationships.bind(this)}
+                toggleConfirmModal={this.props.toggleConfirmModal.bind(this)}
               />
             ) : null}
           </React.Fragment>
