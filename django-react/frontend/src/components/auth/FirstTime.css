@@ -1,0 +1,18 @@
+/* First Time Modal */
+
+/* Whole modal body */
+.first-time-body {
+  text-align: justify;
+}
+
+/* Modal body headers */
+.header {
+  text-align: center;
+  margin: 5px;
+  font-family: monospace
+}
+
+/* Modal List */
+.first-time-list li{
+  margin: 0 !important;
+}

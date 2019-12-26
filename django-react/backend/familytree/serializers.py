@@ -7,7 +7,7 @@ from .models import FamilytreePerson, FamilytreeRelationship, FamilytreeMileston
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username')
+        fields = ('id', 'username', 'date_joined')
 
 class UserSerializerWithToken(serializers.ModelSerializer):
     token = serializers.SerializerMethodField()
