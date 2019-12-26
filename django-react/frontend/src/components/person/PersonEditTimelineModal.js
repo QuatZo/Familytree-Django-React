@@ -128,7 +128,7 @@
               extras: {
                 together_with: togetherWithNames,
               },
-              onClick: () => { this.state.deleteMode ? this.handleDeleteMilestone(item) : this.editMilestone(item) }
+              onClick: () => { this.state.deleteMode ? this.props.toggleConfirmModal("Delete Milestone", "Are you sure you want to delete this milestone?", "Delete", "Cancel", () => this.handleDeleteMilestone(item)) : this.editMilestone(item) }
             });
           });
         })
@@ -160,7 +160,7 @@
                   relationship: item.relationships,
                   together_with: togetherWithNames,
                 },
-                onClick: () => { this.state.deleteMode ? this.handleDeleteRelationship(item) : this.editRelationship(item)}
+                onClick: () => { this.state.deleteMode ? this.props.toggleConfirmModal("Delete Relationship", "Are you sure you want to delete this relationship?", "Delete", "Cancel", () => this.handleDeleteRelationship(item)) : this.editRelationship(item)}
               })
             })
           })
@@ -192,7 +192,7 @@
                     relationship: item.relationships,
                     together_with: togetherWithNames,
                   },
-                  onClick: () => { this.state.deleteMode ? this.handleDeleteRelationship(item) : this.editRelationship(item)}
+                  onClick: () => { this.state.deleteMode ? this.props.toggleConfirmModal("Delete Relationship", "Are you sure you want to delete this relationship?", "Delete", "Cancel", () => this.handleDeleteRelationship(item)) : this.editRelationship(item)}
                 })
               });
               this.setState({timelineData: data});
@@ -326,6 +326,7 @@
 
       // handles deletetion of existing Milestone
       handleDeleteMilestone = item => {
+        this.props.toggleConfirmModal();
         axios
           .delete(`http://localhost:8000/api/familytreemilestone/${item.id}`, {
             headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
@@ -340,6 +341,7 @@
 
       // handles deletion of existing Relationship
       handleDeleteRelationship = item => {
+        this.props.toggleConfirmModal();
         axios
           .delete(`http://localhost:8000/api/familytreerelationship/${item.id}`, {
             headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
