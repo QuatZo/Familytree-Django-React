@@ -14,7 +14,7 @@ class FamilytreePerson(models.Model):
     last_name = models.CharField(max_length=50) # last name
     birth_date = models.CharField(max_length=10, blank=True, default='') # date of birth
     birth_place = models.CharField(max_length=50, blank=True, default='') # place of birth
-    avatar = models.ImageField(upload_to='avatars', default='avatars/0.png') # avatar (IMAGE)
+    avatar = models.ImageField(upload_to='avatars') # avatar (IMAGE)
     
     living = 'living'
     deceased = 'deceased'
@@ -75,7 +75,7 @@ class FamilytreeMilestone(models.Model):
     date = models.DateField() # Date of milestone (post) field
     text = models.CharField(max_length=512, blank=True) # description, can be blank
     title = models.CharField(max_length=64) # title
-    image = models.FileField(upload_to='milestones', default='milestones/default.jpg', validators=[FileExtensionValidator(extensions)]) # media (MUST BE W/ ABOVE EXTENSION)
+    image = models.FileField(upload_to='milestones', validators=[FileExtensionValidator(extensions)]) # media (MUST BE W/ ABOVE EXTENSION)
 
     def __str__(self):
         return self.title + ": " + self.text
