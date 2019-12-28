@@ -14,7 +14,7 @@ class FamilytreePerson(models.Model):
     last_name = models.CharField(max_length=50) # last name
     birth_date = models.CharField(max_length=10, blank=True, default='') # date of birth
     birth_place = models.CharField(max_length=50, blank=True, default='') # place of birth
-    avatar = models.ImageField(upload_to='avatars', default='avatars/0.png') # avatar (IMAGE)
+    avatar = models.ImageField(upload_to='avatars') # avatar (IMAGE)
     
     living = 'living'
     deceased = 'deceased'
@@ -33,7 +33,7 @@ class FamilytreePerson(models.Model):
     x = models.FloatField(default=0) # coords ratio: x
     y = models.FloatField(default=0) # coords ratio: y
 
-    def _str_(self):
+    def __str__(self):
         return self.first_name + " " + self.last_name 
 
 class FamilytreeRelationship(models.Model):
@@ -65,8 +65,8 @@ class FamilytreeRelationship(models.Model):
     relationships = [(father, 'father'),(mother, 'mother'),(brother, 'brother'),(sister, 'sister'), (son, 'son'), (daughter, 'daughter'), (adoptive_son, 'adoptive son'), (adoptive_daughter, 'adoptive daughter'), (surrogate_father, 'surrogate father'), (surrogate_mother, 'surrogate mother'), (stepbrother, 'stepbrother'), (stepsister,'stepsister'), (stepdaughter, 'stepdaughter'), (stepson, 'stepson')]
     relationships = models.CharField(max_length = 35,choices = relationships, default = father) # choice 
 
-    def _str_(self):
-        return self.relationships
+    def __str__(self):
+        return self.title + ": " + self.description
 
 class FamilytreeMilestone(models.Model):
     extensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'raw', 'mp4', 'webm', 'wmv', 'avi', 'wav', 'mp3'] # supported media extensions
@@ -75,7 +75,7 @@ class FamilytreeMilestone(models.Model):
     date = models.DateField() # Date of milestone (post) field
     text = models.CharField(max_length=512, blank=True) # description, can be blank
     title = models.CharField(max_length=64) # title
-    image = models.FileField(upload_to='milestones', default='milestones/default.jpg', validators=[FileExtensionValidator(extensions)]) # media (MUST BE W/ ABOVE EXTENSION)
+    image = models.FileField(upload_to='milestones', validators=[FileExtensionValidator(extensions)]) # media (MUST BE W/ ABOVE EXTENSION)
 
-    def _str_(self):
-        return self.title
+    def __str__(self):
+        return self.title + ": " + self.text

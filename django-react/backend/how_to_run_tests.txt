@@ -1,0 +1,9 @@
+--- ALL TESTS ---
+1. add 'test_image.png', 'test_image_patch.png', 'test_media.mp4' and 'test_media_patch.mp4' to the /django-react/backend/media/ folder
+2. run 'test_python.bat located in /django-react/
+
+--- SPECIFIC TEST ---
+1. run CMD and go to the django-react folder
+2. pipenv shell
+3. cd backend
+4. python manage.py [testFileName] [className].[functionName]
