@@ -31,7 +31,7 @@ PERFECT_RELATIONSHIP_DATA = {
     'begin_date': '2019-09-07',
     'end_date': '2019-09-08',
     'descendant': True,
-    'relationships': 'mother'
+    'relationships': 'child'
 }
 PERFECT_MILESTONE_DATA = {
     'date': '2019-09-07',
@@ -54,7 +54,7 @@ MINIMUM_RELATIONSHIP_DATA = {
     'id_2': 2,
     'title': 'Test Relationship',
     'begin_date': '2019-09-07',
-    'relationships': 'mother'
+    'relationships': 'child'
 }
 MINIMUM_MILESTONE_DATA = {
     'date': '2019-09-07',
@@ -403,7 +403,7 @@ class APITest(APITestCase):
         user, token = self.pass_authorization()
 
         new_data = {
-            'relationships': 'stepsister',
+            'relationships': 'adopted-child',
         }
 
         self.client.credentials(HTTP_AUTHORIZATION='JWT {0}'.format(token))

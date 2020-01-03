@@ -126,7 +126,7 @@
           begin_date: "",
           end_date: null,
           descendant: false, // flag, if it's a 2-level relationship
-          relationships: 'father', // default value for select
+          relationships: 'married', // default value for select
         },
         ModalRelationship: !this.state.ModalRelationship });
       };

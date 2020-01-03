@@ -122,21 +122,24 @@
           color: this.props.relationship.color,
           points: pointsTemp,
           horizontal: sideCoords.horizontal,
+          descendant: this.props.relationship.descendant,
         });
 
         var reference = React.createRef(); // reference to relationship for Toolitp (relationship name on hover)
 
         this.setState({
           relationshipMarker: (relationshipPairList.map(item => ( // marker - arrow at the end of relationship
-            <marker 
-            id={'head_' + item.color.substring(1)} 
-            key={'head_' + item.color.substring(1)} 
-            orient="auto"
-            markerWidth='6' markerHeight='6'
-            refX={item.horizontal ? '3.2' : '0.1'} refY='3'
-            >
-              <path d='M0,0 V6 L3,3 Z' fill={item.color} stroke={item.color}/>
-            </marker>
+            item.descendant ? (
+              <marker 
+                id={'head_' + item.color.substring(1)} 
+                key={'head_' + item.color.substring(1)} 
+                orient="auto"
+                markerWidth='6' markerHeight='6'
+                refX={item.horizontal ? '3.2' : '0.1'} refY='3'
+              >
+                <path d='M0,0 V6 L3,3 Z' fill={item.color} stroke={item.color}/>
+              </marker>
+            ) : null
           ))),
           relationship: (relationshipPairList.map(item => ( // relationship
             <React.Fragment

@@ -63,6 +63,15 @@
       handleChange = (e) => {
         let { name, value } = e.target;
         const activeItem = { ...this.state.activeItem, [name]: value};
+        this.setState({ activeItem }, () => name === 'relationships' ? this.handleChangeDescendant(value) : null);
+      };
+
+      handleChangeDescendant = (value) => {
+        var twoLvl = ['niece/nephew', 'child', 'adopted child']
+        var activeItem = { ...this.state.activeItem, ["descendant"]: false};
+        if(twoLvl.indexOf(value) !== -1){
+          activeItem = { ...this.state.activeItem, ["descendant"]: true};
+        }
         this.setState({ activeItem });
       };
 
@@ -165,27 +174,23 @@
                     dropdownMode="select"/>
                 </FormGroup>
                 <FormGroup>
-                  <Label for="relationships">What's {this.getPerson(this.state.activeItem.id_1)} to the {this.getPerson(this.state.activeItem.id_2)}</Label>
+                  <Label for="relationships">What's {this.getPerson(this.state.activeItem.id_2)} to the {this.getPerson(this.state.activeItem.id_1)}</Label>
                   <select
                     className="form-control"
                     name = "relationships"
                     onChange={this.handleChange}
                     value={this.state.activeItem.relationships}
                   >
-                    <option value="father">Father</option>
-                    <option value="mother">Mother</option>
-                    <option value="brother">Brother</option>
-                    <option value="sister">Sister</option>
-                    <option value="son">Son</option>
-                    <option value="daughter">Daughter</option>
-                    <option value="adoptive son">Adoptive son</option>
-                    <option value="adoptive daughter">Adoptive daughter</option>
-                    <option value="surrogate father">Surrogate father</option>
-                    <option value="surrogate mother">Surrogate mother</option>
-                    <option value="stepbrother">Stepbrother</option>
-                    <option value="stepsister">Stepsister</option>
-                    <option value="stepson">Stepson</option>
-                    <option value="stepdaughter">Stepdaughter</option>
+                    <option value="married">Married</option>
+                    <option value="divorced">Divorced</option>
+                    <option value="fiance">Fiance</option>
+                    <option value="sibling">Sibling</option>
+                    <option value="stepsibling">Step Sibling</option>
+                    <option value="sibling-in-law">Sibling-in-law</option>
+                    <option value="cousin">Cousin</option>
+                    <option value="niece/nephew">Niece/Nephew</option>
+                    <option value="child">Child</option>
+                    <option value="adopted child">Adopted Child</option>
                   </select>
                 </FormGroup>
               </Form>

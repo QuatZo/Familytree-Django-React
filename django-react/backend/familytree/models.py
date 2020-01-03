@@ -47,23 +47,22 @@ class FamilytreeRelationship(models.Model):
     end_date = models.DateField(default=None, blank=True, null=True) # end date, can be blank & null, default = None(Null)
     descendant = models.BooleanField(default=False) # if it's a 2-level relationship
 
-    father = 'father'
-    mother = 'mother'
-    brother = 'brother'
-    sister = 'sister'
-    son = 'son'
-    daughter = 'daughter'
-    adoptive_son = 'adoptive son'
-    adoptive_daughter = 'adoptive daughter'
-    surrogate_father = 'surrogate father'
-    surrogate_mother = 'surrogate mother'
-    stepbrother = 'stepbrother'
-    stepsister = 'stepsister'
-    stepdaughter = 'stepdaughter'
-    stepson = 'stepson'
-
-    relationships = [(father, 'father'),(mother, 'mother'),(brother, 'brother'),(sister, 'sister'), (son, 'son'), (daughter, 'daughter'), (adoptive_son, 'adoptive son'), (adoptive_daughter, 'adoptive daughter'), (surrogate_father, 'surrogate father'), (surrogate_mother, 'surrogate mother'), (stepbrother, 'stepbrother'), (stepsister,'stepsister'), (stepdaughter, 'stepdaughter'), (stepson, 'stepson')]
-    relationships = models.CharField(max_length = 35,choices = relationships, default = father) # choice 
+    # one-level relations
+    married = 'married'
+    divorced = 'divorced'
+    fiance = 'fiance'
+    sibling = 'sibling'
+    step_sibling = 'stepsibling'
+    sibling_in_law = 'sibling-in-law'
+    cousin = 'cousin'
+    
+    # two-level relations
+    niece_nephew = 'niece/nephew'
+    child = 'child'
+    adopted_child = 'adopted child'
+    
+    relationships = [(married, 'married'), (divorced, 'divorced'), (fiance, 'fiance'), (sibling, 'sibling'), (step_sibling, 'stepsibling'), (sibling_in_law, 'sibling-in-law'), (cousin, 'cousin'), (niece_nephew, 'niece/nephew'), (child, 'child'), (adopted_child, 'adopted child')]
+    relationships = models.CharField(max_length = 35, choices = relationships, default = married) # choice 
 
     def __str__(self):
         return self.title + ": " + self.description
