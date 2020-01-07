@@ -21,13 +21,13 @@ class SignupForm extends React.Component {
 
   render() {
     return (
-      <div class="login-dark">
+      <div className="login-dark">
         <form method="post" onSubmit={e => this.props.handle_signup(e, this.state)}>
-            <h2 class="sr-only">Register Form</h2>
-            <div class="illustration"><i class="far fa-user"></i></div>
-            <div class="form-group">
+            <h2 className="sr-only">Register Form</h2>
+            <div className="illustration"><i className="far fa-user"></i></div>
+            <div className="form-group">
               <input 
-              class="form-control" 
+              className="form-control" 
               type="text" 
               name="username" 
               placeholder="Username" 
@@ -37,9 +37,9 @@ class SignupForm extends React.Component {
               autoFocus
               />
             </div>
-            <div class="form-group">
+            <div className="form-group">
               <input 
-              class="form-control" 
+              className="form-control" 
               type="password" 
               name="password" 
               placeholder="Password" 
@@ -48,7 +48,7 @@ class SignupForm extends React.Component {
               required
               />
             </div>
-            <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Register</button></div>
+            <div className="form-group"><button className="btn btn-primary btn-block" type="submit">Register</button></div>
           </form>
       </div>
     );

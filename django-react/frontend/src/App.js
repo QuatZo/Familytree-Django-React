@@ -2,6 +2,7 @@
 
     import React, { Component } from "react";
     import './App.css';
+    import './components/loading/Loading.css'
     import Nav from './components/nav/Nav';
     import LoginForm from './components/auth/LoginForm';
     import SignupForm from './components/auth/SignupForm';
@@ -224,42 +225,45 @@
               username={this.state.username}
             />
             {form}
-            {this.state.logged_in
-              ? !this.state.donePersonList ? (
+            {this.state.logged_in ? (
+              !this.state.donePersonList || !this.state.doneRelationshipList ? (
                 <h3>
                   <FadeIn>
                     <div className="loading">
-                      <h1 className="display-3">Fetching Persons</h1>
-                      {!this.state.loadingPersonList ? (
-                          <Lottie options={defaultOptionsLoading}/>
-                      ) : (
-                        <Lottie options={defaultOptionsLoaded}/>
-                      )}
+                      <div className="loadingPart">
+                        <h4 className="loadingText">Fetching Persons</h4>
+                        <div className="loadingAnimation">
+                          {!this.state.loadingPersonList ? (
+                              <Lottie options={defaultOptionsLoading} height={100} width={200}/>
+                          ) : (
+                            <Lottie options={defaultOptionsLoaded} height={100} width={200}/>
+                          )}
+                        </div>
+                      </div>
+                      <div className="loadingPart">
+                        <h4 className="loadingText">Fetching Relationships</h4>
+                        <div className="loadingAnimation">
+                          {!this.state.loadingRelationshipList ? (
+                            <Lottie options={defaultOptionsLoading} height={100} width={200}/>
+                          ) : (
+                            <Lottie options={defaultOptionsLoaded} height={100} width={200}/>
+                          )}
+                        </div>
+                      </div>
+                      
                     </div>
                   </FadeIn>
                 </h3>
-              ) : !this.state.doneRelationshipList ? (
-                <h3>
-                  <FadeIn>
-                    <div className="loading">
-                      <h1 className="display-3">Fetching Relationships</h1>
-                      {!this.state.loadingRelationshipList ? (
-                        <Lottie options={defaultOptionsLoading}/>
-                      ) : (
-                        <Lottie options={defaultOptionsLoaded}/>
-                      )}
-                    </div>
-                  </FadeIn>
-                </h3>
-              ): (
-                <React.Fragment>
-                  <Familytree 
-                  personList = {this.state.personList}
-                  relationshipList = {this.state.relationshipList}
-                  />
-                </React.Fragment>
-              )      
-              : 'Please, log in.'}
+              ) : (
+                    <React.Fragment>
+                      <Familytree 
+                      personList = {this.state.personList}
+                      relationshipList = {this.state.relationshipList}
+                      />
+                    </React.Fragment>
+                  )
+              ) : null
+            }
               <ToastContainer />
           </div>
         );
