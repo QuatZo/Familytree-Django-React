@@ -472,7 +472,7 @@
                 <button onClick={() => this.toggleConfirmModal("Delete Familytree", "Are you sure you want to delete WHOLE familytree?", "Delete", "Cancel", () => this.deleteEverything())} className="btn btn-outline-danger btn-circle btn-xl">
                   <i className="fas fa-times"></i>
                 </button>
-                <button onClick={this.resetCoords.bind(this)} className="btn btn-outline-warning btn-circle btn-xl">
+                <button onClick={this.resetCoords.bind(this)} className="btn btn-outline-secondary btn-circle btn-xl">
                   <i className="fas fa-redo"></i>
                 </button>
                 <button disabled={this.state.saving} onClick={() => this.toggleConfirmModal("Save coords", "Are you sure you want to save coords for every person in Familytree?", "Save", "Cancel", () => this.saveCoords())} className="btn btn-outline-info btn-circle btn-xl">
@@ -480,6 +480,9 @@
                 </button>
                 <button onClick={this.createPerson} className="btn btn-outline-success btn-circle btn-xl">
                   <i className="fas fa-plus"></i>
+                </button>
+                <button onClick={this.props.changeThemeMode} className="btn btn-outline-light btn-circle btn-xl">
+                  <i className="fa fa-moon"></i>
                 </button>
               </div>
             </div>

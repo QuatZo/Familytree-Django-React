@@ -21,8 +21,8 @@ class SignupForm extends React.Component {
 
   render() {
     return (
-      <div class="login-dark">
-        <form method="post" onSubmit={e => this.props.handle_signup(e, this.state)}>
+      <div class={this.props.theme}>
+        <form  method="post" onSubmit={e => this.props.handle_signup(e, this.state)}>
             <h2 class="sr-only">Register Form</h2>
             <div class="illustration"><i class="far fa-user"></i></div>
             <div class="form-group">

@@ -15,6 +15,7 @@
     import {NOTIFY} from './components/Enums.ts';
     import ShowNotification from './components/notification/Notification';
     
+    
     // options for animation, when API is loading
     const defaultOptionsLoading = {
         loop: true,
@@ -48,11 +49,22 @@
           displayed_form: localStorage.getItem('token') ? '' : 'login', // form to display
           logged_in: localStorage.getItem('token') ? true : false, // flag, if user is already logged in
           username: '',
+          backgroundColor: '#262626',
+          theme:"dark"
         };
       }
 
       loginCounter = 0; // it makes sure noone will log into 2 different accounts from one browser (probably simple flag should be enough)
 
+      changeThemeMode=()=>{
+        this.setState((prevState)=>{
+          return {
+            theme: prevState.theme==="dark" ? "light" : "dark" 
+          }
+        }
+        );
+          
+      }
       componentDidMount() {
         if (this.state.logged_in) { // if person is logged in, dont force user to relog
           axios
@@ -204,25 +216,40 @@
 
       // render page (nav bar + login/signup form if not logged in; else Familytree.js)
       render() {
+        //var them ="bg-light";
+        /*if(this.state.dark==true){
+          this.setState({
+            theme:"dark"
+          })
+
+        }else{
+          this.setState({
+            theme:"light"
+          })
+        }*/
+        
         let form;
         switch (this.state.displayed_form) {
           case 'login':
-            form = <LoginForm handle_login={this.handle_login} />;
+            form = <LoginForm handle_login={this.handle_login} dark={this.state.theme}/>;
             break;
           case 'signup':
-            form = <SignupForm handle_signup={this.handle_signup} />;
+            form = <SignupForm handle_signup={this.handle_signup} theme={this.state.theme}/>;
             break;
           default:
             form = null;
         }
+        
         return (
-          <div className="App">
+          <div className={"App-"+this.state.theme}>
             <Nav
               logged_in={this.state.logged_in}
               display_form={this.display_form}
               handle_logout={this.handle_logout}
               username={this.state.username}
-            />
+              dark={this.state.theme}
+              />
+            
             {form}
             {this.state.logged_in
               ? !this.state.donePersonList ? (
@@ -256,13 +283,15 @@
                   <Familytree 
                   personList = {this.state.personList}
                   relationshipList = {this.state.relationshipList}
+                  changeThemeMode={this.changeThemeMode}
                   />
                 </React.Fragment>
               )      
               : 'Please, log in.'}
               <ToastContainer />
           </div>
-        );
+          
+        );         
       }
     }
     export default App;

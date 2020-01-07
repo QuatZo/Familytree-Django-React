@@ -2,6 +2,16 @@
   height: 40vmin;
 }
 
+.App-light{
+  background-color:#b9c1c9;
+  height: 100%;
+}
+
+.App-dark{
+  background-color: #262626;
+  height: 100%;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -30,5 +40,5 @@
 
 /* Nav bar button */
 .nav_button{
-  margin-left: 10px;
+  margin-right: 10px;
 }

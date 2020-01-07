@@ -13,18 +13,28 @@ function Nav(props) {
   );
 
   const logged_in_nav = (
-    <React.Fragment>
-      <a className="navbar-brand" href="#"> | {props.username} | </a>
+
+    <div className="nav_buttons">
+      <button onClick={() => "#"} className="btn btn-secondary my-2 my-sm-0 disabled nav_button">User: {props.username}</button>
+      <button onClick={() => props.handle_logout('logout')} className="btn btn-outline-danger my-2 my-sm-0">Logout</button>
+    </div>
+   /* <React.Fragment>
+        <button onClick={"#"} className="btn btn-secondary my-2 my-sm-0 disabled nav_button">User: {props.username}</button>
         <button onClick={props.handle_logout} className="btn btn-outline-danger my-2 my-sm-0">Logout</button>
-    </React.Fragment>
+        
+    </React.Fragment>*/
   );
+
+
   return (
-    <nav className="navbar sticky-top navbar-dark bg-dark" id="nav">
+  
+    <nav className={"navbar sticky-top navbar-"+props.dark+" bg-"+props.dark} id="nav">
       <a className="navbar-brand" href="#">Familytree</a>
       {props.logged_in ? logged_in_nav : logged_out_nav}
     </nav>
       
   );
+
 }
 
 export default Nav;
@@ -32,5 +42,6 @@ export default Nav;
 Nav.propTypes = {
   logged_in: PropTypes.bool.isRequired,
   display_form: PropTypes.func.isRequired,
-  handle_logout: PropTypes.func.isRequired
+  handle_logout: PropTypes.func.isRequired,
+  dark: PropTypes.string.isRequired
 };

@@ -21,7 +21,7 @@ class LoginForm extends React.Component {
 
   render() {
     return (
-      <div className="login-dark">
+      <div className={this.props.dark}>
         <form method="post" onSubmit={e => this.props.handle_login(e, this.state)}>
             <h2 className="sr-only">Login Form</h2>
             <div className="illustration"><i className="far fa-user"></i></div>
@@ -58,5 +58,6 @@ class LoginForm extends React.Component {
 export default LoginForm;
 
 LoginForm.propTypes = {
-  handle_login: PropTypes.func.isRequired
+  handle_login: PropTypes.func.isRequired,
+  dark: PropTypes.bool.isRequired
 };

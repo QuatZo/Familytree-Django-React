@@ -5,11 +5,13 @@
   width: 100%;
   position: fixed;
   padding: 5px;
-  background: #262626;
-  color: white;
   z-index: 1;
   visibility: visible !important;
+  background: #262626;
+  color: white;
 }
+
+
 
 /* Person IMG */
 .person img{
@@ -35,6 +37,7 @@
   position: fixed;
   z-index: 1;
   visibility: hidden;
+  
 }
 
 /* Person buttons */
