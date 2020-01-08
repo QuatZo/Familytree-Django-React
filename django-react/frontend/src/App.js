@@ -73,25 +73,31 @@
       componentDidUpdate(){
         if (this.loginCounter < 1 && this.state.logged_in && !this.state.doneRelationshipList && !this.state.donePersonList){
           this.loginCounter += 1;
-          setTimeout(() => {
-            axios
-              .get("http://localhost:8000/api/familytreepersons/", {
-                headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
-              })
-              .then(res => this.setState({ personList: res.data }))
-              .then(() => {
-                  this.setState({ loadingPersonList: true });
-                  setTimeout(() => {
-                    this.fetchRelationshipList();
-                  }, 1000);
-              });
-          }, 1200);
+          
+          this.fetchPersonList();
+          this.fetchRelationshipList();
         }
+      }
+
+      // get list of Persons from API, while loading page
+      fetchPersonList = () => {
+        setTimeout(() => {
+          axios
+            .get("http://localhost:8000/api/familytreepersons/", {
+              headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
+            })
+            .then(res => this.setState({ personList: res.data }))
+            .then(() => {
+                this.setState({ loadingPersonList: true });
+                setTimeout(() => {
+                  this.setState({ donePersonList: true });
+              }, 1000); // miliseconds AFTER Person List loading is done (1s)
+            });
+        }, 1800); // miliseconds AFTER Person List loading should be called (1.8s)
       }
 
       // get list of Relationships from API, while loading page
       fetchRelationshipList = () => {
-        this.setState({ donePersonList: true });
         setTimeout(() => {
         axios
           .get("http://localhost:8000/api/familytreerelationship/", {
@@ -102,9 +108,9 @@
             this.setState({ loadingRelationshipList: true });
             setTimeout(() => {
                 this.setState({ doneRelationshipList: true });   
-            }, 1000);
+            }, 1000); // miliseconds AFTER Relationship List loading is done (1s)
           });
-        }, 1200);
+        }, 1000); // miliseconds AFTER Person List loading should be called (1s)
       }
 
       // check in API, if provided credentials are correct
@@ -180,27 +186,6 @@
         this.setState({
           displayed_form: form
         });
-      };
-
-      // refresh Person's list
-      refreshPersonList = () => {
-        axios
-          .get("http://localhost:8000/api/familytreepersons/", {
-            headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
-          })
-          .then(res => this.setState({ personList: res.data }))
-          .then(() => console.log(this.state.user_id))
-          .catch(err => ShowNotification(NOTIFY.ERROR));
-      };
-
-      // refresh Relationship's list
-      refreshRelationshipList = () => {
-        axios
-        .get("http://localhost:8000/api/familytreerelationship/", {
-          headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
-        })
-          .then(res => this.setState({ relationshipList: res.data }))
-          .catch(err => ShowNotification(NOTIFY.ERROR));
       };
 
       // render page (nav bar + login/signup form if not logged in; else Familytree.js)
