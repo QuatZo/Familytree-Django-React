@@ -465,7 +465,7 @@
             </div>
             <div className="buttons">
               <div className="download-buttons">
-                <button onClick={() => this.downloadPDF()} className="btn btn-outline-secondary btn-circle btn-xl">
+                <button onClick={() => this.downloadPDF()} className={this.props.theme==="dark"? "btn btn-outline-light btn-circle btn-xl":"btn btn-outline-secondary btn-circle btn-xl"}>
                   <i className="fas fa-download"></i>
                 </button>
               </div>
@@ -482,8 +482,8 @@
                 <button onClick={this.createPerson} className="btn btn-outline-success btn-circle btn-xl">
                   <i className="fas fa-plus"></i>
                 </button>
-                <button onClick={this.props.changeThemeMode} className="btn btn-outline-secondary btn-circle btn-xl">
-                  <i className="fa fa-moon"></i>
+                <button onClick={this.props.changeThemeMode} className={this.props.theme==="dark"? "btn btn-outline-light btn-circle btn-xl":"btn btn-outline-secondary btn-circle btn-xl"}>
+                  <i className={this.props.theme==="dark"?"fas fa-sun":"fa fa-moon"}></i>
                 </button>
               </div>
             </div>
