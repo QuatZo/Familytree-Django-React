@@ -101,13 +101,14 @@
         const errors = this.validate(this.state.activeItem.title, this.state.activeItem.date, this.state.activeItem.person_id, this.file);
         const isEnabled = !Object.keys(errors).some(x => errors[x]); // button is disables as long as error exists
         return (
-          <Modal isOpen={true} toggle={toggle}>
-            <ModalHeader toggle={toggle}> Milestone </ModalHeader>
-            <ModalBody>
+          <Modal className={"modal-open-"+this.props.theme} isOpen={true} toggle={toggle}>
+            <ModalHeader className={"modal-header-"+this.props.theme} toggle={toggle}> Milestone </ModalHeader>
+            <ModalBody className={"modal-body-"+this.props.theme}>
               <Form>
               <FormGroup>
                   <Label for="title">Title</Label>
                   <Input
+                    id={this.props.theme}
                     type="text"
                     name="title"
                     className={errors.title ? "error" : ""}
@@ -120,6 +121,7 @@
                 <FormGroup>
                   <Label for="text">Text</Label>
                   <Input
+                    id={this.props.theme}
                     type="text"
                     name="text"
                     className="form-control"
@@ -131,6 +133,7 @@
                 <FormGroup>
                   <Label for="date">Date</Label><br />
                   <DatePicker 
+                    id={this.props.theme}
                     name="date"
                     className={"form-control " + (errors.date ? "error" : "")}
                     value={this.state.activeItem.date}
@@ -144,6 +147,7 @@
                 <FormGroup>
                   <Label for="person_id">Persons {errors.person_id ? " (please, choose at least one person from the list)" : null}</Label><br />
                   <MultiSelect
+                    id={this.props.theme}
                     options={this.state.personSelectOptions}
                     className={"form-control " + (errors.person_id && this.state.activeItem.id === undefined ? "error" : "")}
                     selected={this.state.activeItem.person_id}
@@ -161,6 +165,7 @@
                   <FormGroup>
                     <Label for="imageUrl">Image/Movie</Label>
                     <Input
+                      id={this.props.theme}
                       type="file"
                       name="imageUrl"
                       className={errors.file ? "error" : ""}
@@ -170,7 +175,7 @@
                   </FormGroup>
               </Form>
             </ModalBody>
-            <ModalFooter>
+            <ModalFooter className={"modal-footer-"+this.props.theme}>
               <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem, this.file)}>
                 Save
               </Button>

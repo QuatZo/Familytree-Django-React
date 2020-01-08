@@ -410,15 +410,17 @@
         return (
           <React.Fragment>
             <Modal 
+              className={"modal-open-"+this.props.theme}
               isOpen={true} 
               toggle={toggle} 
               size="xl"
             >
-              <ModalHeader toggle={toggle}> 
+              <ModalHeader className={"modal-header-"+this.props.theme} toggle={toggle}> 
                 Person
                 <Form>
                   <FormGroup>
                     <Input
+                    id={this.props.theme}
                     type="number"
                     name="user_id"
                     value={localStorage.getItem('user_id')}
@@ -432,6 +434,7 @@
                       <FormGroup>
                         <Label for="first_name">First Name</Label>
                         <Input
+                          id={this.props.theme}
                           type="text"
                           name="first_name"
                           className={errors.first_name?"error":""}
@@ -446,6 +449,7 @@
                       <FormGroup>
                         <Label for="last_name">Last Name</Label>
                         <Input
+                          id={this.props.theme}
                           type="text"
                           name="last_name"
                           className={errors.last_name?"error":""}
@@ -460,6 +464,7 @@
                       <FormGroup>
                         <Label for="sex_choices">Sex</Label>
                         <select
+                          id={this.props.theme}
                           className="form-control"
                           name = "sex_choices"
                           value={this.state.activeItem.sex_choices}
@@ -477,6 +482,7 @@
                       <FormGroup>
                         <Label for="status_choices">Status of life</Label>
                         <select
+                          id={this.props.theme}
                           className="form-control"
                           name = "status_choices"
                           value={this.state.activeItem.status_choices}
@@ -492,6 +498,7 @@
                       <FormGroup>
                         <Label for="birth_date">Birth Date</Label><br />
                         <DatePicker 
+                          id={this.props.theme}
                           className="form-control"
                           name="birth_date"
                           value={this.state.activeItem.birth_date}
@@ -507,6 +514,7 @@
                       <FormGroup>
                         <Label for="birth_place">Birthplace</Label>
                         <Input
+                          id={this.props.theme}
                           type="text"
                           name="birth_place"
                           value={this.state.activeItem.birth_place}
@@ -521,6 +529,7 @@
                     <FormGroup style={{display: 'flex'}}>
                       <Label for="avatar">Change Avatar</Label>
                       <Input
+                        id={this.props.theme}
                         type="file"
                         name="avatar"
                         onChange={this.handleChangeFile}
@@ -546,13 +555,13 @@
                 </Form>
               </ModalHeader>
               {this.state.timelineData.length < 1 ? null : 
-              <ModalBody>
+              <ModalBody className={"modal-body-"+this.props.theme}>
                 <div className="personModalTimeline">
                   <Timeline events={this.state.timelineData} customComponents={{header: CustomHeader, imageBody: CustomImageBody, textBody: CustomTextBody}}/>
                 </div>
               </ModalBody>
               }
-              <ModalFooter>
+              <ModalFooter className={"modal-footer-"+this.props.theme}>
                 <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem, this.file)}>
                   Save
                 </Button>
@@ -571,6 +580,7 @@
                 activeItem={this.state.activeRelationship}
                 toggle={this.toggleRelationshipModal}
                 onSave={this.handleSubmitRelationship}
+                theme={this.props.theme}
               />
             ) : null}
           </React.Fragment>

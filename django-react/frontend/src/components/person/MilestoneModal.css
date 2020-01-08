@@ -53,12 +53,6 @@
     
 }
 
-.dark-file{
-    border: 1px solid #ced4da;
-}
-
-
-
 
 
 /*light*/
@@ -99,13 +93,4 @@
 
 #light{
     background-color: white;
-    height: calc(1.5em + .75rem + 2px);
-    color: #495057;
-    border-radius: .25rem;
-    width: 100%;
-    
-}
-
-.light-file{
-    border: 1px solid #ced4da;
 }

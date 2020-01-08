@@ -27,9 +27,9 @@
       render() {
         const { toggle, onSave } = this.props;
         return (
-          <Modal isOpen={true} toggle={toggle} size="lg">
-            <ModalHeader toggle={toggle}> Welcome to the Familytree website! </ModalHeader>
-            <ModalBody className="first-time-body">
+          <Modal className={"modal-open-"+this.props.theme} isOpen={true} toggle={toggle} size="lg">
+            <ModalHeader className={"modal-header-"+this.props.theme} toggle={toggle}> Welcome to the Familytree website! </ModalHeader>
+            <ModalBody className={"first-time-body modal-body-"+this.props.theme}>
               We are really proud you did create an account. You'll see this message everytime you log-in/refresh page for 24hrs since account registration. Please, let us introduce our website.<br/><br/>
               <h1 className="header">Student Project</h1>
               You need to know that this is a student project and we <b>DO NOT</b> carry responsibility for <b>ANY data leaks</b>. This project is not meant to be used in Production. <br/><br/>
@@ -69,7 +69,7 @@
               <br /><br />
               <b>CAUTION: </b> We want to remind you that it's a student's project, so it's not meant to be in production. Any data leaks, bugs & shortcomings are possible and we are really sorry for them to occur.
             </ModalBody>
-            <ModalFooter>
+            <ModalFooter className={"modal-footer-"+this.props.theme}>
               <Button color="success" onClick={() => onSave()}>
                 I understand
               </Button>

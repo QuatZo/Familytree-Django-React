@@ -172,7 +172,7 @@
                     id={this.props.theme}
                     type="file"
                     name="avatar"
-                    className={errors.file ? "error" : ""}
+                    className={errors.file ? "error" : this.props.theme+"-file"}
                     onBlur={this.handleBlur('avatar')}
                     onChange={this.handleChangeFile}
                   />

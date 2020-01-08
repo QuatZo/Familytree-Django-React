@@ -159,6 +159,7 @@
                 onSave={this.handleSubmit}
                 refreshRelationships={this.props.refreshRelationships.bind(this)}
                 toggleConfirmModal={this.props.toggleConfirmModal.bind(this)}
+                theme={this.props.theme}
               />
             ) : null}
           </React.Fragment>
