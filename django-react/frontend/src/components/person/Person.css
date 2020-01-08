@@ -7,12 +7,19 @@
   padding: 5px;
   z-index: 1;
   visibility: visible !important;
+}
+
+.light{
+  background: #d0d3d3;
+  color: black;
+  border: 10px 10px 10px 10px !important;
+  border-color: rgb(104, 101, 101) !important;
+}
+.dark{
   background: #262626;
   color: white;
 }
-
-
-
+ 
 /* Person IMG */
 .person img{
   width: 100%;
@@ -37,7 +44,6 @@
   position: fixed;
   z-index: 1;
   visibility: hidden;
-  
 }
 
 /* Person buttons */

@@ -1,11 +1,11 @@
 /* Login container */
-.dark {
+.login-dark {
   height:1000px;
   position:relative;
 }
 
 /* Login form */
-.dark form {
+.login-dark form {
   max-width:320px;
   width:90%;
   background-color:#343a40;
@@ -20,7 +20,7 @@
 }
 
 /* Illustration (fa-fa image) */
-.dark .illustration {
+.login-dark .illustration {
   text-align:center;
   padding:15px 0 20px;
   font-size:100px;
@@ -28,7 +28,7 @@
 }
 
 /* Form fields */
-.dark form .form-control {
+.login-dark form .form-control {
   background:none;
   border:none;
   border-bottom:1px solid #434a52;
@@ -39,7 +39,7 @@
 }
 
 /* Form buttons */
-.dark form .btn-primary {
+.login-dark form .btn-primary {
   background:#2f6ec2;
   border:none;
   border-radius:4px;
@@ -51,13 +51,13 @@
 }
 
 /* Form buttons on hover & active*/
-.dark form .btn-primary:hover, .login-dark form .btn-primary:active {
+.login-dark form .btn-primary:hover, .login-dark form .btn-primary:active {
   background:#214a80;
   outline:none;
 }
 
 /* Form 'Forgot password' button */
-.dark form .forgot {
+.login-dark form .forgot {
   display:block;
   text-align:center;
   font-size:12px;
@@ -67,26 +67,26 @@
 }
 
 /* Form 'Forgot password' button on hover & active */
-.dark form .forgot:hover, .login-dark form .forgot:active {
+.login-dark form .forgot:hover, .login-dark form .forgot:active {
   opacity:1;
   text-decoration:none;
 }
 
 /* Form buttons active */
-.dark form .btn-primary:active {
+.login-dark form .btn-primary:active {
   transform:translateY(1px);
 }
 
 
 
 /* Login container */
-.light {
+.login-light {
   height:1000px;
   position:relative;
 }
 
 /* Login form */
-.light form {
+.login-light form {
   max-width:320px;
   width:90%;
   background-color:#f8f9fa;
@@ -101,7 +101,7 @@
 }
 
 /* Illustration (fa-fa image) */
-.light .illustration {
+.login-light .illustration {
   text-align:center;
   padding:15px 0 20px;
   font-size:100px;
@@ -109,7 +109,7 @@
 }
 
 /* Form fields */
-.light form .form-control {
+.login-light form .form-control {
   background:none;
   border:none;
   border-bottom:1px solid #434a52;
@@ -120,7 +120,7 @@
 }
 
 /* Form buttons */
-.light form .btn-primary {
+.login-light form .btn-primary {
   background:#2f6ec2;
   border:none;
   border-radius:4px;
@@ -132,13 +132,13 @@
 }
 
 /* Form buttons on hover & active*/
-.light form .btn-primary:hover, .login-dark form .btn-primary:active {
+.login-light form .btn-primary:hover, .login-dark form .btn-primary:active {
   background:#214a80;
   outline:none;
 }
 
 /* Form 'Forgot password' button */
-.light form .forgot {
+.login-light form .forgot {
   display:block;
   text-align:center;
   font-size:12px;
@@ -148,13 +148,13 @@
 }
 
 /* Form 'Forgot password' button on hover & active */
-.light form .forgot:hover, .login-dark form .forgot:active {
+.login-light form .forgot:hover, .login-dark form .forgot:active {
   opacity:1;
   text-decoration:none;
 }
 
 /* Form buttons active */
-.light form .btn-primary:active {
+.login-light form .btn-primary:active {
   transform:translateY(1px);
 }
 

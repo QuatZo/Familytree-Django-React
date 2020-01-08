@@ -3,7 +3,7 @@
 }
 
 .App-light{
-  background-color:#b9c1c9;
+  background-color:#e5e7e9;
   height: 100%;
 }
 
@@ -36,9 +36,10 @@
 /* Nav bar buttons container*/
 .nav_buttons{
   display: inline-block;
+  
 } 
 
 /* Nav bar button */
 .nav_button{
-  margin-right: 10px;
+ margin-left: 5px;
 }

@@ -14,7 +14,7 @@
     import { ToastContainer} from 'react-toastify';
     import {NOTIFY} from './components/Enums.ts';
     import ShowNotification from './components/notification/Notification';
-    
+
     
     // options for animation, when API is loading
     const defaultOptionsLoading = {
@@ -49,7 +49,6 @@
           displayed_form: localStorage.getItem('token') ? '' : 'login', // form to display
           logged_in: localStorage.getItem('token') ? true : false, // flag, if user is already logged in
           username: '',
-          backgroundColor: '#262626',
           theme:"dark"
         };
       }
@@ -216,22 +215,11 @@
 
       // render page (nav bar + login/signup form if not logged in; else Familytree.js)
       render() {
-        //var them ="bg-light";
-        /*if(this.state.dark==true){
-          this.setState({
-            theme:"dark"
-          })
 
-        }else{
-          this.setState({
-            theme:"light"
-          })
-        }*/
-        
         let form;
         switch (this.state.displayed_form) {
           case 'login':
-            form = <LoginForm handle_login={this.handle_login} dark={this.state.theme}/>;
+            form = <LoginForm handle_login={this.handle_login} theme={this.state.theme}/>;
             break;
           case 'signup':
             form = <SignupForm handle_signup={this.handle_signup} theme={this.state.theme}/>;
@@ -247,7 +235,8 @@
               display_form={this.display_form}
               handle_logout={this.handle_logout}
               username={this.state.username}
-              dark={this.state.theme}
+              theme={this.state.theme}
+              changeThemeMode={this.changeThemeMode}
               />
             
             {form}
@@ -283,12 +272,14 @@
                   <Familytree 
                   personList = {this.state.personList}
                   relationshipList = {this.state.relationshipList}
-                  changeThemeMode={this.changeThemeMode}
+                  changeThemeMode = {this.changeThemeMode}
+                  theme = {this.state.theme}
                   />
                 </React.Fragment>
               )      
               : 'Please, log in.'}
               <ToastContainer />
+              
           </div>
           
         );         
