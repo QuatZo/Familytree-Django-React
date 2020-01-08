@@ -165,18 +165,13 @@
       // handles new Relationship submission
       handleSubmitRelationship = item => {
         this.toggleRelationshipModal();
-        const options = {
-          url: 'http://localhost:8000/api/familytreerelationship/',
-          content: item,
-          method: 'POST',
+        axios.post('http://localhost:8000/api/familytreerelationship/', item, {
           headers: {
             'Content-Type': 'application/json',
             Accept : 'application/json',
             Authorization: `JWT ${localStorage.getItem('token')}`
-          },
-          data: item
-        };
-        axios(options)
+          }
+        })
           .then(() => this.refreshRelationshipList())
           .then(() => ShowNotification(NOTIFY.ADD_RELATIONSHIP))
           .catch(err => {

@@ -109,15 +109,11 @@
       // check in API, if provided credentials are correct
       handle_login = (e, data) => {
         e.preventDefault();
-        const options = {
-          url: 'http://localhost:8000/token-auth/',
-          method: 'POST',
+        axios.post('http://localhost:8000/token-auth/', data, {
           headers: {
             'Content-Type': 'application/json'
-          },
-          data: data
-        };
-        axios(options)
+          }
+        })
           .then(res => {
             localStorage.setItem('token', res.data.token); // store user's login token
             localStorage.setItem('user_id', res.data.user.id); // store user's id
@@ -135,15 +131,12 @@
       // register user to website; throws error when username already exists
       handle_signup = (e, data) => {
         e.preventDefault();
-        const options = {
-          url: 'http://localhost:8000/users/',
-          method: 'POST',
+        
+        axios.post('http://localhost:8000/users/', data, {
           headers: {
             'Content-Type': 'application/json'
-          },
-          data: data
-        };
-        axios(options)
+          }
+        })
           .then(res => {
             this.setState({
               logged_in: false,
