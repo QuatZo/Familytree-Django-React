@@ -73,9 +73,9 @@
         const errors = this.validate(this.state.activeItem.first_name, this.state.activeItem.last_name, this.file);
         const isEnabled = !Object.keys(errors).some(x => errors[x]); // button is disabled as long as error exists
         return (
-          <Modal className="modal-open-dark" isOpen={true} toggle={toggle}>
-            <ModalHeader className="modal-header-dark" toggle={toggle}> Person </ModalHeader>
-            <ModalBody className="modal-body-dark">
+          <Modal className={"modal-open-"+this.props.theme} isOpen={true} toggle={toggle}>
+            <ModalHeader className={"modal-header-"+this.props.theme} toggle={toggle}> Person </ModalHeader>
+            <ModalBody className={"modal-body-"+this.props.theme}>
               <Form>
               <FormGroup >
                 <Input 
@@ -90,7 +90,7 @@
               <FormGroup>
                   <Label for="first_name">First Name</Label>
                   <Input
-                    id="dark"
+                    id={this.props.theme}
                     type="text"
                     name="first_name"
                     className={errors.first_name?"error":""}
@@ -104,7 +104,7 @@
                 <FormGroup>
                   <Label for="last_name">Last Name</Label>
                   <Input
-                    id="dark"
+                    id={this.props.theme}
                     type="text"
                     name="last_name"
                     className={errors.last_name?"error":""}
@@ -117,7 +117,7 @@
                 <FormGroup>
                   <Label for="birth_date">Birth Date</Label><br />
                   <DatePicker 
-                    id="dark"
+                    id={this.props.theme}
                     className="form-control"
                     name="birth_date"
                     value={this.state.activeItem.birth_date}
@@ -130,7 +130,7 @@
                 <FormGroup>
                   <Label for="status_choices">Status of life</Label>
                   <select
-                    id="dark"
+                    id={this.props.theme}
                     className="form-control"
                     name = "status_choices"
                     value={this.state.activeItem.status_choices}
@@ -144,7 +144,7 @@
                 <FormGroup>
                   <Label for="sex_choices">Sex</Label>
                   <select
-                    id="dark"
+                    id={this.props.theme}
                     className="form-control"
                     name = "sex_choices"
                     value={this.state.activeItem.sex_choices}
@@ -158,7 +158,7 @@
                 <FormGroup>
                   <Label for="birth_place">Birthplace</Label>
                   <Input
-                    id="dark"
+                    id={this.props.theme}
                     type="text"
                     name="birth_place"
                     value={this.state.activeItem.birth_place}
@@ -169,7 +169,7 @@
                 <FormGroup>
                   <Label for="avatar">Avatar</Label>
                   <Input
-                    id="dark"
+                    id={this.props.theme}
                     type="file"
                     name="avatar"
                     className={errors.file ? "error" : ""}
@@ -179,7 +179,7 @@
                 </FormGroup>
               </Form>
             </ModalBody>
-            <ModalFooter className="modal-footer-dark">
+            <ModalFooter className={"modal-footer-"+this.props.theme}>
               <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem, this.file)}>
                 Save
               </Button>

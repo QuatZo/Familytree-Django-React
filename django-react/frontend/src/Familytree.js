@@ -436,6 +436,7 @@
                 <ModalFirstTime
                   toggle={this.toggleFirstTimeModal}
                   onSave={this.toggleFirstTimeModal}
+                  theme={this.props.theme}
                 />
               ) : null}
               {this.state.modal ? (
@@ -443,6 +444,7 @@
                  activeItem={this.state.activePersonData}
                  toggle={this.togglePersonModal}
                  onSave={this.handleSubmitPerson}
+                 theme={this.props.theme}
                 />
               ) : null}
               {this.state.ModalRelationship ? (
@@ -450,6 +452,7 @@
                   activeItem={this.state.activeRelationship}
                   toggle={this.toggleRelationshipModal}
                   onSave={this.handleSubmitRelationship}
+                  theme={this.props.theme}
                 />
               ) : null}
               {this.state.ModalConfirm ? (
@@ -460,6 +463,7 @@
                   cancelText={this.state.activeConfirmData.cancelText}
                   toggle={this.toggleConfirmModal}
                   onConfirm={this.state.activeConfirmData.onConfirm}
+                  theme={this.props.theme}
                 />
               ) : null}
             </div>

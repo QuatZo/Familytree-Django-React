@@ -121,13 +121,14 @@
         const errors = this.validate(this.state.activeItem.title, this.state.activeItem.begin_date);
         const isEnabled = !Object.keys(errors).some(x => errors[x]); // button is disabled as long as error exists
         return (
-          <Modal isOpen={true} toggle={toggle}>
-            <ModalHeader toggle={toggle}> Relationship</ModalHeader>
-            <ModalBody>
+          <Modal className={"modal-open-"+this.props.theme} isOpen={true} toggle={toggle}>
+            <ModalHeader className={"modal-header-"+this.props.theme} toggle={toggle}> Relationship</ModalHeader>
+            <ModalBody className={"modal-body-"+this.props.theme}>
               <Form>
                 <FormGroup>
                   <Label for="title">Title</Label>
                   <Input
+                    id={this.props.theme}
                     type="text"
                     name="title"
                     className={errors.title?"error":""}
@@ -140,6 +141,7 @@
                 <FormGroup>
                   <Label for="description">Description</Label>
                   <Input
+                    id={this.props.theme}
                     type="text"
                     name="description"
                     className="form-control"
@@ -151,6 +153,7 @@
                 <FormGroup>
                   <Label for="begin_date">Begin Date</Label><br />
                   <DatePicker 
+                    id={this.props.theme}
                     name="begin_date"
                     className={"form-control " + (errors.begin_date ? "error" : "")}
                     value={this.state.activeItem.begin_date}
@@ -164,6 +167,7 @@
                 <FormGroup>
                   <Label for="end_date">End date (optional)</Label><br />
                   <DatePicker 
+                    id={this.props.theme}
                     name="end_date"
                     className="form-control"
                     value={this.state.activeItem.end_date}
@@ -176,6 +180,7 @@
                 <FormGroup>
                   <Label for="relationships">What's {this.getPerson(this.state.activeItem.id_2)} to the {this.getPerson(this.state.activeItem.id_1)}</Label>
                   <select
+                    id={this.props.theme}
                     className="form-control"
                     name = "relationships"
                     onChange={this.handleChange}
@@ -195,7 +200,7 @@
                 </FormGroup>
               </Form>
             </ModalBody>
-            <ModalFooter>
+            <ModalFooter className={"modal-footer-"+this.props.theme}>
               <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem)}>
                 Save
               </Button>
