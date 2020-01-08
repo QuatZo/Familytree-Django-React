@@ -76,3 +76,11 @@
 .login-dark form .btn-primary:active {
   transform:translateY(1px);
 }
+
+.password-req{
+  font-size: small;
+}
+
+.password-req ul li{
+  margin: 0;
+}
