@@ -7,6 +7,7 @@
     import Timeline from 'react-image-timeline';
     import 'react-datepicker/dist/react-datepicker.css';
     import './PersonEdit.css'
+    import '../Modal.css'
     import 'react-image-timeline/dist/timeline.css';
     import axios from "axios";
     import {NOTIFY} from '../Enums.ts';
@@ -410,16 +411,18 @@
         return (
           <React.Fragment>
             <Modal 
+              className={"modal-open-"+this.props.theme}
               isOpen={true} 
               toggle={toggle} 
               size="xl"
             >
-              <ModalHeader toggle={toggle}> 
+              <ModalHeader className={"modal-header-"+this.props.theme} toggle={toggle}> 
                 Person
                 <Form>
                   <FormGroup>
                     <Input
                     type="number"
+                    className={'form-control ' + this.props.theme}
                     name="user_id"
                     value={localStorage.getItem('user_id')}
                     hidden
@@ -434,7 +437,7 @@
                         <Input
                           type="text"
                           name="first_name"
-                          className={errors.first_name?"error":""}
+                          className={this.props.theme + (errors.first_name?" error":"")}
                           onBlur={this.handleBlur('first_name')}
                           value={this.state.activeItem.first_name}
                           onChange={this.handleChange}
@@ -448,7 +451,7 @@
                         <Input
                           type="text"
                           name="last_name"
-                          className={errors.last_name?"error":""}
+                          className={this.props.theme + (errors.last_name?" error":"")}
                           onBlur={this.handleBlur('last_name')}
                           value={this.state.activeItem.last_name}
                           onChange={this.handleChange}
@@ -460,7 +463,7 @@
                       <FormGroup>
                         <Label for="sex_choices">Sex</Label>
                         <select
-                          className="form-control"
+                          className={"form-control " + this.props.theme}
                           name = "sex_choices"
                           value={this.state.activeItem.sex_choices}
                           onChange={this.handleChange}
@@ -477,7 +480,7 @@
                       <FormGroup>
                         <Label for="status_choices">Status of life</Label>
                         <select
-                          className="form-control"
+                          className={"form-control " + this.props.theme}
                           name = "status_choices"
                           value={this.state.activeItem.status_choices}
                           onChange={this.handleChange}
@@ -492,7 +495,7 @@
                       <FormGroup>
                         <Label for="birth_date">Birth Date</Label><br />
                         <DatePicker 
-                          className="form-control"
+                          className={"form-control " + this.props.theme}
                           name="birth_date"
                           value={this.state.activeItem.birth_date}
                           onChange={ this.handleChangeDate} 
@@ -508,6 +511,7 @@
                         <Label for="birth_place">Birthplace</Label>
                         <Input
                           type="text"
+                          className={"form-control " + this.props.theme}
                           name="birth_place"
                           value={this.state.activeItem.birth_place}
                           onChange={this.handleChange}
@@ -522,6 +526,7 @@
                       <Label for="avatar">Change Avatar</Label>
                       <Input
                         type="file"
+                        className={this.props.theme}
                         name="avatar"
                         onChange={this.handleChangeFile}
                       />
@@ -546,13 +551,13 @@
                 </Form>
               </ModalHeader>
               {this.state.timelineData.length < 1 ? null : 
-              <ModalBody>
+              <ModalBody className={"modal-body-"+this.props.theme}>
                 <div className="personModalTimeline">
                   <Timeline events={this.state.timelineData} customComponents={{header: CustomHeader, imageBody: CustomImageBody, textBody: CustomTextBody}}/>
                 </div>
               </ModalBody>
               }
-              <ModalFooter>
+              <ModalFooter className={"modal-footer-"+this.props.theme}>
                 <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem, this.file)}>
                   Save
                 </Button>
@@ -564,6 +569,7 @@
                 activeItem={this.state.activeMilestone}
                 toggle={this.toggleMilestoneModal}
                 onSave={this.handleSubmitMilestone}
+                theme={this.props.theme}
               />
             ) : null}
             {this.state.ModalRelationship ? (
@@ -571,6 +577,7 @@
                 activeItem={this.state.activeRelationship}
                 toggle={this.toggleRelationshipModal}
                 onSave={this.handleSubmitRelationship}
+                theme={this.props.theme}
               />
             ) : null}
           </React.Fragment>

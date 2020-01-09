@@ -4,6 +4,7 @@
     import React, { Component } from "react";
     import DatePicker from "react-datepicker";
     import 'react-datepicker/dist/react-datepicker.css';
+    import '../Modal.css';
     
     import {
       Button,
@@ -70,12 +71,12 @@
         const errors = this.validate(this.state.activeItem.first_name, this.state.activeItem.last_name, this.file);
         const isEnabled = !Object.keys(errors).some(x => errors[x]); // button is disabled as long as error exists
         return (
-          <Modal isOpen={true} toggle={toggle}>
-            <ModalHeader toggle={toggle}> Person </ModalHeader>
-            <ModalBody>
+          <Modal className={"modal-open-"+this.props.theme} isOpen={true} toggle={toggle}>
+            <ModalHeader className={"modal-header-"+this.props.theme} toggle={toggle}> Person </ModalHeader>
+            <ModalBody className={"modal-body-"+this.props.theme}>
               <Form>
-              <FormGroup>
-                <Input
+              <FormGroup >
+                <Input 
                 type="number"
                 name="user_id"
                 value={localStorage.getItem('user_id')}
@@ -89,11 +90,12 @@
                   <Input
                     type="text"
                     name="first_name"
-                    className={errors.first_name?"error":""}
+                    className={this.props.theme + (errors.first_name?" error":"")}
                     onBlur={this.handleBlur('first_name')}
                     value={this.state.activeItem.first_name}
                     onChange={this.handleChange}
                     placeholder="First Name"
+                    
                   />
                 </FormGroup>
                 <FormGroup>
@@ -101,7 +103,7 @@
                   <Input
                     type="text"
                     name="last_name"
-                    className={errors.last_name?"error":""}
+                    className={this.props.theme + (errors.last_name?" error":"")}
                     onBlur={this.handleBlur('last_name')}
                     value={this.state.activeItem.last_name}
                     onChange={this.handleChange}
@@ -111,7 +113,7 @@
                 <FormGroup>
                   <Label for="birth_date">Birth Date</Label><br />
                   <DatePicker 
-                    className="form-control"
+                    className={"form-control " + this.props.theme}
                     name="birth_date"
                     value={this.state.activeItem.birth_date}
                     onChange={ this.handleChangeDate} 
@@ -123,7 +125,7 @@
                 <FormGroup>
                   <Label for="status_choices">Status of life</Label>
                   <select
-                    className="form-control"
+                    className={"form-control " + this.props.theme}
                     name = "status_choices"
                     value={this.state.activeItem.status_choices}
                     onChange={this.handleChange}
@@ -136,7 +138,7 @@
                 <FormGroup>
                   <Label for="sex_choices">Sex</Label>
                   <select
-                    className="form-control"
+                    className={"form-control " + this.props.theme}
                     name = "sex_choices"
                     value={this.state.activeItem.sex_choices}
                     onChange={this.handleChange}
@@ -151,6 +153,7 @@
                   <Input
                     type="text"
                     name="birth_place"
+                    className={"form-control " + this.props.theme}
                     value={this.state.activeItem.birth_place}
                     onChange={this.handleChange}
                     placeholder="Place of birth"
@@ -161,14 +164,14 @@
                   <Input
                     type="file"
                     name="avatar"
-                    className={errors.file ? "error" : ""}
+                    className={this.props.theme + (errors.file ? " error" : "")}
                     onBlur={this.handleBlur('avatar')}
                     onChange={this.handleChangeFile}
                   />
                 </FormGroup>
               </Form>
             </ModalBody>
-            <ModalFooter>
+            <ModalFooter className={"modal-footer-"+this.props.theme}>
               <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem, this.file)}>
                 Save
               </Button>

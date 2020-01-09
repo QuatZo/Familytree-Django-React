@@ -2,7 +2,7 @@
 /*eslint no-useless-computed-key: 0*/
 
     import React, { Component } from "react";
-    
+    import './Modal.css'
     import {
       Button,
       Modal,
@@ -25,14 +25,14 @@
       render() {
         const { toggle, onConfirm } = this.props;
         return (
-          <Modal isOpen={true} toggle={toggle}>
-            <ModalHeader toggle={toggle}> 
+          <Modal className={"modal-open-"+this.props.theme} isOpen={true} toggle={toggle}>
+            <ModalHeader className={"modal-header-"+this.props.theme} toggle={toggle}> 
               {this.state.header} 
             </ModalHeader>
-            <ModalBody> 
+            <ModalBody className={"modal-body-"+this.props.theme}> 
               {this.state.content} 
             </ModalBody>
-            <ModalFooter>
+            <ModalFooter className={"modal-footer-"+this.props.theme}>
               <Button onClick={toggle}>
                 {this.state.cancelText}
               </Button>
