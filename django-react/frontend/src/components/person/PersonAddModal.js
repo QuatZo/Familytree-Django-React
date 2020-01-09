@@ -4,9 +4,7 @@
     import React, { Component } from "react";
     import DatePicker from "react-datepicker";
     import 'react-datepicker/dist/react-datepicker.css';
-    import './PersonAddModal.css';
- 
-    
+    import '../Modal.css';
     
     import {
       Button,
@@ -90,10 +88,9 @@
               <FormGroup>
                   <Label for="first_name">First Name</Label>
                   <Input
-                    id={this.props.theme}
                     type="text"
                     name="first_name"
-                    className={errors.first_name?"error":""}
+                    className={this.props.theme + (errors.first_name?" error":"")}
                     onBlur={this.handleBlur('first_name')}
                     value={this.state.activeItem.first_name}
                     onChange={this.handleChange}
@@ -104,10 +101,9 @@
                 <FormGroup>
                   <Label for="last_name">Last Name</Label>
                   <Input
-                    id={this.props.theme}
                     type="text"
                     name="last_name"
-                    className={errors.last_name?"error":""}
+                    className={this.props.theme + (errors.last_name?" error":"")}
                     onBlur={this.handleBlur('last_name')}
                     value={this.state.activeItem.last_name}
                     onChange={this.handleChange}
@@ -117,8 +113,7 @@
                 <FormGroup>
                   <Label for="birth_date">Birth Date</Label><br />
                   <DatePicker 
-                    id={this.props.theme}
-                    className="form-control"
+                    className={"form-control " + this.props.theme}
                     name="birth_date"
                     value={this.state.activeItem.birth_date}
                     onChange={ this.handleChangeDate} 
@@ -130,8 +125,7 @@
                 <FormGroup>
                   <Label for="status_choices">Status of life</Label>
                   <select
-                    id={this.props.theme}
-                    className="form-control"
+                    className={"form-control " + this.props.theme}
                     name = "status_choices"
                     value={this.state.activeItem.status_choices}
                     onChange={this.handleChange}
@@ -144,8 +138,7 @@
                 <FormGroup>
                   <Label for="sex_choices">Sex</Label>
                   <select
-                    id={this.props.theme}
-                    className="form-control"
+                    className={"form-control " + this.props.theme}
                     name = "sex_choices"
                     value={this.state.activeItem.sex_choices}
                     onChange={this.handleChange}
@@ -158,9 +151,9 @@
                 <FormGroup>
                   <Label for="birth_place">Birthplace</Label>
                   <Input
-                    id={this.props.theme}
                     type="text"
                     name="birth_place"
+                    className={"form-control " + this.props.theme}
                     value={this.state.activeItem.birth_place}
                     onChange={this.handleChange}
                     placeholder="Place of birth"
@@ -169,10 +162,9 @@
                 <FormGroup>
                   <Label for="avatar">Avatar</Label>
                   <Input
-                    id={this.props.theme}
                     type="file"
                     name="avatar"
-                    className={errors.file ? "error" : this.props.theme+"-file"}
+                    className={this.props.theme + (errors.file ? " error" : "")}
                     onBlur={this.handleBlur('avatar')}
                     onChange={this.handleChangeFile}
                   />

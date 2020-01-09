@@ -28,18 +28,24 @@
 }
 
 /* Loading text */
-.loading{
+.loading {
   color: grey;
   text-align: center;
 }
 
 /* Nav bar buttons container*/
-.nav_buttons{
+.nav_buttons {
   display: inline-block;
   
 } 
 
 /* Nav bar button */
-.nav_button{
+.nav_button {
  margin-left: 5px;
+}
+
+/* Toastify */
+.Toastify__toast-container--top-right {
+  top: 4em !important;
+  right: .5em !important;
 }

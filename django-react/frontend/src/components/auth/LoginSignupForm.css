@@ -1,0 +1,162 @@
+/* Shared */
+
+/* Login/Signup Container */
+.login-dark,
+.login-light,
+.signup-dark,
+.signup-light
+{
+  height:1000px;
+  position:relative;
+}
+
+/* Login/Signup Form */
+.login-dark form,
+.login-light form,
+.signup-dark form,
+.signup-light form 
+{
+  max-width:320px;
+  width:90%;
+  padding:40px;
+  border-radius:4px;
+  transform:translate(-50%, -50%);
+  position:absolute;
+  top:40%;
+  left:50%;
+  box-shadow:3px 3px 4px rgba(0,0,0,0.2);
+}
+
+/* Illustration (fa-fa image) */
+.login-dark .illustration,
+.login-light .illustration,
+.signup-dark .illustration,
+.signup-light .illustration 
+{
+  text-align:center;
+  padding:15px 0 20px;
+  font-size:100px;
+}
+
+/* Form fields */
+.login-dark form .form-control,
+.login-light form .form-control,
+.signup-dark form .form-control,
+.signup-light form .form-control
+{
+  background:none;
+  border:none;
+  border-bottom:1px solid #434a52;
+  border-radius:0;
+  box-shadow:none;
+  outline:none;
+  color:inherit;
+}
+
+/* Form buttons */
+.login-dark form .btn-primary,
+.login-light form .btn-primary,
+.signup-dark form .btn-primary,
+.signup-light form .btn-primary
+{
+  border:none;
+  border-radius:4px;
+  padding:11px;
+  box-shadow:none;
+  margin-top:26px;
+  text-shadow:none;
+  outline:none;
+}
+
+/* Form buttons on hover & active*/
+.login-dark form .btn-primary:hover, 
+.login-dark form .btn-primary:active,
+.login-light form .btn-primary:hover, 
+.login-light form .btn-primary:active,
+.signup-dark form .btn-primary:hover, 
+.signup-dark form .btn-primary:active,
+.signup-light form .btn-primary:hover, 
+.signup-light form .btn-primary:active
+{
+  outline:none;
+}
+
+/* Form buttons active */
+.login-dark form .btn-primary:active,
+.login-light form .btn-primary:active,
+.signup-dark form .btn-primary:active,
+.signup-light form .btn-primary:active
+{
+  transform:translateY(1px);
+}
+
+
+/* Dark */
+
+/* Form */
+.login-dark form,
+.signup-dark form {
+  background-color:#343a40;
+  color:#fff;
+}
+
+/* Light */
+
+/* Form */
+.login-light form,
+.signup-light form {
+  background-color:#f8f9fa;
+  color:#000;
+}
+
+
+/* Login */
+
+/* Illustration (fa-fa image) */
+.login-dark .illustration,
+.login-light .illustration 
+{
+  color:#2980ef;
+}
+
+/* Form buttons */
+.login-dark form .btn-primary,
+.login-light form .btn-primary
+{
+  background:#2f6ec2;
+}
+
+/* Form buttons on hover & active*/
+.login-dark form .btn-primary:hover, 
+.login-dark form .btn-primary:active,
+.login-light form .btn-primary:hover, 
+.login-light form .btn-primary:active
+{
+  background:#214a80;
+}
+
+/* Signup */
+
+/* Illustration (fa-fa image) */
+.signup-dark .illustration,
+.signup-light .illustration 
+{
+  color:#e02929;
+}
+
+/* Form buttons */
+.signup-dark form .btn-primary,
+.signup-light form .btn-primary
+{
+  background:#ef2929;
+}
+
+/* Form buttons on hover & active*/
+.signup-dark form .btn-primary:hover, 
+.signup-dark form .btn-primary:active,
+.signup-light form .btn-primary:hover, 
+.signup-light form .btn-primary:active
+{
+  background:#940f0f;
+  outline:none;
+}

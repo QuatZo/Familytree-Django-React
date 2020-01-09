@@ -2,7 +2,7 @@
 /*eslint no-useless-computed-key: 0*/
 
     import React, { Component } from "react";
-    
+    import './Modal.css'
     import {
       Button,
       Modal,

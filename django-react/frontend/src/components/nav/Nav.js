@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 function Nav(props) {
   const logged_out_nav = (
     <div className="nav_buttons">
-      <button onClick={props.changeThemeMode} className="btn btn-outline-secondary my-2 my-sm-0 nav_button">{props.theme==="dark"?"Light Theme":"Dark Theme"}</button>
+      <button onClick={props.changeThemeMode} className="btn btn-outline-secondary my-2 my-sm-0 nav_button">{(props.theme === "dark" ? "Light" : "Dark") + " Theme"}</button>
       <button onClick={() => props.display_form('login')} className="btn btn-outline-success my-2 my-sm-0 nav_button">Login</button>
       <button onClick={() => props.display_form('signup')} className="btn btn-outline-info my-2 my-sm-0  nav_button">Register</button>
     </div>
@@ -17,7 +17,7 @@ function Nav(props) {
 
     <div className="nav_buttons">
       <button onClick={() => "#"} className="btn btn-secondary my-2 my-sm-0 disabled nav_button">User: {props.username}</button>
-      <button onClick={props.changeThemeMode} className="btn btn-outline-secondary my-2 my-sm-0 nav_button">{props.theme==="dark"?"Light Theme":"Dark Theme"}</button>
+      <button onClick={props.changeThemeMode} className="btn btn-outline-secondary my-2 my-sm-0 nav_button">{(props.theme === "dark" ? "Light" : "Dark") + " Theme"}</button>
       <button onClick={() => props.handle_logout('logout')} className="btn btn-outline-danger my-2 my-sm-0 nav_button">Logout</button>
     </div>
   );

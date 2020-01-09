@@ -1,6 +1,8 @@
 // File which contains enum types
 
 export enum NOTIFY {
+    CHANGE_THEME,
+
     SUCCESS_LOGIN,
     SUCCESS_REGISTER,
     SUCCESS_LOGOUT,

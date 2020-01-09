@@ -7,6 +7,7 @@
     import Timeline from 'react-image-timeline';
     import 'react-datepicker/dist/react-datepicker.css';
     import './PersonEdit.css'
+    import '../Modal.css'
     import 'react-image-timeline/dist/timeline.css';
     import axios from "axios";
     import {NOTIFY} from '../Enums.ts';
@@ -420,8 +421,8 @@
                 <Form>
                   <FormGroup>
                     <Input
-                    id={this.props.theme}
                     type="number"
+                    className={'form-control ' + this.props.theme}
                     name="user_id"
                     value={localStorage.getItem('user_id')}
                     hidden
@@ -434,10 +435,9 @@
                       <FormGroup>
                         <Label for="first_name">First Name</Label>
                         <Input
-                          id={this.props.theme}
                           type="text"
                           name="first_name"
-                          className={errors.first_name?"error":""}
+                          className={this.props.theme + (errors.first_name?" error":"")}
                           onBlur={this.handleBlur('first_name')}
                           value={this.state.activeItem.first_name}
                           onChange={this.handleChange}
@@ -449,10 +449,9 @@
                       <FormGroup>
                         <Label for="last_name">Last Name</Label>
                         <Input
-                          id={this.props.theme}
                           type="text"
                           name="last_name"
-                          className={errors.last_name?"error":""}
+                          className={this.props.theme + (errors.last_name?" error":"")}
                           onBlur={this.handleBlur('last_name')}
                           value={this.state.activeItem.last_name}
                           onChange={this.handleChange}
@@ -464,8 +463,7 @@
                       <FormGroup>
                         <Label for="sex_choices">Sex</Label>
                         <select
-                          id={this.props.theme}
-                          className="form-control"
+                          className={"form-control " + this.props.theme}
                           name = "sex_choices"
                           value={this.state.activeItem.sex_choices}
                           onChange={this.handleChange}
@@ -482,8 +480,7 @@
                       <FormGroup>
                         <Label for="status_choices">Status of life</Label>
                         <select
-                          id={this.props.theme}
-                          className="form-control"
+                          className={"form-control " + this.props.theme}
                           name = "status_choices"
                           value={this.state.activeItem.status_choices}
                           onChange={this.handleChange}
@@ -498,8 +495,7 @@
                       <FormGroup>
                         <Label for="birth_date">Birth Date</Label><br />
                         <DatePicker 
-                          id={this.props.theme}
-                          className="form-control"
+                          className={"form-control " + this.props.theme}
                           name="birth_date"
                           value={this.state.activeItem.birth_date}
                           onChange={ this.handleChangeDate} 
@@ -514,8 +510,8 @@
                       <FormGroup>
                         <Label for="birth_place">Birthplace</Label>
                         <Input
-                          id={this.props.theme}
                           type="text"
+                          className={"form-control " + this.props.theme}
                           name="birth_place"
                           value={this.state.activeItem.birth_place}
                           onChange={this.handleChange}
@@ -529,8 +525,8 @@
                     <FormGroup style={{display: 'flex'}}>
                       <Label for="avatar">Change Avatar</Label>
                       <Input
-                        id={this.props.theme}
                         type="file"
+                        className={this.props.theme}
                         name="avatar"
                         onChange={this.handleChangeFile}
                       />
@@ -573,6 +569,7 @@
                 activeItem={this.state.activeMilestone}
                 toggle={this.toggleMilestoneModal}
                 onSave={this.handleSubmitMilestone}
+                theme={this.props.theme}
               />
             ) : null}
             {this.state.ModalRelationship ? (

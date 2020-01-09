@@ -7,6 +7,10 @@
     // function which shows specific notification, depending on given NOTIFY enum
      function ShowNotification(notifyEnum) {
         switch(notifyEnum){
+          case NOTIFY.CHANGE_THEME:
+            toast("Theme has been changed.");
+            break;
+
           case NOTIFY.SUCCESS_LOGIN:
             toast.success("You logged in. Have a nice use!");
             break;

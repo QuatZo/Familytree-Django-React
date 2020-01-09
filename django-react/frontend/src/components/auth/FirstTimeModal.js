@@ -3,6 +3,7 @@
 
     import React, { Component } from "react";
     import './FirstTime.css';
+    import '../Modal.css';
     
     import {
       Button,

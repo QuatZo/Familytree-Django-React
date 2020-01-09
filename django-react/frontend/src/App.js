@@ -49,21 +49,12 @@
           displayed_form: localStorage.getItem('token') ? '' : 'login', // form to display
           logged_in: localStorage.getItem('token') ? true : false, // flag, if user is already logged in
           username: '',
-          theme:"dark"
+          theme: 'dark',
         };
       }
 
       loginCounter = 0; // it makes sure noone will log into 2 different accounts from one browser (probably simple flag should be enough)
 
-      changeThemeMode=()=>{
-        this.setState((prevState)=>{
-          return {
-            theme: prevState.theme==="dark" ? "light" : "dark" 
-          }
-        }
-        );
-          
-      }
       componentDidMount() {
         if (this.state.logged_in) { // if person is logged in, dont force user to relog
           axios
@@ -213,6 +204,13 @@
           .catch(err => ShowNotification(NOTIFY.ERROR));
       };
 
+      changeThemeMode = () => {
+        this.setState({
+            theme: this.state.theme === "dark" ? "light" : "dark" 
+          }, () => ShowNotification(NOTIFY.CHANGE_THEME)
+        );
+      }
+
       // render page (nav bar + login/signup form if not logged in; else Familytree.js)
       render() {
 
@@ -279,9 +277,7 @@
               )      
               : 'Please, log in.'}
               <ToastContainer />
-              
           </div>
-          
         );         
       }
     }

@@ -486,8 +486,8 @@
                 <button onClick={this.createPerson} className="btn btn-outline-success btn-circle btn-xl">
                   <i className="fas fa-plus"></i>
                 </button>
-                <button onClick={this.props.changeThemeMode} className={this.props.theme==="dark"? "btn btn-outline-light btn-circle btn-xl":"btn btn-outline-secondary btn-circle btn-xl"}>
-                  <i className={this.props.theme==="dark"?"fas fa-sun":"fa fa-moon"}></i>
+                <button onClick={this.props.changeThemeMode} className={this.props.theme === "dark" ? "btn btn-outline-light btn-circle btn-xl" : "btn btn-outline-secondary btn-circle btn-xl"}>
+                  <i className={this.props.theme === "dark" ? "fas fa-sun" : "fa fa-moon"}></i>
                 </button>
               </div>
             </div>

@@ -9,6 +9,7 @@
     import MultiSelect from "@khanacademy/react-multi-select";    
     import {NOTIFY} from '../Enums.ts';
     import ShowNotification from '../notification/Notification';
+    import '../Modal.css'
     
     import {
       Button,
@@ -108,10 +109,9 @@
               <FormGroup>
                   <Label for="title">Title</Label>
                   <Input
-                    id={this.props.theme}
                     type="text"
                     name="title"
-                    className={errors.title ? "error" : ""}
+                    className={this.props.theme + (errors.title ? " error" : "")}
                     onBlur={this.handleBlur('title')}
                     value={this.state.activeItem.title}
                     onChange={this.handleChange}
@@ -121,10 +121,9 @@
                 <FormGroup>
                   <Label for="text">Text</Label>
                   <Input
-                    id={this.props.theme}
                     type="text"
                     name="text"
-                    className="form-control"
+                    className={"form-control " + this.props.theme}
                     value={this.state.activeItem.text}
                     onChange={this.handleChange}
                     placeholder="Text"
@@ -133,9 +132,8 @@
                 <FormGroup>
                   <Label for="date">Date</Label><br />
                   <DatePicker 
-                    id={this.props.theme}
                     name="date"
-                    className={"form-control " + (errors.date ? "error" : "")}
+                    className={"form-control " + this.props.theme + (errors.date ? " error" : "")}
                     value={this.state.activeItem.date}
                     onChange={ this.handleChangeDate} 
                     onBlur={this.handleBlur('date')}
@@ -147,9 +145,8 @@
                 <FormGroup>
                   <Label for="person_id">Persons {errors.person_id ? " (please, choose at least one person from the list)" : null}</Label><br />
                   <MultiSelect
-                    id={this.props.theme}
                     options={this.state.personSelectOptions}
-                    className={"form-control " + (errors.person_id && this.state.activeItem.id === undefined ? "error" : "")}
+                    className={"form-control " + this.props.theme + (errors.person_id && this.state.activeItem.id === undefined ? " error" : "")}
                     selected={this.state.activeItem.person_id}
                     onSelectedChanged={selected => this.setState({ activeItem: {
                         id: this.state.activeItem.id,
@@ -165,10 +162,9 @@
                   <FormGroup>
                     <Label for="imageUrl">Image/Movie</Label>
                     <Input
-                      id={this.props.theme}
                       type="file"
                       name="imageUrl"
-                      className={errors.file ? "error" : ""}
+                      className={this.props.theme + (errors.file ? " error" : "")}
                       onBlur={this.handleBlur('imageUrl')}
                       onChange={this.handleChangeFile}
                     />
