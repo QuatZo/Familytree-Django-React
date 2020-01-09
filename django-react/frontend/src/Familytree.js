@@ -428,7 +428,7 @@
         return (
           <React.Fragment>
             <div className="contentPerson">
-              <svg className='relationshipContainer' height={this.state.windowSize.height} width={this.state.windowSize.width}>
+              <svg className={'relationshipContainer-' + this.props.theme} height={this.state.windowSize.height} width={this.state.windowSize.width}>
                 {this.state.relationships}
               </svg>
               {this.renderItems()}     

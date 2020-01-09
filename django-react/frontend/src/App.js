@@ -228,10 +228,10 @@
               !this.state.donePersonList || !this.state.doneRelationshipList ? (
                 <h3>
                   <FadeIn>
-                    <div className="loading">
-                      <div className="loadingPart">
-                        <h4 className="loadingText">Fetching Persons</h4>
-                        <div className="loadingAnimation">
+                    <div className={"loading-" + this.state.theme}>
+                      <div className={"loadingPart-" + this.state.theme}>
+                        <h4 className={"loadingText-" + this.state.theme}>Fetching Persons</h4>
+                        <div className={"loadingAnimation-" + this.state.theme}>
                           {!this.state.loadingPersonList ? (
                               <Lottie options={defaultOptionsLoading} height={100} width={200}/>
                           ) : (
@@ -239,9 +239,9 @@
                           )}
                         </div>
                       </div>
-                      <div className="loadingPart">
-                        <h4 className="loadingText">Fetching Relationships</h4>
-                        <div className="loadingAnimation">
+                      <div className={"loadingPart-" + this.state.theme}>
+                        <h4 className={"loadingText-" + this.state.theme}>Fetching Relationships</h4>
+                        <div className={"loadingAnimation-" + this.state.theme}>
                           {!this.state.loadingRelationshipList ? (
                             <Lottie options={defaultOptionsLoading} height={100} width={200}/>
                           ) : (
