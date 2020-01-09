@@ -2,6 +2,7 @@
 
     import React, { Component } from "react";
     import './App.css';
+    import './components/loading/Loading.css'
     import Nav from './components/nav/Nav';
     import LoginForm from './components/auth/LoginForm';
     import SignupForm from './components/auth/SignupForm';
@@ -74,25 +75,31 @@
       componentDidUpdate(){
         if (this.loginCounter < 1 && this.state.logged_in && !this.state.doneRelationshipList && !this.state.donePersonList){
           this.loginCounter += 1;
-          setTimeout(() => {
-            axios
-              .get("http://localhost:8000/api/familytreepersons/", {
-                headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
-              })
-              .then(res => this.setState({ personList: res.data }))
-              .then(() => {
-                  this.setState({ loadingPersonList: true });
-                  setTimeout(() => {
-                    this.fetchRelationshipList();
-                  }, 1000);
-              });
-          }, 1200);
+          
+          this.fetchPersonList();
+          this.fetchRelationshipList();
         }
+      }
+
+      // get list of Persons from API, while loading page
+      fetchPersonList = () => {
+        setTimeout(() => {
+          axios
+            .get("http://localhost:8000/api/familytreepersons/", {
+              headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
+            })
+            .then(res => this.setState({ personList: res.data }))
+            .then(() => {
+                this.setState({ loadingPersonList: true });
+                setTimeout(() => {
+                  this.setState({ donePersonList: true });
+              }, 1000); // miliseconds AFTER Person List loading is done (1s)
+            });
+        }, 1800); // miliseconds AFTER Person List loading should be called (1.8s)
       }
 
       // get list of Relationships from API, while loading page
       fetchRelationshipList = () => {
-        this.setState({ donePersonList: true });
         setTimeout(() => {
         axios
           .get("http://localhost:8000/api/familytreerelationship/", {
@@ -103,9 +110,9 @@
             this.setState({ loadingRelationshipList: true });
             setTimeout(() => {
                 this.setState({ doneRelationshipList: true });   
-            }, 1000);
+            }, 1000); // miliseconds AFTER Relationship List loading is done (1s)
           });
-        }, 1200);
+        }, 1000); // miliseconds AFTER Person List loading should be called (1s)
       }
 
       // check in API, if provided credentials are correct
@@ -183,34 +190,13 @@
         });
       };
 
-      // refresh Person's list
-      refreshPersonList = () => {
-        axios
-          .get("http://localhost:8000/api/familytreepersons/", {
-            headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
-          })
-          .then(res => this.setState({ personList: res.data }))
-          .then(() => console.log(this.state.user_id))
-          .catch(err => ShowNotification(NOTIFY.ERROR));
-      };
-
-      // refresh Relationship's list
-      refreshRelationshipList = () => {
-        axios
-        .get("http://localhost:8000/api/familytreerelationship/", {
-          headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
-        })
-          .then(res => this.setState({ relationshipList: res.data }))
-          .catch(err => ShowNotification(NOTIFY.ERROR));
-      };
-
       changeThemeMode = () => {
         this.setState({
             theme: this.state.theme === "dark" ? "light" : "dark" 
           }, () => ShowNotification(NOTIFY.CHANGE_THEME)
         );
       }
-
+      
       // render page (nav bar + login/signup form if not logged in; else Familytree.js)
       render() {
 
@@ -238,44 +224,47 @@
               />
             
             {form}
-            {this.state.logged_in
-              ? !this.state.donePersonList ? (
+            {this.state.logged_in ? (
+              !this.state.donePersonList || !this.state.doneRelationshipList ? (
                 <h3>
                   <FadeIn>
                     <div className="loading">
-                      <h1 className="display-3">Fetching Persons</h1>
-                      {!this.state.loadingPersonList ? (
-                          <Lottie options={defaultOptionsLoading}/>
-                      ) : (
-                        <Lottie options={defaultOptionsLoaded}/>
-                      )}
+                      <div className="loadingPart">
+                        <h4 className="loadingText">Fetching Persons</h4>
+                        <div className="loadingAnimation">
+                          {!this.state.loadingPersonList ? (
+                              <Lottie options={defaultOptionsLoading} height={100} width={200}/>
+                          ) : (
+                            <Lottie options={defaultOptionsLoaded} height={100} width={200}/>
+                          )}
+                        </div>
+                      </div>
+                      <div className="loadingPart">
+                        <h4 className="loadingText">Fetching Relationships</h4>
+                        <div className="loadingAnimation">
+                          {!this.state.loadingRelationshipList ? (
+                            <Lottie options={defaultOptionsLoading} height={100} width={200}/>
+                          ) : (
+                            <Lottie options={defaultOptionsLoaded} height={100} width={200}/>
+                          )}
+                        </div>
+                      </div>
+                      
                     </div>
                   </FadeIn>
                 </h3>
-              ) : !this.state.doneRelationshipList ? (
-                <h3>
-                  <FadeIn>
-                    <div className="loading">
-                      <h1 className="display-3">Fetching Relationships</h1>
-                      {!this.state.loadingRelationshipList ? (
-                        <Lottie options={defaultOptionsLoading}/>
-                      ) : (
-                        <Lottie options={defaultOptionsLoaded}/>
-                      )}
-                    </div>
-                  </FadeIn>
-                </h3>
-              ): (
-                <React.Fragment>
-                  <Familytree 
-                  personList = {this.state.personList}
-                  relationshipList = {this.state.relationshipList}
-                  changeThemeMode = {this.changeThemeMode}
-                  theme = {this.state.theme}
-                  />
-                </React.Fragment>
-              )      
-              : 'Please, log in.'}
+              ) : (
+                    <React.Fragment>
+                      <Familytree 
+                        personList = {this.state.personList}
+                        relationshipList = {this.state.relationshipList}
+                        changeThemeMode = {this.changeThemeMode}
+                        theme = {this.state.theme}
+                      />
+                    </React.Fragment>
+                  )
+              ) : null
+            }
               <ToastContainer />
           </div>
         );         

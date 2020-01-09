@@ -26,13 +26,6 @@
 .App-link {
   color: #09d3ac;
 }
-
-/* Loading text */
-.loading {
-  color: grey;
-  text-align: center;
-}
-
 /* Nav bar buttons container*/
 .nav_buttons {
   display: inline-block;

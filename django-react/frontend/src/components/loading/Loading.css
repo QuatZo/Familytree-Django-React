@@ -1,0 +1,40 @@
+/* Loading container */
+.loading{
+  text-align: center;
+  display: grid;
+  height: 240px;
+  width: 540px;
+  position: fixed;
+  left: 35vw;
+  top: 35%;
+  background-color:#343a40;
+  border-radius:4px;
+  color:#fff;
+  box-shadow:3px 3px 4px rgba(0,0,0,0.2);
+}
+
+/* Loading type container (i.e. Fetching Persons) */
+.loadingPart{
+  display: inline-flex;
+  margin-left: 40px;
+  height: 100px;
+}
+
+/* Loading text (i.e. Fetching Persons Text) */
+.loadingText{
+  height: 100px;
+  line-height: 100px;
+  width: 300px;
+  text-align: left;
+}
+
+/* Loading animation */
+.loadingAnimation{
+  height: 100px;
+  width: calc(100% - 300px);
+}
+
+/* Loading animation button */
+[role=button]{
+  float: right;
+}
