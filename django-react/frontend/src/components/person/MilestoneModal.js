@@ -29,6 +29,7 @@
           activeItem: this.props.activeItem,
           touched: {
             title: false,
+            text: false,
             date: false,
             person_id: false,
             file: false,
@@ -86,10 +87,12 @@
       }
       
       // error handling, validates given fields
-      validate(title, date, person_id, file){
+      validate(title, text, date, person_id, file){
         person_id = person_id.filter(el => el !== undefined);
         return{
           title: title.trim().length === 0,
+          title_too_long: title.trim().length > 64,
+          text: text.trim().length > 512,
           date: date.toString().trim().length === 0,
           person_id: person_id.length === 0,
           file: file === null && this.state.activeItem.id === undefined,
@@ -98,7 +101,7 @@
 
       render() {
         const { toggle, onSave } = this.props;
-        const errors = this.validate(this.state.activeItem.title, this.state.activeItem.date, this.state.activeItem.person_id, this.file);
+        const errors = this.validate(this.state.activeItem.title, this.state.activeItem.text, this.state.activeItem.date, this.state.activeItem.person_id, this.file);
         const isEnabled = !Object.keys(errors).some(x => errors[x]); // button is disables as long as error exists
         return (
           <Modal isOpen={true} toggle={toggle}>
@@ -110,23 +113,26 @@
                   <Input
                     type="text"
                     name="title"
-                    className={errors.title ? "error" : ""}
+                    className={(errors.title||errors.title_too_long )? "error" : ""}
                     onBlur={this.handleBlur('title')}
                     value={this.state.activeItem.title}
                     onChange={this.handleChange}
                     placeholder="Title"
                   />
+                  {errors.title?(<small className='errortext'>Please insert title</small>):null}
+                  {errors.title_too_long?(<small className='errortext'>This name is too long, max length is 64</small>):null}
                 </FormGroup>
                 <FormGroup>
                   <Label for="text">Text</Label>
                   <Input
                     type="text"
                     name="text"
-                    className="form-control"
+                    className={"form-control" + (errors.text ? "error" : "")}
                     value={this.state.activeItem.text}
                     onChange={this.handleChange}
                     placeholder="Text"
                   />
+                  {errors.text?(<small className='errortext'>This name is too long, max length is 512</small>):null}
                 </FormGroup>
                 <FormGroup>
                   <Label for="date">Date</Label><br />
@@ -140,13 +146,15 @@
                     showMonthDropdown
                     showYearDropdown
                     dropdownMode="select"/>
+                    {errors.date?(<small className='errortext'>Please choose date</small>):null}
                 </FormGroup>
                 <FormGroup>
-                  <Label for="person_id">Persons {errors.person_id ? " (please, choose at least one person from the list)" : null}</Label><br />
+                  <Label for="person_id">Persons {errors.person_id ? "" : null}</Label><br />
                   <MultiSelect
                     options={this.state.personSelectOptions}
                     className={"form-control " + (errors.person_id && this.state.activeItem.id === undefined ? "error" : "")}
                     selected={this.state.activeItem.person_id}
+                    onBlur={this.handleBlur('person_id')}
                     onSelectedChanged={selected => this.setState({ activeItem: {
                         id: this.state.activeItem.id,
                         user_id: this.state.activeItem.user_id,
@@ -157,6 +165,7 @@
                         image: this.state.activeItem.image,
                       }})}
                   />
+                  {errors.person_id?(<small className='errortext'> Please, choose at least one person from the list</small>):null}
                   </FormGroup>
                   <FormGroup>
                     <Label for="imageUrl">Image/Movie</Label>
@@ -167,6 +176,7 @@
                       onBlur={this.handleBlur('imageUrl')}
                       onChange={this.handleChangeFile}
                     />
+                    {errors.file?(<small className='errortext'>Please input your image or movie</small>):null}
                   </FormGroup>
               </Form>
             </ModalBody>

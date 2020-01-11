@@ -24,7 +24,9 @@ class SignupForm extends React.Component {
   validate(username, password){
     return{
       username: username.trim().length === 0,
-      password: password.trim().length === 0 || !(/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,}$/.test(password)),
+      password: password.trim().length === 0 || !(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,}$/.test(password)),
+      password_number_false: password.trim().length === 0 || !(/^(?=.*\d)$/.test(password)),
+      password_number_true: password.trim().length  === 0 || (/^(?=.*\d)$/.test(password)),
     }
   }
 
@@ -58,15 +60,17 @@ class SignupForm extends React.Component {
             </div>
             <div class="form-group">
               <input 
-              className={"form-control" + (errors.password?" error":"")}
+              className={"form-control" + (errors.password || errors.password_number_false || errors.password_number_true)?" error":""}
               type="password" 
               name="password" 
-              placeholder="Password" 
+              placeholder="Password"
               onBlur={this.handleBlur('password')}
               value={this.state.password}
               onChange={this.handle_change}
               required
               />
+              {errors.password_number_false?(<small className='errortext'>1 number (0-9)</small>):null}
+              {errors.password_number_true?(<small className='errortext_true'>1 number (0-9)</small>):null}
             </div>
             <div class="form-group password-req">
               <ul>

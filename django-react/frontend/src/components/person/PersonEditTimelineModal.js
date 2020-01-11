@@ -377,7 +377,9 @@
       validate(first_name, last_name){
         return{
           first_name: first_name.trim().length === 0,
-          last_name: last_name.trim().length === 0
+          first_name_too_long: first_name.trim().length > 50,
+          last_name: last_name.trim().length === 0,
+          last_name_too_long: last_name.trim().length > 50,
         }
       }
       
@@ -440,6 +442,8 @@
                           onChange={this.handleChange}
                           placeholder="First Name"
                         />
+                        {errors.first_name?(<small className='errortext'>Please insert first name</small>):null}
+                        {errors.first_name_too_long?(<small className='errortext'>This name is too long, max length is 50</small>):null}
                       </FormGroup>
                     </Col>
                     <Col md={4}>
@@ -454,6 +458,8 @@
                           onChange={this.handleChange}
                           placeholder="Last Name"
                         />
+                        {errors.last_name?(<small className='errortext'>Please insert last name</small>):null}
+                        {errors.last_name_too_long?(<small className='errortext'>This name is too long, max length is 50</small>):null}
                       </FormGroup>
                     </Col>
                     <Col md={4}>

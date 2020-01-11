@@ -32,3 +32,8 @@
 .nav_button{
   margin-left: 10px;
 }
+
+/* Text for Error in formfield */
+.errortext{
+  color:red;
+}
