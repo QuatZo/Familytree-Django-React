@@ -24,7 +24,13 @@
 
       // calculate side centers w/ direction for 2 given person containers
       calcSideCenters(first, second){
-        const nav = document.getElementById("nav").getBoundingClientRect().height - 5; // get height of nav bar
+        var nav;
+        try{
+          nav = document.getElementById("nav").getBoundingClientRect().height - 5; // get height of nav bar
+        }
+        catch(TypeError){
+          nav = 30;
+        }
 
         var relationshipPoints = { // contains side centers for 2 give person containers
           top: [
@@ -163,11 +169,16 @@
 
       // calculate the text width for Tooltip Component, by using text length (relationship name on hover)
       calcTextWidth(text, font) {
-        var canvas = this.calcTextWidth.canvas || (this.calcTextWidth.canvas = document.createElement("canvas"));
-        var context = canvas.getContext("2d");
-        context.font = font;
-        var metrics = context.measureText(text);
-        return metrics.width;
+        try{
+          var canvas = this.calcTextWidth.canvas || (this.calcTextWidth.canvas = document.createElement("canvas"));
+          var context = canvas.getContext("2d");
+          context.font = font;
+          var metrics = context.measureText(text);
+          return metrics.width;
+        }
+        catch(TypeError){
+          return 30;
+        }
       }      
 
       render() {
