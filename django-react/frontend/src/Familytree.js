@@ -35,9 +35,8 @@
           windowSize: {width: 0, height: 0}, // size of the window
           saving: false, // flag, if it's saving coordinates
           activeRelationship: [], // relationship
-          activeConfirmData: {
-
-          }
+          activeConfirmData: {},
+          printable: false,
         };
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
       }  
@@ -366,6 +365,7 @@
             key={item.id}
             person={item}
             activePersons={this.state.activePersons}
+            printable={this.state.printable}
             refresh={this.refreshPersonList.bind(this)}
             setActivePerson={this.setActivePerson.bind(this)}
             getCoordinates={this.getCoordinates.bind(this)}
@@ -419,7 +419,30 @@
       }
 
       downloadPDF = () =>{
-        console.log("There should be a download PDF stuff");
+        this.setState({
+          printable: true,
+        }, () =>{
+          var css = '@page { size: 20in 9in; margin: 0;}',
+          head = document.head || document.getElementsByTagName('head')[0],
+          style = document.createElement('style');
+
+          style.type = 'text/css';
+          style.media = 'print';
+
+          if (style.styleSheet){
+            style.styleSheet.cssText = css;
+          } else {
+            style.appendChild(document.createTextNode(css));
+          }
+
+          head.appendChild(style);
+
+          window.print();
+
+          this.setState({
+            printable: false,
+          })
+        })
       }
 
       // renders whole Familytree page, which is visible after log-in (content + buttons, no nav bar)
@@ -462,6 +485,7 @@
                 />
               ) : null}
             </div>
+            {this.state.printable ? null :(
             <div className="buttons">
               <div className="download-buttons">
                 <button onClick={() => this.downloadPDF()} className="btn btn-outline-light btn-circle btn-xl">
@@ -483,6 +507,7 @@
                 </button>
               </div>
             </div>
+            )}
           </React.Fragment>
         );
       }

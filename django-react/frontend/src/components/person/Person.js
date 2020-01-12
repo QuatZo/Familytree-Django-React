@@ -134,7 +134,8 @@
                     first_name={this.props.person.first_name}
                   >
                     {this.props.person.first_name + ' ' + this.props.person.last_name}
-                  </div> 
+                  </div>
+                  {this.props.printable ? null :(
                   <div>
                     <button
                       onClick={() => this.editItem(this.props.person)}
@@ -149,6 +150,7 @@
                       <i className="fas fa-user-minus"></i>
                     </button>
                   </div>
+                  )} 
                 </div>
               </div>
             </Draggable>
