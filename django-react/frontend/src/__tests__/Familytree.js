@@ -161,13 +161,13 @@ it('doesn\'t include Relationship on newly created account at page load', () => 
   expect(app.containsMatchingElement(<Relationship />)).not.toEqual(true)
 });
 
-it('has 5 Buttons', () => {
+it('has 6 Buttons', () => {
   const app = shallow(<Familytree personList={[]} relationshipList={[]}/>);
   var download = app.find('div.download-buttons').getElements().map(el => el.props.children.type)
   var operating = app.find('div.operating-buttons').getElements().map(gr => gr.props.children.map(el => el.type))
   var types = download.concat(operating[0])
   types = types.filter(Boolean)
-  expect(types).toEqual(['button', 'button', 'button', 'button', 'button'])
+  expect(types).toEqual(['button', 'button', 'button', 'button', 'button', 'button'])
 });
 
 it('renders with one person without crashing', () => {

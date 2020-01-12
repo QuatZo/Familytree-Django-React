@@ -27,11 +27,10 @@ class LoginForm extends React.Component {
             <div className="form-group">
               <input 
               className="form-control" 
-              type="text" 
+              type="text"
               name="username" 
               placeholder="Username" 
-              data-testid="username"
-              value={this.state.username}
+              value={this.state.username.toLowerCase()}
               onChange={this.handle_change}
               required 
               autoFocus

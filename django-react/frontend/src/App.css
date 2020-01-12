@@ -34,7 +34,12 @@
 
 /* Nav bar button */
 .nav_button {
- margin-left: 5px;
+  margin-left: 5px;
+}
+
+/* Text for Error in formfield */
+.errortext{
+  color:#cf6679;
 }
 
 /* Toastify */

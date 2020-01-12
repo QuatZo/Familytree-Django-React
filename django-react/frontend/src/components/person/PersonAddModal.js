@@ -15,7 +15,7 @@
       Form,
       FormGroup,
       Input,
-      Label
+      Label,
     } from "reactstrap";
 
     export default class CustomModal extends Component {
@@ -54,7 +54,9 @@
       validate(first_name, last_name, file){
         return{
           first_name: first_name.trim().length === 0,
+          first_name_too_long: first_name.trim().length > 50,
           last_name: last_name.trim().length === 0,
+          last_name_too_long: last_name.trim().length > 50,
           file: file === null,
         }
       }
@@ -90,25 +92,29 @@
                   <Input
                     type="text"
                     name="first_name"
-                    className={this.props.theme + (errors.first_name?" error":"")}
+                    className={this.props.theme + ((errors.first_name || errors.first_name_too_long) ? " error" : "")}
                     onBlur={this.handleBlur('first_name')}
                     value={this.state.activeItem.first_name}
                     onChange={this.handleChange}
                     placeholder="First Name"
                     
                   />
+                  {errors.first_name?(<small className='errortext'>Please insert first name</small>):null}
+                  {errors.first_name_too_long?(<small className='errortext'>This name is too long, max length is 50</small>):null}
                 </FormGroup>
                 <FormGroup>
                   <Label for="last_name">Last Name</Label>
                   <Input
                     type="text"
                     name="last_name"
-                    className={this.props.theme + (errors.last_name?" error":"")}
+                    className={this.props.theme + ((errors.last_name || errors.last_name_too_long) ? " error" : "")}
                     onBlur={this.handleBlur('last_name')}
                     value={this.state.activeItem.last_name}
                     onChange={this.handleChange}
                     placeholder="Last Name"
                   />
+                  {errors.last_name?(<small className='errortext'>Please insert last name</small>):null}
+                  {errors.last_name_too_long?(<small className='errortext'>This name is too long, max length is 50</small>):null}
                 </FormGroup>
                 <FormGroup>
                   <Label for="birth_date">Birth Date</Label><br />
@@ -168,6 +174,7 @@
                     onBlur={this.handleBlur('avatar')}
                     onChange={this.handleChangeFile}
                   />
+                  {errors.file?(<small className='errortext'>Please input your avatar</small>):null}
                 </FormGroup>
               </Form>
             </ModalBody>
