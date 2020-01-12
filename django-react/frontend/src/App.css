@@ -2,6 +2,16 @@
   height: 40vmin;
 }
 
+.App-light{
+  background-color:#e5e7e9;
+  height: 100%;
+}
+
+.App-dark{
+  background-color: #262626;
+  height: 100%;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -16,19 +26,19 @@
 .App-link {
   color: #09d3ac;
 }
-
-/* Loading text */
-.loading{
-  color: white;
-  text-align: center;
-}
-
 /* Nav bar buttons container*/
-.nav_buttons{
+.nav_buttons {
   display: inline-block;
+  
 } 
 
 /* Nav bar button */
-.nav_button{
-  margin-left: 10px;
+.nav_button {
+ margin-left: 5px;
+}
+
+/* Toastify */
+.Toastify__toast-container--top-right {
+  top: 4em !important;
+  right: .5em !important;
 }

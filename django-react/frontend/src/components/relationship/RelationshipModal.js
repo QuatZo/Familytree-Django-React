@@ -7,6 +7,7 @@
     import axios from "axios";
     import {NOTIFY} from '../Enums.ts';
     import ShowNotification from '../notification/Notification';
+    import '../Modal.css'
 
     import {
       Button,
@@ -63,6 +64,15 @@
       handleChange = (e) => {
         let { name, value } = e.target;
         const activeItem = { ...this.state.activeItem, [name]: value};
+        this.setState({ activeItem }, () => name === 'relationships' ? this.handleChangeDescendant(value) : null);
+      };
+
+      handleChangeDescendant = (value) => {
+        var twoLvl = ['niece/nephew', 'child', 'adopted child']
+        var activeItem = { ...this.state.activeItem, ["descendant"]: false};
+        if(twoLvl.indexOf(value) !== -1){
+          activeItem = { ...this.state.activeItem, ["descendant"]: true};
+        }
         this.setState({ activeItem });
       };
 
@@ -112,16 +122,16 @@
         const errors = this.validate(this.state.activeItem.title, this.state.activeItem.begin_date);
         const isEnabled = !Object.keys(errors).some(x => errors[x]); // button is disabled as long as error exists
         return (
-          <Modal isOpen={true} toggle={toggle}>
-            <ModalHeader toggle={toggle}> Relationship</ModalHeader>
-            <ModalBody>
+          <Modal className={"modal-open-"+this.props.theme} isOpen={true} toggle={toggle}>
+            <ModalHeader className={"modal-header-"+this.props.theme} toggle={toggle}> Relationship</ModalHeader>
+            <ModalBody className={"modal-body-"+this.props.theme}>
               <Form>
                 <FormGroup>
                   <Label for="title">Title</Label>
                   <Input
                     type="text"
                     name="title"
-                    className={errors.title?"error":""}
+                    className={this.props.theme + (errors.title ? " error" : "")}
                     onBlur={this.handleBlur('title')}
                     value={this.state.activeItem.title}
                     onChange={this.handleChange}
@@ -133,7 +143,7 @@
                   <Input
                     type="text"
                     name="description"
-                    className="form-control"
+                    className={this.props.theme}
                     value={this.state.activeItem.description}
                     onChange={this.handleChange}
                     placeholder="Description"
@@ -143,7 +153,7 @@
                   <Label for="begin_date">Begin Date</Label><br />
                   <DatePicker 
                     name="begin_date"
-                    className={"form-control " + (errors.begin_date ? "error" : "")}
+                    className={"form-control " + this.props.theme + (errors.begin_date ? " error" : "")}
                     value={this.state.activeItem.begin_date}
                     onChange={ this.handleChangeBeginDate} 
                     onBlur={this.handleBlur('begin_date')}
@@ -156,7 +166,7 @@
                   <Label for="end_date">End date (optional)</Label><br />
                   <DatePicker 
                     name="end_date"
-                    className="form-control"
+                    className={"form-control " + this.props.theme}
                     value={this.state.activeItem.end_date}
                     onChange={ this.handleChangeEndDate} 
                     peekNextMonth
@@ -165,32 +175,28 @@
                     dropdownMode="select"/>
                 </FormGroup>
                 <FormGroup>
-                  <Label for="relationships">What's {this.getPerson(this.state.activeItem.id_1)} to the {this.getPerson(this.state.activeItem.id_2)}</Label>
+                  <Label for="relationships">What's {this.getPerson(this.state.activeItem.id_2)} to the {this.getPerson(this.state.activeItem.id_1)}</Label>
                   <select
-                    className="form-control"
+                    className={"form-control " + this.props.theme}
                     name = "relationships"
                     onChange={this.handleChange}
                     value={this.state.activeItem.relationships}
                   >
-                    <option value="father">Father</option>
-                    <option value="mother">Mother</option>
-                    <option value="brother">Brother</option>
-                    <option value="sister">Sister</option>
-                    <option value="son">Son</option>
-                    <option value="daughter">Daughter</option>
-                    <option value="adoptive son">Adoptive son</option>
-                    <option value="adoptive daughter">Adoptive daughter</option>
-                    <option value="surrogate father">Surrogate father</option>
-                    <option value="surrogate mother">Surrogate mother</option>
-                    <option value="stepbrother">Stepbrother</option>
-                    <option value="stepsister">Stepsister</option>
-                    <option value="stepson">Stepson</option>
-                    <option value="stepdaughter">Stepdaughter</option>
+                    <option value="married">Married</option>
+                    <option value="divorced">Divorced</option>
+                    <option value="fiance">Fiance</option>
+                    <option value="sibling">Sibling</option>
+                    <option value="stepsibling">Step Sibling</option>
+                    <option value="sibling-in-law">Sibling-in-law</option>
+                    <option value="cousin">Cousin</option>
+                    <option value="niece/nephew">Niece/Nephew</option>
+                    <option value="child">Child</option>
+                    <option value="adopted child">Adopted Child</option>
                   </select>
                 </FormGroup>
               </Form>
             </ModalBody>
-            <ModalFooter>
+            <ModalFooter className={"modal-footer-"+this.props.theme}>
               <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem)}>
                 Save
               </Button>

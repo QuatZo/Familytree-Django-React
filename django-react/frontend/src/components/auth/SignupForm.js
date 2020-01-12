@@ -1,5 +1,5 @@
 import React from 'react';
-import './LoginForm.css'
+import './LoginSignupForm.css'
 
 class SignupForm extends React.Component {
   state = {
@@ -20,8 +20,8 @@ class SignupForm extends React.Component {
 
   render() {
     return (
-      <div className="login-dark">
-        <form method="post" onSubmit={e => this.props.handle_signup(e, this.state)}>
+      <div className={"signup-"+this.props.theme}>
+        <form  method="post" onSubmit={e => this.props.handle_signup(e, this.state)}>
             <h2 className="sr-only">Register Form</h2>
             <div className="illustration"><i className="far fa-user"></i></div>
             <div className="form-group">
@@ -47,7 +47,7 @@ class SignupForm extends React.Component {
               required
               />
             </div>
-            <div className="form-group"><button disabled className="btn btn-primary btn-block" type="submit">Register</button></div>
+            <div className="form-group"><button className="btn btn-primary btn-block" type="submit">Register</button></div>
           </form>
       </div>
     );

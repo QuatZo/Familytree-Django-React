@@ -6,24 +6,31 @@ import React from 'react';
 function Nav(props) {
   const logged_out_nav = (
     <div className="nav_buttons">
+      <button onClick={props.changeThemeMode} className="btn btn-outline-secondary my-2 my-sm-0 nav_button">{(props.theme === "dark" ? "Light" : "Dark") + " Theme"}</button>
       <button onClick={() => props.display_form('login')} className="btn btn-outline-success my-2 my-sm-0 nav_button">Login</button>
       <button onClick={() => props.display_form('signup')} className="btn btn-outline-info my-2 my-sm-0  nav_button">Register</button>
     </div>
   );
 
   const logged_in_nav = (
-    <React.Fragment>
-      <a className="navbar-brand" href="#"> | {props.username} | </a>
-        <button onClick={props.handle_logout} className="btn btn-outline-danger my-2 my-sm-0">Logout</button>
-    </React.Fragment>
+
+    <div className="nav_buttons">
+      <button onClick={() => "#"} className="btn btn-secondary my-2 my-sm-0 disabled nav_button">User: {props.username}</button>
+      <button onClick={props.changeThemeMode} className="btn btn-outline-secondary my-2 my-sm-0 nav_button">{(props.theme === "dark" ? "Light" : "Dark") + " Theme"}</button>
+      <button onClick={() => props.handle_logout('logout')} className="btn btn-outline-danger my-2 my-sm-0 nav_button">Logout</button>
+    </div>
   );
+
+
   return (
-    <nav className="navbar sticky-top navbar-dark bg-dark" id="nav">
+  
+    <nav className={"navbar sticky-top navbar-"+props.theme+" bg-"+props.theme} id="nav">
       <a className="navbar-brand" href="#">Familytree</a>
       {props.logged_in ? logged_in_nav : logged_out_nav}
     </nav>
       
   );
+
 }
 
 export default Nav;

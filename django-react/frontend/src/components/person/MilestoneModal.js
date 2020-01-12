@@ -9,6 +9,7 @@
     import MultiSelect from "@khanacademy/react-multi-select";    
     import {NOTIFY} from '../Enums.ts';
     import ShowNotification from '../notification/Notification';
+    import '../Modal.css'
     
     import {
       Button,
@@ -101,16 +102,16 @@
         const errors = this.validate(this.state.activeItem.title, this.state.activeItem.date, this.state.activeItem.person_id, this.file);
         const isEnabled = !Object.keys(errors).some(x => errors[x]); // button is disables as long as error exists
         return (
-          <Modal isOpen={true} toggle={toggle}>
-            <ModalHeader toggle={toggle}> Milestone </ModalHeader>
-            <ModalBody>
+          <Modal className={"modal-open-"+this.props.theme} isOpen={true} toggle={toggle}>
+            <ModalHeader className={"modal-header-"+this.props.theme} toggle={toggle}> Milestone </ModalHeader>
+            <ModalBody className={"modal-body-"+this.props.theme}>
               <Form>
               <FormGroup>
                   <Label for="title">Title</Label>
                   <Input
                     type="text"
                     name="title"
-                    className={errors.title ? "error" : ""}
+                    className={this.props.theme + (errors.title ? " error" : "")}
                     onBlur={this.handleBlur('title')}
                     value={this.state.activeItem.title}
                     onChange={this.handleChange}
@@ -122,7 +123,7 @@
                   <Input
                     type="text"
                     name="text"
-                    className="form-control"
+                    className={"form-control " + this.props.theme}
                     value={this.state.activeItem.text}
                     onChange={this.handleChange}
                     placeholder="Text"
@@ -132,7 +133,7 @@
                   <Label for="date">Date</Label><br />
                   <DatePicker 
                     name="date"
-                    className={"form-control " + (errors.date ? "error" : "")}
+                    className={"form-control " + this.props.theme + (errors.date ? " error" : "")}
                     value={this.state.activeItem.date}
                     onChange={ this.handleChangeDate} 
                     onBlur={this.handleBlur('date')}
@@ -145,7 +146,7 @@
                   <Label for="person_id">Persons {errors.person_id ? " (please, choose at least one person from the list)" : null}</Label><br />
                   <MultiSelect
                     options={this.state.personSelectOptions}
-                    className={"form-control " + (errors.person_id && this.state.activeItem.id === undefined ? "error" : "")}
+                    className={"form-control " + this.props.theme + (errors.person_id && this.state.activeItem.id === undefined ? " error" : "")}
                     selected={this.state.activeItem.person_id}
                     onSelectedChanged={selected => this.setState({ activeItem: {
                         id: this.state.activeItem.id,
@@ -163,14 +164,14 @@
                     <Input
                       type="file"
                       name="imageUrl"
-                      className={errors.file ? "error" : ""}
+                      className={this.props.theme + (errors.file ? " error" : "")}
                       onBlur={this.handleBlur('imageUrl')}
                       onChange={this.handleChangeFile}
                     />
                   </FormGroup>
               </Form>
             </ModalBody>
-            <ModalFooter>
+            <ModalFooter className={"modal-footer-"+this.props.theme}>
               <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem, this.file)}>
                 Save
               </Button>

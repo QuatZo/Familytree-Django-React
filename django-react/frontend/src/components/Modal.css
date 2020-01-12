@@ -1,0 +1,121 @@
+/* Global Modal */
+
+/* Shared */
+.modal .modal-header-dark,
+.modal .modal-header-light
+{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 1rem 1rem;
+}
+
+.modal .modal-open-dark .close,
+.modal .modal-open-light .close
+{
+    float: right;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+    opacity: .5;
+}
+
+.form-control.dark,
+.form-control.light{
+    height: calc(1.5em + .75rem + 2px);
+    color: #495057;
+    border-radius: .25rem;
+    width: 100%;
+}
+
+.form-control-file.dark,
+.form-control-file.light
+{
+    border: 1px solid #ced4da;
+}
+
+.form-control-file.dark.error,
+.form-control-file.light.error
+{
+    border: 1px solid red;
+}
+
+.modal .modal-footer-dark,
+.modal .modal-footer-light
+{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 1rem;
+}
+
+/* Dark */
+.modal .modal-header-dark{
+    border-bottom: 1px solid black;
+    border-top-left-radius: .2rem;
+    border-top-right-radius: .2rem;
+    background: #262626;
+    color: white;
+} 
+
+.modal .modal-open-dark .close {
+    color: #fff;
+    text-shadow: 0 1px 0 #fff;
+}
+
+.modal .modal-footer-dark {
+    border-top: 1px solid black;
+    border-bottom-right-radius: .2rem;
+    border-bottom-left-radius: .2rem;
+    background: #262626;
+}
+
+.modal .modal-body-dark {
+    position: relative;
+    flex: 1 1 auto;
+    padding: 1rem;
+    background: #262626 ;
+    color: #fff;
+}
+
+.form-control.dark{
+    background-color: black;
+}
+
+.modal .modal-body-dark .form-control.dark,
+.modal .modal-body-dark .dropdown-heading
+{
+    background-color: black !important;
+    height: calc(1.5em + .75rem + 2px);
+    color: #495057;
+    border-radius: .25rem;
+    width: 100%; 
+}
+.modal .modal-body-dark .select-panel,
+.modal .modal-body-dark label.select-item
+{
+    background-color: #262626 !important;
+}
+
+/* Light */
+.modal .modal-header-light {
+    border-bottom: 1px solid #dee2e6;
+    border-top-left-radius: .3rem;
+    border-top-right-radius: .3rem;
+} 
+
+.modal .modal-open-light .close {
+    color: #000;
+    text-shadow: 0 1px 0 #000;
+}
+
+.modal .modal-footer-light {
+    border-top: 1px solid #dee2e6;
+    border-bottom-right-radius: .3rem;
+    border-bottom-left-radius: .3rem;
+}
+
+.form-control.light
+{
+    background-color: white;
+}
