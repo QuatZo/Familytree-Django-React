@@ -211,23 +211,30 @@
         var personCoords = [];
 
         personList.map(person => { // for every person in personList
-          var personHTML = document.getElementById(personListHTML.find(el => parseInt(el.id) === person.id).classList[1].split("_").pop()); // get HTML Element
-          personCoords = personHTML.getBoundingClientRect(); // get rectangle of the previously mentioned HTML ELement
+          try{
 
-          var transform = this.getCSSTransformValues(personHTML); // use function which gets the CSS values for transform of HTML element & its parent
+          
+            var personHTML = document.getElementById(personListHTML.find(el => parseInt(el.id) === person.id).classList[1].split("_").pop()); // get HTML Element
+            personCoords = personHTML.getBoundingClientRect(); // get rectangle of the previously mentioned HTML ELement
 
-          var index = personListCoords.findIndex(el => el.id === person.id); // find index of specific person in personListCoords (state personClassCoordinates) array
-          // calculate new coordinates, if function resetCoords has been called at least once, then it uses the 'previous parent transform' values
-          var x = person.x * this.state.windowSize.width + transform.parent.x - (!isNaN(transform.person.x) ? (person.x * this.state.windowSize.width - transform.person.x) : 0);
-          var y = person.y * this.state.windowSize.height + transform.parent.y - (!isNaN(transform.person.y) ? (person.y * this.state.windowSize.height - transform.person.y) : 0);
-          
-          
-          if(index !== -1){ // if this person already exists in an array which contains coordinates of persons
-            personListCoords[index].screen = {x: x, y: y}; // then overwrite coords with the newest ones
+            var transform = this.getCSSTransformValues(personHTML); // use function which gets the CSS values for transform of HTML element & its parent
+
+            var index = personListCoords.findIndex(el => el.id === person.id); // find index of specific person in personListCoords (state personClassCoordinates) array
+            // calculate new coordinates, if function resetCoords has been called at least once, then it uses the 'previous parent transform' values
+            var x = person.x * this.state.windowSize.width + transform.parent.x - (!isNaN(transform.person.x) ? (person.x * this.state.windowSize.width - transform.person.x) : 0);
+            var y = person.y * this.state.windowSize.height + transform.parent.y - (!isNaN(transform.person.y) ? (person.y * this.state.windowSize.height - transform.person.y) : 0);
+            
+            
+            if(index !== -1){ // if this person already exists in an array which contains coordinates of persons
+              personListCoords[index].screen = {x: x, y: y}; // then overwrite coords with the newest ones
+            }
+            else{ // if not...
+              personListCoords.push({id: person.id, screen: {x: x, y: y}}); // add this person with its coordinates to the array
+              personHTML.style.transform = "translate(" + (x - personHTML.offsetLeft + 5) + "px, " + (y - personHTML.offsetTop + 5) + "px)" // move HTML element to the coords
+            }
           }
-          else{ // if not...
-            personListCoords.push({id: person.id, screen: {x: x, y: y}}); // add this person with its coordinates to the array
-            personHTML.style.transform = "translate(" + (x - personHTML.offsetLeft + 5) + "px, " + (y - personHTML.offsetTop + 5) + "px)" // move HTML element to the coords
+          catch(TypeError){
+            return;
           }
         })
         this.setState({
