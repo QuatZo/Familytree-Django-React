@@ -1,7 +1,6 @@
 /*eslint jsx-a11y/anchor-is-valid: 0*/
 
 import React from 'react';
-import PropTypes from 'prop-types';
 
 // returns nav bar, depending on login state
 function Nav(props) {
@@ -35,11 +34,3 @@ function Nav(props) {
 }
 
 export default Nav;
-
-Nav.propTypes = {
-  logged_in: PropTypes.bool.isRequired,
-  display_form: PropTypes.func.isRequired,
-  handle_logout: PropTypes.func.isRequired,
-  theme: PropTypes.string.isRequired,
-  changeThemeMode: PropTypes.func.isRequired
-};

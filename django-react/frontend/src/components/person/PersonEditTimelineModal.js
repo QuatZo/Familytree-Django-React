@@ -303,17 +303,12 @@
       handleSubmitRelationship = item => {
         this.toggleRelationshipModal();        
         if (item.id) {
-          const options = {
-            url: `http://localhost:8000/api/familytreerelationship/${item.id}/`,
-            content: item,
-            method: 'PUT',
+          axios.put(`http://localhost:8000/api/familytreerelationship/${item.id}/`, item, {
             headers: {
               'Content-Type': 'application/json',
               Authorization: `JWT ${localStorage.getItem('token')}`
-            },
-            data: item
-          };
-          axios(options)
+            }
+          })
             .then(() => this.downloadTimelineData())
             .then(() => this.props.refreshRelationships())
             .then(() => ShowNotification(NOTIFY.SAVE_RELATIONSHIP))

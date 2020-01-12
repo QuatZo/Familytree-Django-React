@@ -42,6 +42,7 @@ class LoginForm extends React.Component {
               type="password" 
               name="password" 
               placeholder="Password" 
+              data-testid="password"
               value={this.state.password}
               onChange={this.handle_change}
               required
