@@ -15,8 +15,6 @@
       FormGroup,
       Input,
       Label,
-      FormFeedback,
-      FormText
     } from "reactstrap";
 
     export default class CustomModal extends Component {

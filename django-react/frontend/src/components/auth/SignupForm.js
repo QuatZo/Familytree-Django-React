@@ -4,8 +4,8 @@ import './LoginForm.css'
 
 class SignupForm extends React.Component {
   state = {
-    username: "username",
-    password: "Password",
+    username: "",
+    password: "",
     touched: {
       username: false,
       password: false,
@@ -24,9 +24,11 @@ class SignupForm extends React.Component {
   validate(username, password){
     return{
       username: username.trim().length === 0,
-      password: password.trim().length === 0 || !(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,}$/.test(password)),
-      password_number_false: password.trim().length === 0 || !(/^(?=.*\d)$/.test(password)),
-      password_number_true: password.trim().length  === 0 || (/^(?=.*\d)$/.test(password)),
+      password_number: password.trim().length === 0 || !(/\d/.test(password)),
+      password_uppercase: password.trim().length === 0 || !(/[A-Z]/.test(password)),
+      password_lowercase: password.trim().length === 0 || !(/[a-z]/.test(password)),
+      password_nonalpha: password.trim().length === 0 || !(/[^\w\d\s:]/.test(password)),
+      password_length: password.trim().length === 0 || !(/([^\s]){8,}/.test(password)),
     }
   }
 
@@ -60,7 +62,7 @@ class SignupForm extends React.Component {
             </div>
             <div class="form-group">
               <input 
-              className={"form-control" + (errors.password || errors.password_number_false || errors.password_number_true)?" error":""}
+              className={"form-control" + ((errors.password_number || errors.password_uppercase || errors.password_lowercase || errors.password_nonalpha || errors.password_length) ? " error" : "")}
               type="password" 
               name="password" 
               placeholder="Password"
@@ -69,17 +71,15 @@ class SignupForm extends React.Component {
               onChange={this.handle_change}
               required
               />
-              {errors.password_number_false?(<small className='errortext'>1 number (0-9)</small>):null}
-              {errors.password_number_true?(<small className='errortext_true'>1 number (0-9)</small>):null}
             </div>
             <div class="form-group password-req">
               <ul>
-                Password must contain:
-                <li> 1 number (0-9) </li>
-                <li> 1 uppercase letters </li>
-                <li> 1 lowercase letters </li>
-                <li> 1 non-alpha numeric number </li>
-                <li> at least 8 characters with no space </li>
+                <span className={(errors.password_number || errors.password_uppercase || errors.password_lowercase || errors.password_nonalpha || errors.password_length) ? "errortext" : null}>Password must contain at least:</span>
+                <li className={errors.password_number ? "errortext wrong" : "good"}> 1 number (0-9) </li>
+                <li className={errors.password_uppercase ? "errortext wrong" : "good"}> 1 uppercase letters </li>
+                <li className={errors.password_lowercase ? "errortext wrong" : "good"}> 1 lowercase letters </li>
+                <li className={errors.password_nonalpha ? "errortext wrong" : "good"}> 1 non-alpha numeric number </li>
+                <li className={errors.password_length ? "errortext wrong" : "good"}> 8 characters with no space </li>
               </ul>
             </div>
             <div class="form-group"><button disabled={!isEnabled} class="btn btn-primary btn-block" type="submit">Register</button></div>
