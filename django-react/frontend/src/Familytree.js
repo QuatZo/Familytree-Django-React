@@ -372,6 +372,7 @@
             renderRelationships={this.renderRelationships.bind(this)}
             refreshRelationships={this.refreshRelationshipList.bind(this)}
             toggleConfirmModal={this.toggleConfirmModal.bind(this)}
+            theme={this.props.theme}
           />
         ));
       };
@@ -450,7 +451,7 @@
         return (
           <React.Fragment>
             <div className="contentPerson">
-              <svg height={this.state.windowSize.height} width={this.state.windowSize.width}>
+              <svg className={'relationshipContainer-' + this.props.theme} height={this.state.windowSize.height} width={this.state.windowSize.width}>
                 {this.state.relationships}
               </svg>
               {this.renderItems()}     
@@ -458,6 +459,7 @@
                 <ModalFirstTime
                   toggle={this.toggleFirstTimeModal}
                   onSave={this.toggleFirstTimeModal}
+                  theme={this.props.theme}
                 />
               ) : null}
               {this.state.modal ? (
@@ -465,6 +467,7 @@
                  activeItem={this.state.activePersonData}
                  toggle={this.togglePersonModal}
                  onSave={this.handleSubmitPerson}
+                 theme={this.props.theme}
                 />
               ) : null}
               {this.state.ModalRelationship ? (
@@ -472,6 +475,7 @@
                   activeItem={this.state.activeRelationship}
                   toggle={this.toggleRelationshipModal}
                   onSave={this.handleSubmitRelationship}
+                  theme={this.props.theme}
                 />
               ) : null}
               {this.state.ModalConfirm ? (
@@ -482,13 +486,14 @@
                   cancelText={this.state.activeConfirmData.cancelText}
                   toggle={this.toggleConfirmModal}
                   onConfirm={this.state.activeConfirmData.onConfirm}
+                  theme={this.props.theme}
                 />
               ) : null}
             </div>
             {this.state.printable ? null :(
             <div className="buttons">
               <div className="download-buttons">
-                <button onClick={() => this.downloadPDF()} className="btn btn-outline-light btn-circle btn-xl">
+                <button onClick={() => this.downloadPDF()} className={this.props.theme==="dark"? "btn btn-outline-light btn-circle btn-xl":"btn btn-outline-secondary btn-circle btn-xl"}>
                   <i className="fas fa-download"></i>
                 </button>
               </div>
@@ -496,7 +501,7 @@
                 <button onClick={() => this.toggleConfirmModal("Delete Familytree", "Are you sure you want to delete WHOLE familytree?", "Delete", "Cancel", () => this.deleteEverything())} className="btn btn-outline-danger btn-circle btn-xl">
                   <i className="fas fa-times"></i>
                 </button>
-                <button onClick={this.resetCoords.bind(this)} className="btn btn-outline-warning btn-circle btn-xl">
+                <button onClick={this.resetCoords.bind(this)} className="btn btn-outline-secondary btn-circle btn-xl">
                   <i className="fas fa-redo"></i>
                 </button>
                 <button disabled={this.state.saving} onClick={() => this.toggleConfirmModal("Save coords", "Are you sure you want to save coords for every person in Familytree?", "Save", "Cancel", () => this.saveCoords())} className="btn btn-outline-info btn-circle btn-xl">
@@ -504,6 +509,9 @@
                 </button>
                 <button onClick={this.createPerson} className="btn btn-outline-success btn-circle btn-xl">
                   <i className="fas fa-plus"></i>
+                </button>
+                <button onClick={this.props.changeThemeMode} className={this.props.theme === "dark" ? "btn btn-outline-light btn-circle btn-xl" : "btn btn-outline-secondary btn-circle btn-xl"}>
+                  <i className={this.props.theme === "dark" ? "fas fa-sun" : "fa fa-moon"}></i>
                 </button>
               </div>
             </div>

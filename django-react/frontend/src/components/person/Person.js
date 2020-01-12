@@ -119,7 +119,7 @@
               >
                 <div
                   id={this.props.person.id}
-                  className={"person id_" + this.props.person.id + " " + (this.props.activePersons.includes(this.props.person.id)?"active":"inactive") +  " border rounded"}
+                  className={"person id_" + this.props.person.id + " " + (this.props.activePersons.includes(this.props.person.id)?"active":"inactive") +  " border rounded " + this.props.theme}
                   onDoubleClick={() => this.props.setActivePerson(this.props.person.id)}
                   onMouseDown={this.handleClick.bind(this)}
                   onMouseUp={this.handleClick.bind(this)}
@@ -161,6 +161,7 @@
                 onSave={this.handleSubmit}
                 refreshRelationships={this.props.refreshRelationships.bind(this)}
                 toggleConfirmModal={this.props.toggleConfirmModal.bind(this)}
+                theme={this.props.theme}
               />
             ) : null}
           </React.Fragment>

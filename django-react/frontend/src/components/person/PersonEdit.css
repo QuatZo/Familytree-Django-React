@@ -1,14 +1,5 @@
 /* Person Edit Modal */
 
-/* Header */
-.modal-header{
-  position: sticky;
-  top: 0px;
-  background: white;
-  width: 100%;
-  z-index: 99;
-}
-
 /* Title */
 .modal-title{
   width: 100%;

@@ -1,6 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import './LoginForm.css'
+import './LoginSignupForm.css'
 
 class SignupForm extends React.Component {
   state = {
@@ -43,13 +42,13 @@ class SignupForm extends React.Component {
     const errors = this.validate(this.state.username, this.state.password);
     const isEnabled = !Object.keys(errors).some(x => errors[x]); // button is disabled as long as error exists
     return (
-      <div class="login-dark">
-        <form method="post" onSubmit={e => this.props.handle_signup(e, this.state)}>
-            <h2 class="sr-only">Register Form</h2>
-            <div class="illustration"><i class="far fa-user"></i></div>
-            <div class="form-group">
+      <div className={"signup-"+this.props.theme}>
+        <form  method="post" onSubmit={e => this.props.handle_signup(e, this.state)}>
+            <h2 className="sr-only">Register Form</h2>
+            <div className="illustration"><i className="far fa-user"></i></div>
+            <div className="form-group">
               <input 
-              className={"form-control" + (errors.username?" error":"")}
+              className={"form-control" + (errors.username ? " error" : "")}
               type="text" 
               name="username" 
               placeholder="Username" 
@@ -60,7 +59,7 @@ class SignupForm extends React.Component {
               autoFocus
               />
             </div>
-            <div class="form-group">
+            <div className="form-group">
               <input 
               className={"form-control" + ((errors.password_number || errors.password_uppercase || errors.password_lowercase || errors.password_nonalpha || errors.password_length) ? " error" : "")}
               type="password" 
@@ -90,7 +89,3 @@ class SignupForm extends React.Component {
 }
 
 export default SignupForm;
-
-SignupForm.propTypes = {
-  handle_signup: PropTypes.func.isRequired
-};
