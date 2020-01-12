@@ -30,6 +30,7 @@ class LoginForm extends React.Component {
               type="text" 
               name="username" 
               placeholder="Username" 
+              data-testid="username"
               value={this.state.username}
               onChange={this.handle_change}
               required 
@@ -42,6 +43,7 @@ class LoginForm extends React.Component {
               type="password" 
               name="password" 
               placeholder="Password" 
+              data-testid="password"
               value={this.state.password}
               onChange={this.handle_change}
               required
