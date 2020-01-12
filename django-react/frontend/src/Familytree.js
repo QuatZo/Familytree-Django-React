@@ -131,10 +131,10 @@
       };
 
       // handles new Person submission
-      handleSubmitPerson = (item, file) => {
+      handleSubmitPerson = (item) => {
         this.togglePersonModal();
         var SHA256 = require("crypto-js/sha256"); // SHA256 encryption
-        var newFilename = SHA256(Date.now().toString() + file.name) + file.name.substring(file.name.indexOf(".")); // encrypted avatar's filename
+        var newFilename = SHA256(Date.now().toString() + item.avatar.name) + item.avatar.name.substring(item.avatar.name.indexOf(".")); // encrypted avatar's filename
 
         let data = new FormData(); // creates a data based on form, w/ values mentioned below
         data.append('user_id', item.user_id);
@@ -145,7 +145,7 @@
         data.append('sex_choices', item.sex_choices);
         data.append('birth_place', item.birth_place);
         data.append('relationship_choices', item.relationship_choices);
-        data.append('avatar', file, newFilename); // SHA256 encryption
+        data.append('avatar', item.avatar, newFilename); // SHA256 encryption
     
         axios.post('http://localhost:8000/api/familytreepersons/', data, {
           headers: {
@@ -181,7 +181,7 @@
       
       // prepares activePersonData for new Person
       createPerson = () => {
-        const item = { user_id: localStorage.getItem('user_id'), first_name: "", last_name: "", birth_date: "", status_choices: 'living', sex_choices: 'male', birth_place: ""};
+        const item = { user_id: localStorage.getItem('user_id'), first_name: "", last_name: "", birth_date: "", status_choices: 'living', sex_choices: 'male', birth_place: "", avatar: undefined};
         this.setState({ activeItem: item, modal: !this.state.modal });
       };
 

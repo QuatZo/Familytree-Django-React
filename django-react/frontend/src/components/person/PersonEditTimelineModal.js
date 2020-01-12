@@ -82,8 +82,6 @@
         };
       }
 
-      file = null; // chosen file
-
       componentDidMount(){
         this.refreshPersonList();
       }
@@ -215,7 +213,7 @@
           date: "",
           title: "",
           text: "",
-          image: "/media/milestones/default.jpg"
+          image: undefined
         }, ModalMilestone: !this.state.ModalMilestone });
       }
 
@@ -230,7 +228,7 @@
       };
       
       // handles new/existing milestone submission
-      handleSubmitMilestone = (item, file) => {
+      handleSubmitMilestone = (item) => {
         this.toggleMilestoneModal();
         var SHA256, newFilename, oldItem, i;
 
@@ -239,7 +237,7 @@
         // if Milestone already exists
         if (item.id) {
           SHA256 = require("crypto-js/sha256");
-          newFilename = file !== null ? SHA256(Date.now().toString() + file.name) + file.name.substring(file.name.indexOf(".")) : null; // SHA256 encryption for filename (media/image)
+          newFilename = item.image !== null ? SHA256(Date.now().toString() + item.image.name) + item.image.name.substring(item.image.name.indexOf(".")) : null; // SHA256 encryption for filename (media/image)
           oldItem = this.props.activeItem;
 
           let data = new FormData();
@@ -251,7 +249,7 @@
           if(oldItem.date !== item.date) data.append('date', item.date);
           if(oldItem.text !== item.text) data.append('text', item.text);
           if(oldItem.title !== item.title) data.append('title', item.title);
-          if(oldItem.image !== file && file !== null) data.append('image', file, newFilename); // sha256 encryption
+          if(oldItem.image !== item.image && item.image !== null) data.append('image', item.image, newFilename); // sha256 encryption
 
           axios
           .patch(`http://localhost:8000/api/familytreemilestone/${item.id}/`, data, {
@@ -271,7 +269,7 @@
 
         // if there is no Milestone w/ provided ID
         SHA256 = require("crypto-js/sha256"); 
-        newFilename = SHA256(Date.now().toString() + file.name) + file.name.substring(file.name.indexOf(".")); // SHA256 encryption for filename (media/image)
+        newFilename = SHA256(Date.now().toString() + item.image.name) + item.image.name.substring(item.image.name.indexOf(".")); // SHA256 encryption for filename (media/image)
 
         let data = new FormData();
         data.append('user_id', item.user_id);
@@ -283,7 +281,7 @@
         data.append('date', item.date);
         data.append('text', item.text);
         data.append('title', item.title);
-        data.append('image', file, newFilename); // sha256 encryption
+        data.append('image', item.image, newFilename); // sha256 encryption
 
         axios.post('http://localhost:8000/api/familytreemilestone/', data, {
           headers: {
@@ -364,24 +362,26 @@
         this.setState({activeItem});
       };
 
+      // handles change of file (upload)
+      handleChangeFile = (e) => {
+        const activeItem = { ...this.state.activeItem, ["avatar"]: e.target.files[0]};
+        this.setState({activeItem});
+      }
+
       // handles mode change from Edit to Delete & vice versa
       handleChangeMode = checked => {
         this.setState({ deleteMode: checked }, () => this.downloadTimelineData());
       }
       
       // error handling, validates value in form fields
-      validate(first_name, last_name){
+      validate(form){
         return{
-          first_name: first_name.trim().length === 0,
-          first_name_too_long: first_name.trim().length > 50,
-          last_name: last_name.trim().length === 0,
-          last_name_too_long: last_name.trim().length > 50,
+          first_name: form.first_name.trim().length === 0,
+          first_name_too_long: form.first_name.trim().length > 50,
+          last_name: form.last_name.trim().length === 0,
+          last_name_too_long: form.last_name.trim().length > 50,
+          birth_place: form.birth_place.trim().length > 50,
         }
-      }
-      
-      // handles change of file (upload)
-      handleChangeFile = (e) => {
-        this.file = e.target.files[0];
       }
 
       // error handling
@@ -403,7 +403,7 @@
 
       render() {
         const { toggle, onSave } = this.props;
-        const errors = this.validate(this.state.activeItem.first_name, this.state.activeItem.last_name);
+        const errors = this.validate(this.state.activeItem);
         const isEnabled = !Object.keys(errors).some(x => errors[x]); // button is disables as long as error exists
         return (
           <React.Fragment>
@@ -434,7 +434,7 @@
                         <Input
                           type="text"
                           name="first_name"
-                          className={this.props.theme + (errors.first_name ? " error" : "")}
+                          className={this.props.theme + ((errors.first_name || errors.first_name_too_long) ? " error" : "")}
                           onBlur={this.handleBlur('first_name')}
                           value={this.state.activeItem.first_name}
                           onChange={this.handleChange}
@@ -450,7 +450,7 @@
                         <Input
                           type="text"
                           name="last_name"
-                          className={this.props.theme + (errors.last_name?" error":"")}
+                          className={this.props.theme + ((errors.last_name || errors.last_name_too_long) ? " error" : "")}
                           onBlur={this.handleBlur('last_name')}
                           value={this.state.activeItem.last_name}
                           onChange={this.handleChange}
@@ -512,12 +512,13 @@
                         <Label for="birth_place">Birthplace</Label>
                         <Input
                           type="text"
-                          className={"form-control " + this.props.theme}
+                          className={"form-control " + this.props.theme + (errors.birth_place ? " error" : "")}
                           name="birth_place"
                           value={this.state.activeItem.birth_place}
                           onChange={this.handleChange}
                           placeholder="Place of birth"
                         />
+                        {errors.birth_place ? (<small className='errortext'>This birth place is too long, max length is 50</small>) : null}
                       </FormGroup>
                     </Col>
                   </Row>
@@ -559,7 +560,7 @@
               </ModalBody>
               }
               <ModalFooter className={"modal-footer-"+this.props.theme}>
-                <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem, this.file)}>
+                <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem)}>
                   Save
                 </Button>
               </ModalFooter>
