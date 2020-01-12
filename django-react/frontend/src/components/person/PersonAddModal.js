@@ -92,7 +92,7 @@
                   <Input
                     type="text"
                     name="first_name"
-                    className={this.props.theme + (errors.first_name || errors.first_name_too_long) ? " error" : ""}
+                    className={this.props.theme + ((errors.first_name || errors.first_name_too_long) ? " error" : "")}
                     onBlur={this.handleBlur('first_name')}
                     value={this.state.activeItem.first_name}
                     onChange={this.handleChange}
@@ -107,7 +107,7 @@
                   <Input
                     type="text"
                     name="last_name"
-                    className={this.props.theme + (errors.last_name || errors.last_name_too_long) ? " error" : ""}
+                    className={this.props.theme + ((errors.last_name || errors.last_name_too_long) ? " error" : "")}
                     onBlur={this.handleBlur('last_name')}
                     value={this.state.activeItem.last_name}
                     onChange={this.handleChange}

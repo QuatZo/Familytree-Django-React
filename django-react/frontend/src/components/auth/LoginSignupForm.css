@@ -160,3 +160,39 @@
   background:#940f0f;
   outline:none;
 }
+
+/* Password requirements div */
+.password-req{
+  font-size: small;
+}
+
+/* Password requirements list */
+.password-req ul{
+  list-style: none;
+  padding: 0;
+}
+
+/* Password requirements list element */
+.password-req ul li{
+  padding-left: 1.3em;
+  margin: 0;
+}
+
+/* Password requirements list element before (icon) */
+.password-req ul li:before{
+  font-family: FontAwesome;
+  display: inline-block;
+  margin-left: -1.3em;
+  width: 1.3em;
+  margin: 0;
+}
+
+/* Password requirements list element before (icon) for true regex */
+.password-req ul li.good:before{
+  content: "\f00c";
+}
+
+/* Password requirements list element before (icon) for false regex */
+.password-req ul li.wrong:before{
+  content: "\f00d";
+}

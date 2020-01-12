@@ -434,7 +434,7 @@
                         <Input
                           type="text"
                           name="first_name"
-                          className={this.props.theme + (errors.first_name?" error":"")}
+                          className={this.props.theme + (errors.first_name ? " error" : "")}
                           onBlur={this.handleBlur('first_name')}
                           value={this.state.activeItem.first_name}
                           onChange={this.handleChange}

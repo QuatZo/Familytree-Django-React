@@ -81,7 +81,7 @@ class SignupForm extends React.Component {
                 <li className={errors.password_length ? "errortext wrong" : "good"}> 8 characters with no space </li>
               </ul>
             </div>
-            <div class="form-group"><button disabled={!isEnabled} class="btn btn-primary btn-block" type="submit">Register</button></div>
+            <div className="form-group"><button disabled={!isEnabled} class="btn btn-primary btn-block" type="submit">Register</button></div>
           </form>
       </div>
     );
