@@ -30,8 +30,6 @@
         };
       }
 
-      file = null; // chosen file (avatar)
-
       // handles change of all fields, except date, file & select
       handleChange = (e) => {
         let { name, value } = e.target;
@@ -47,17 +45,19 @@
 
       // handles change of File Field (upload)
       handleChangeFile = (e) => {
-        this.file = e.target.files[0];
+        const activeItem = { ...this.state.activeItem, ["avatar"]: e.target.files[0]};
+        this.setState({activeItem});
       }
 
       // error handling, validates given form fields
-      validate(first_name, last_name, file){
+      validate(form){
         return{
-          first_name: first_name.trim().length === 0,
-          first_name_too_long: first_name.trim().length > 50,
-          last_name: last_name.trim().length === 0,
-          last_name_too_long: last_name.trim().length > 50,
-          file: file === null,
+          first_name: form.first_name.trim().length === 0,
+          first_name_too_long: form.first_name.trim().length > 50,
+          last_name: form.last_name.trim().length === 0,
+          last_name_too_long: form.last_name.trim().length > 50,
+          file: form.avatar === null || form.avatar === undefined,
+          birth_place: form.birth_place.trim().length > 50,
         }
       }
 
@@ -70,7 +70,7 @@
       
       render() {
         const { toggle, onSave } = this.props;
-        const errors = this.validate(this.state.activeItem.first_name, this.state.activeItem.last_name, this.file);
+        const errors = this.validate(this.state.activeItem);
         const isEnabled = !Object.keys(errors).some(x => errors[x]); // button is disabled as long as error exists
         return (
           <Modal className={"modal-open-"+this.props.theme} isOpen={true} toggle={toggle}>
@@ -159,11 +159,12 @@
                   <Input
                     type="text"
                     name="birth_place"
-                    className={"form-control " + this.props.theme}
+                    className={"form-control " + this.props.theme + (errors.birth_place ? " error" : "")}
                     value={this.state.activeItem.birth_place}
                     onChange={this.handleChange}
                     placeholder="Place of birth"
                   />
+                  {errors.birth_place?(<small className='errortext'>This birth place is too long, max length is 50</small>):null}
                 </FormGroup>
                 <FormGroup>
                   <Label for="avatar">Avatar</Label>
@@ -179,7 +180,7 @@
               </Form>
             </ModalBody>
             <ModalFooter className={"modal-footer-"+this.props.theme}>
-              <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem, this.file)}>
+              <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem)}>
                 Save
               </Button>
             </ModalFooter>

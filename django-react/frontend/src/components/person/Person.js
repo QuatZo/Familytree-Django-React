@@ -22,12 +22,11 @@
       };
 
       // handles Person's submission for existing person (changes its data in API)
-      handleSubmit = (item, file) => {
+      handleSubmit = (item) => {
         this.toggle();
 
         if (item.id) {
           var SHA256 = require("crypto-js/sha256");
-          var newFilename = file !== null ? SHA256(Date.now().toString() + file.name) + file.name.substring(file.name.indexOf(".")) : null;
           var oldItem = this.props.person;
 
           let data = new FormData();
@@ -40,7 +39,10 @@
           if(oldItem.sex_choices !== item.sex_choices) data.append('sex_choices', item.sex_choices);
           if(oldItem.birth_place !== item.birth_place) data.append('birth_place', item.birth_place);
           if(oldItem.relationship_choices !== item.relationship_choices) data.append('relationship_choices', item.relationship_choices);
-          if(oldItem.avatar !== file && file !== null) data.append('avatar', file, newFilename); // sha256 encryption
+          if(oldItem.avatar !== item.avatar && item.avatar !== null && item.avatar !== undefined){
+            var newFilename = SHA256(Date.now().toString() + item.avatar.name) + item.avatar.name.substring(item.avatar.name.indexOf("."));
+            data.append('avatar', item.avatar, newFilename); // sha256 encryption
+          } 
 
           axios
           .patch(`http://localhost:8000/api/familytreepersons/${item.id}/`, data, {

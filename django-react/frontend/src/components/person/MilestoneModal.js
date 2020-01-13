@@ -39,8 +39,6 @@
         };
       }
 
-      file = null; // chosen files
-
       componentDidMount(){
         var options = [];
         axios
@@ -77,8 +75,15 @@
 
       // handles change for File Field
       handleChangeFile = (e) => {
-        this.file = e.target.files[0];
+        const activeItem = { ...this.state.activeItem, ["image"]: e.target.files[0]};
+        this.setState({activeItem});
       }
+
+      handleChangeSelect = selected => {
+        const activeItem = { ...this.state.activeItem, ["person_id"]: selected.filter(el => el !== undefined)};
+        this.setState({activeItem});
+      }
+
 
       // error handling
       handleBlur = (field) => (evt) => {
@@ -88,21 +93,21 @@
       }
       
       // error handling, validates given fields
-      validate(title, text, date, person_id, file){
-        person_id = person_id.filter(el => el !== undefined);
+      validate(form){
+        form.person_id = form.person_id.filter(el => el !== undefined);
         return{
-          title: title.trim().length === 0,
-          title_too_long: title.trim().length > 64,
-          text: text.trim().length > 512,
-          date: date.toString().trim().length === 0,
-          person_id: person_id.length === 0,
-          file: file === null && this.state.activeItem.id === undefined,
+          title: form.title.trim().length === 0,
+          title_too_long: form.title.trim().length > 64,
+          text: form.text.trim().length > 512,
+          date: form.date.toString().trim().length === 0,
+          person_id: form.person_id.length === 0,
+          file: (form.image === null || form.image === undefined) && form.id === undefined,
         }
       }
 
       render() {
         const { toggle, onSave } = this.props;
-        const errors = this.validate(this.state.activeItem.title, this.state.activeItem.text, this.state.activeItem.date, this.state.activeItem.person_id, this.file);
+        const errors = this.validate(this.state.activeItem);
         const isEnabled = !Object.keys(errors).some(x => errors[x]); // button is disables as long as error exists
         return (
           <Modal className={"modal-open-"+this.props.theme} isOpen={true} toggle={toggle}>
@@ -114,26 +119,26 @@
                   <Input
                     type="text"
                     name="title"
-                    className={this.props.theme + (errors.title || errors.title_too_long) ? "error" : ""}
+                    className={this.props.theme + ((errors.title || errors.title_too_long) ? " error" : "")}
                     onBlur={this.handleBlur('title')}
                     value={this.state.activeItem.title}
                     onChange={this.handleChange}
                     placeholder="Title"
                   />
                   {errors.title?(<small className='errortext'>Please insert title</small>):null}
-                  {errors.title_too_long?(<small className='errortext'>This name is too long, max length is 64</small>):null}
+                  {errors.title_too_long?(<small className='errortext'>This title is too long, max length is 64</small>):null}
                 </FormGroup>
                 <FormGroup>
                   <Label for="text">Text</Label>
                   <Input
                     type="text"
                     name="text"
-                    className={"form-control " + this.props.theme + (errors.text ? "error" : "")}
+                    className={"form-control " + this.props.theme + (errors.text ? " error" : "")}
                     value={this.state.activeItem.text}
                     onChange={this.handleChange}
                     placeholder="Text"
                   />
-                  {errors.text?(<small className='errortext'>This name is too long, max length is 512</small>):null}
+                  {errors.text?(<small className='errortext'>This text is too long, max length is 512</small>):null}
                 </FormGroup>
                 <FormGroup>
                   <Label for="date">Date</Label><br />
@@ -156,15 +161,7 @@
                     className={"form-control " + this.props.theme + (errors.person_id && this.state.activeItem.id === undefined ? " error" : "")}
                     selected={this.state.activeItem.person_id}
                     onBlur={this.handleBlur('person_id')}
-                    onSelectedChanged={selected => this.setState({ activeItem: {
-                        id: this.state.activeItem.id,
-                        user_id: this.state.activeItem.user_id,
-                        person_id: selected.filter(el => el !== undefined),
-                        date: this.state.activeItem.date,
-                        title: this.state.activeItem.title,
-                        text: this.state.activeItem.text,
-                        image: this.state.activeItem.image,
-                      }})}
+                    onSelectedChanged={this.handleChangeSelect}
                   />
                   {errors.person_id?(<small className='errortext'> Please, choose at least one person from the list</small>):null}
                   </FormGroup>
@@ -182,7 +179,7 @@
               </Form>
             </ModalBody>
             <ModalFooter className={"modal-footer-"+this.props.theme}>
-              <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem, this.file)}>
+              <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem)}>
                 Save
               </Button>
             </ModalFooter>
