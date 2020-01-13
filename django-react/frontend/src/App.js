@@ -153,7 +153,7 @@
               username: res.data.username
             }, () => ShowNotification(NOTIFY.SUCCESS_REGISTER));
           })
-          .catch(() => ShowNotification(NOTIFY.ERROR_LOGIN));
+          .catch(() => ShowNotification(NOTIFY.ERROR_REGISTER));
       };
     
       // log out user from website
@@ -192,7 +192,6 @@
       
       // render page (nav bar + login/signup form if not logged in; else Familytree.js)
       render() {
-
         let form;
         switch (this.state.displayed_form) {
           case 'login':

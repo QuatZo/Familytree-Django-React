@@ -9,6 +9,7 @@ export enum NOTIFY {
 
     ERROR,
     ERROR_LOGIN,
+    ERROR_REGISTER,
     ERROR_TIMEOUT,
 
     RESET,

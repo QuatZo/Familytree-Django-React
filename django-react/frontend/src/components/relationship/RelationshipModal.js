@@ -110,16 +110,19 @@
       };
 
       // error handling, validates fields
-      validate(title, begin_date){
+      validate(form){
         return{
-          title: title.trim().length === 0,
-          begin_date: begin_date.toString().trim().length === 0,
+          title: form.title.trim().length === 0,
+          title_too_long: form.title.trim().length > 64,
+          description: form.description.trim().length > 512,
+          begin_date: form.begin_date.toString().trim().length === 0,
+          end_date_earlier_than_begin: form.end_date !== null && form.end_date !== undefined && form.end_date.toString().trim() < form.begin_date.toString().trim(),
         }
       }
 
       render() {
         const { toggle, onSave } = this.props;
-        const errors = this.validate(this.state.activeItem.title, this.state.activeItem.begin_date);
+        const errors = this.validate(this.state.activeItem);
         const isEnabled = !Object.keys(errors).some(x => errors[x]); // button is disabled as long as error exists
         return (
           <Modal className={"modal-open-"+this.props.theme} isOpen={true} toggle={toggle}>
@@ -131,23 +134,26 @@
                   <Input
                     type="text"
                     name="title"
-                    className={this.props.theme + (errors.title ? " error" : "")}
+                    className={this.props.theme + ((errors.title || errors.title_too_long) ? " error" : "")}
                     onBlur={this.handleBlur('title')}
                     value={this.state.activeItem.title}
                     onChange={this.handleChange}
                     placeholder="Title"
                   />
+                  {errors.title ? (<small className='errortext'>Please insert title</small>) : null}
+                  {errors.title_too_long ? (<small className='errortext'>This title is too long, max length is 64</small>) : null}
                 </FormGroup>
                 <FormGroup>
                   <Label for="description">Description</Label>
                   <Input
                     type="text"
                     name="description"
-                    className={this.props.theme}
+                    className={this.props.theme + (errors.description ? " error" : "")}
                     value={this.state.activeItem.description}
                     onChange={this.handleChange}
                     placeholder="Description"
                   />
+                  {errors.description ? (<small className='errortext'>This description is too long, max length is 512</small>) : null}
                 </FormGroup>
                 <FormGroup>
                   <Label for="begin_date">Begin Date</Label><br />
@@ -161,18 +167,20 @@
                     showMonthDropdown
                     showYearDropdown
                     dropdownMode="select"/>
+                  {errors.begin_date ? (<small className='errortext'>Please insert begin date</small>) : null}
                 </FormGroup>
                 <FormGroup>
                   <Label for="end_date">End date (optional)</Label><br />
                   <DatePicker 
                     name="end_date"
-                    className={"form-control " + this.props.theme}
+                    className={"form-control " + this.props.theme + (errors.end_date_earlier_than_begin ? " error" : "")}
                     value={this.state.activeItem.end_date}
                     onChange={ this.handleChangeEndDate} 
                     peekNextMonth
                     showMonthDropdown
                     showYearDropdown
                     dropdownMode="select"/>
+                  {errors.end_date_earlier_than_begin ? (<small className='errortext'>End date can't be earlier than begin date. We don't support time travel</small>) : null}
                 </FormGroup>
                 <FormGroup>
                   <Label for="relationships">What's {this.getPerson(this.state.activeItem.id_2)} to the {this.getPerson(this.state.activeItem.id_1)}</Label>

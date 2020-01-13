@@ -27,6 +27,9 @@
           case NOTIFY.ERROR_LOGIN:
               toast.error("Incorrect username and/or password!");
               break;
+          case NOTIFY.ERROR_REGISTER:
+              toast.error("This username is already taken!")
+              break;
           case NOTIFY.ERROR_TIMEOUT:
               toast.error("Your session has expired. Please, log in!");
               break;
