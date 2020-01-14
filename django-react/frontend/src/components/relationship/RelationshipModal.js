@@ -78,8 +78,8 @@
 
       // gets person's first & last name by using only its ID
       getPerson(idPerson){
-        if(this.state.personList.length === 0){ return "" }
-        var targetPerson = this.state.personList.find(item => item.id === idPerson); // find certain person in personList
+        if(this.state.personList.length === 0 ||this.state.personList.length === undefined ){ return "" }
+        var targetPerson = Array.from(this.state.personList).find(item => item.id === idPerson); // find certain person in personList
         return targetPerson.first_name + " " + targetPerson.last_name;
       }
 
@@ -99,13 +99,27 @@
 
       // handle Form changes for Begin Date field
       handleChangeBeginDate = date => {
-        const activeItem = { ...this.state.activeItem, ["begin_date"]: (new Date(date)).toISOString().slice(0, 10)};
+        var dt;
+        try{
+          dt = (new Date(date)).toISOString().slice(0, 10);
+        }
+        catch(RangeError){
+          dt = "";
+        }
+        const activeItem = { ...this.state.activeItem, ["begin_date"]: dt};
         this.setState({activeItem});
       };
 
       // handle Form changes for End Date field
       handleChangeEndDate = date => {
-        const activeItem = { ...this.state.activeItem, ["end_date"]: (new Date(date)).toISOString().slice(0, 10)};
+        var dt;
+        try{
+          dt = (new Date(date)).toISOString().slice(0, 10);
+        }
+        catch(RangeError){
+          dt = "";
+        }
+        const activeItem = { ...this.state.activeItem, ["end_date"]: dt};
         this.setState({activeItem});
       };
 
@@ -116,7 +130,7 @@
           title_too_long: form.title.trim().length > 64,
           description: form.description.trim().length > 512,
           begin_date: form.begin_date.toString().trim().length === 0,
-          end_date_earlier_than_begin: form.end_date !== null && form.end_date !== undefined && form.end_date.toString().trim() < form.begin_date.toString().trim(),
+          end_date_earlier_than_begin: form.end_date !== null && form.end_date !== undefined && form.end_date !== "" && form.end_date.toString().trim() < form.begin_date.toString().trim(),
         }
       }
 

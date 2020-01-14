@@ -44,36 +44,38 @@ const PERSON_COORDINATES = [
   },
 ]
 
-it('renders without crashing', () => {
-  shallow(<Relationship relationship={RELATIONSHIP_DATA} personClassCoordinates={PERSON_COORDINATES} personSize={PERSON_SIZE}/>);
-});
-
-it('doesn\'t include nav bar at page load', () => {
-  const app = shallow(<Relationship relationship={RELATIONSHIP_DATA} personClassCoordinates={PERSON_COORDINATES} personSize={PERSON_SIZE}/>);
-  expect(app.containsMatchingElement(<Nav />)).not.toEqual(true)
-});
-
-it('doesn\'t include Login Form at page load', () => {
-  const app = shallow(<Relationship relationship={RELATIONSHIP_DATA} personClassCoordinates={PERSON_COORDINATES} personSize={PERSON_SIZE}/>);
-  expect(app.containsMatchingElement(<LoginForm />)).not.toEqual(true)
-});
-
-it('doesn\'t include Signup Form at page load', () => {
-  const app = shallow(<Relationship relationship={RELATIONSHIP_DATA} personClassCoordinates={PERSON_COORDINATES} personSize={PERSON_SIZE}/>);
-  expect(app.containsMatchingElement(<SignupForm />)).not.toEqual(true)
-});
-
-it('doesn\'t include Familytree at page load', () => {
-  const app = shallow(<Relationship relationship={RELATIONSHIP_DATA} personClassCoordinates={PERSON_COORDINATES} personSize={PERSON_SIZE}/>);
-  expect(app.containsMatchingElement(<Familytree />)).not.toEqual(true)
-});
-
-it('doesn\'t include App at page load', () => {
-  const app = shallow(<Relationship relationship={RELATIONSHIP_DATA} personClassCoordinates={PERSON_COORDINATES} personSize={PERSON_SIZE}/>);
-  expect(app.containsMatchingElement(<App />)).not.toEqual(true)
-});
-
-it('doesn\'t include Person at page load', () => {
-  const app = shallow(<Relationship relationship={RELATIONSHIP_DATA} personClassCoordinates={PERSON_COORDINATES} personSize={PERSON_SIZE}/>);
-  expect(app.containsMatchingElement(<Person />)).not.toEqual(true)
+describe('Initial load', () => {
+  it('renders without crashing', () => {
+    shallow(<Relationship relationship={RELATIONSHIP_DATA} personClassCoordinates={PERSON_COORDINATES} personSize={PERSON_SIZE}/>);
+  });
+  
+  it('doesn\'t include nav bar at page load', () => {
+    const app = shallow(<Relationship relationship={RELATIONSHIP_DATA} personClassCoordinates={PERSON_COORDINATES} personSize={PERSON_SIZE}/>);
+    expect(app.containsMatchingElement(<Nav />)).not.toEqual(true)
+  });
+  
+  it('doesn\'t include Login Form at page load', () => {
+    const app = shallow(<Relationship relationship={RELATIONSHIP_DATA} personClassCoordinates={PERSON_COORDINATES} personSize={PERSON_SIZE}/>);
+    expect(app.containsMatchingElement(<LoginForm />)).not.toEqual(true)
+  });
+  
+  it('doesn\'t include Signup Form at page load', () => {
+    const app = shallow(<Relationship relationship={RELATIONSHIP_DATA} personClassCoordinates={PERSON_COORDINATES} personSize={PERSON_SIZE}/>);
+    expect(app.containsMatchingElement(<SignupForm />)).not.toEqual(true)
+  });
+  
+  it('doesn\'t include Familytree at page load', () => {
+    const app = shallow(<Relationship relationship={RELATIONSHIP_DATA} personClassCoordinates={PERSON_COORDINATES} personSize={PERSON_SIZE}/>);
+    expect(app.containsMatchingElement(<Familytree />)).not.toEqual(true)
+  });
+  
+  it('doesn\'t include App at page load', () => {
+    const app = shallow(<Relationship relationship={RELATIONSHIP_DATA} personClassCoordinates={PERSON_COORDINATES} personSize={PERSON_SIZE}/>);
+    expect(app.containsMatchingElement(<App />)).not.toEqual(true)
+  });
+  
+  it('doesn\'t include Person at page load', () => {
+    const app = shallow(<Relationship relationship={RELATIONSHIP_DATA} personClassCoordinates={PERSON_COORDINATES} personSize={PERSON_SIZE}/>);
+    expect(app.containsMatchingElement(<Person />)).not.toEqual(true)
+  });  
 });

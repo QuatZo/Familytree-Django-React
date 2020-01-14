@@ -403,7 +403,8 @@ class APITest(APITestCase):
         user, token = self.pass_authorization()
 
         new_data = {
-            'relationships': 'adopted-child',
+            'relationships': 'cousin',
+            'descendant': False,
         }
 
         self.client.credentials(HTTP_AUTHORIZATION='JWT {0}'.format(token))

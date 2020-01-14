@@ -46,7 +46,7 @@
             headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
           })
           .then(res => {
-            res.data.map(item => {
+            Array.from(res.data).map(item => {
               options.push({
                 label: item.first_name + " " + item.last_name,
                 value: item.id,
@@ -69,7 +69,14 @@
 
       // handles change for Date Field
       handleChangeDate = date => {
-        const activeItem = { ...this.state.activeItem, ["date"]: (new Date(date)).toISOString().slice(0, 10)};
+        var dt;
+        try{
+          dt = (new Date(date)).toISOString().slice(0, 10);
+        }
+        catch(RangeError){
+          dt = "";
+        }
+        const activeItem = { ...this.state.activeItem, ["date"]: dt};
         this.setState({activeItem});
       };
 
@@ -94,7 +101,13 @@
       
       // error handling, validates given fields
       validate(form){
-        form.person_id = form.person_id.filter(el => el !== undefined);
+        try{
+          form.person_id = form.person_id.filter(el => el !== undefined);
+        }
+        catch(TypeError){
+          form.person_id = []
+        }
+
         return{
           title: form.title.trim().length === 0,
           title_too_long: form.title.trim().length > 64,
@@ -157,6 +170,7 @@
                 <FormGroup>
                   <Label for="person_id">Persons {errors.person_id ? "" : null}</Label><br />
                   <MultiSelect
+                    name="multiselect"
                     options={this.state.personSelectOptions}
                     className={"form-control " + this.props.theme + (errors.person_id && this.state.activeItem.id === undefined ? " error" : "")}
                     selected={this.state.activeItem.person_id}

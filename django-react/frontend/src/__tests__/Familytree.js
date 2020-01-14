@@ -127,89 +127,93 @@ const DOUBLED_RELATIONSHIP_DATA = [
   },
 ]
 
-it('renders without crashing', () => {
-  shallow(<Familytree personList={[]} relationshipList={[]}/>);
+describe('Initial load', () => {
+  it('renders without crashing', () => {
+    shallow(<Familytree personList={[]} relationshipList={[]}/>);
+  });
+  
+  it('doesn\'t include nav bar at page load', () => {
+    const app = shallow(<Familytree personList={[]} relationshipList={[]} />);
+    expect(app.containsMatchingElement(<Nav />)).not.toEqual(true)
+  });
+  
+  it('doesn\'t include Login Form at page load', () => {
+    const app = shallow(<Familytree personList={[]} relationshipList={[]}/>);
+    expect(app.containsMatchingElement(<LoginForm />)).not.toEqual(true)
+  });
+  
+  it('doesn\'t include Signup Form at page load', () => {
+    const app = shallow(<Familytree personList={[]} relationshipList={[]}/>);
+    expect(app.containsMatchingElement(<SignupForm />)).not.toEqual(true)
+  });
+  
+  it('doesn\'t include App at page load', () => {
+    const app = shallow(<Familytree personList={[]} relationshipList={[]}/>);
+    expect(app.containsMatchingElement(<App />)).not.toEqual(true)
+  });
+  
+  it('doesn\'t include Person on newly created account at page load', () => {
+    const app = shallow(<Familytree personList={[]} relationshipList={[]}/>);
+    expect(app.containsMatchingElement(<Person />)).not.toEqual(true)
+  });
+  
+  it('doesn\'t include Relationship on newly created account at page load', () => {
+    const app = shallow(<Familytree personList={[]} relationshipList={[]}/>);
+    expect(app.containsMatchingElement(<Relationship />)).not.toEqual(true)
+  });
+  
+  it('has 6 Buttons', () => {
+    const app = shallow(<Familytree personList={[]} relationshipList={[]}/>);
+    var download = app.find('div.download-buttons').getElements().map(el => el.props.children.type)
+    var operating = app.find('div.operating-buttons').getElements().map(gr => gr.props.children.map(el => el.type))
+    var types = download.concat(operating[0])
+    types = types.filter(Boolean)
+    expect(types).toEqual(['button', 'button', 'button', 'button', 'button', 'button'])
+  });
 });
 
-it('doesn\'t include nav bar at page load', () => {
-  const app = shallow(<Familytree personList={[]} relationshipList={[]} />);
-  expect(app.containsMatchingElement(<Nav />)).not.toEqual(true)
-});
-
-it('doesn\'t include Login Form at page load', () => {
-  const app = shallow(<Familytree personList={[]} relationshipList={[]}/>);
-  expect(app.containsMatchingElement(<LoginForm />)).not.toEqual(true)
-});
-
-it('doesn\'t include Signup Form at page load', () => {
-  const app = shallow(<Familytree personList={[]} relationshipList={[]}/>);
-  expect(app.containsMatchingElement(<SignupForm />)).not.toEqual(true)
-});
-
-it('doesn\'t include App at page load', () => {
-  const app = shallow(<Familytree personList={[]} relationshipList={[]}/>);
-  expect(app.containsMatchingElement(<App />)).not.toEqual(true)
-});
-
-it('doesn\'t include Person on newly created account at page load', () => {
-  const app = shallow(<Familytree personList={[]} relationshipList={[]}/>);
-  expect(app.containsMatchingElement(<Person />)).not.toEqual(true)
-});
-
-it('doesn\'t include Relationship on newly created account at page load', () => {
-  const app = shallow(<Familytree personList={[]} relationshipList={[]}/>);
-  expect(app.containsMatchingElement(<Relationship />)).not.toEqual(true)
-});
-
-it('has 6 Buttons', () => {
-  const app = shallow(<Familytree personList={[]} relationshipList={[]}/>);
-  var download = app.find('div.download-buttons').getElements().map(el => el.props.children.type)
-  var operating = app.find('div.operating-buttons').getElements().map(gr => gr.props.children.map(el => el.type))
-  var types = download.concat(operating[0])
-  types = types.filter(Boolean)
-  expect(types).toEqual(['button', 'button', 'button', 'button', 'button', 'button'])
-});
-
-it('renders with one person without crashing', () => {
-  shallow(<Familytree personList={PERSON_DATA} relationshipList={[]}/>);
-});
-
-it('includes Person at page load if exists in API', () => {
-  const app = shallow(<Familytree personList={PERSON_DATA} relationshipList={[]}/>);
-  expect(app.containsMatchingElement(<Person />)).toEqual(true)
-});
-
-it('includes multiple Persons at page load if exists in API', () => {
-  const app = shallow(<Familytree personList={MULTIPLE_PERSON_DATA} relationshipList={[]}/>);
-  expect(app.find('Person').getElements()).toHaveLength(MULTIPLE_PERSON_DATA.length)
-});
-
-it('renders with one relationship without crashing', () => {
-  shallow(<Familytree personList={[]} relationshipList={RELATIONSHIP_DATA}/>);
-});
-
-it('includes reationship at page load if exists in API', () => {
-  const app = shallow(<Familytree personList={[]} relationshipList={RELATIONSHIP_DATA}/>);
-  expect(app.containsMatchingElement(<Relationship />)).toEqual(true)
-});
-
-it('includes multiple Relationships at page load if exists in API', () => {
-  const app = shallow(<Familytree personList={[]} relationshipList={MULTIPLE_RELATIONSHIP_DATA}/>);
-  expect(app.find('Relationship').getElements()).toHaveLength(MULTIPLE_RELATIONSHIP_DATA.length)
-});
-
-it('includes one if double Relationships at page load if exists in API', () => {
-  // by id_1, id_2
-  const app = shallow(<Familytree personList={[]} relationshipList={DOUBLED_RELATIONSHIP_DATA}/>);
-  expect(app.find('Relationship').getElements()).toHaveLength(1)
-});
-
-it('renders multiple persons & relationship without crashing', () => {
-  shallow(<Familytree personList={MULTIPLE_PERSON_DATA} relationshipList={RELATIONSHIP_DATA}/>);
-});
-
-it('includes multiple persons & relationships at page load if exists in API', () => {
-  const app = shallow(<Familytree personList={MULTIPLE_PERSON_DATA} relationshipList={MULTIPLE_RELATIONSHIP_DATA}/>);
-  expect(app.find('Person').getElements()).toHaveLength(MULTIPLE_PERSON_DATA.length)
-  expect(app.find('Relationship').getElements()).toHaveLength(MULTIPLE_RELATIONSHIP_DATA.length)
+describe('Rendering child components', () => {
+  it('renders with one person without crashing', () => {
+    shallow(<Familytree personList={PERSON_DATA} relationshipList={[]}/>);
+  });
+  
+  it('includes Person at page load if exists in API', () => {
+    const app = shallow(<Familytree personList={PERSON_DATA} relationshipList={[]}/>);
+    expect(app.containsMatchingElement(<Person />)).toEqual(true)
+  });
+  
+  it('includes multiple Persons at page load if exists in API', () => {
+    const app = shallow(<Familytree personList={MULTIPLE_PERSON_DATA} relationshipList={[]}/>);
+    expect(app.find('Person').getElements()).toHaveLength(MULTIPLE_PERSON_DATA.length)
+  });
+  
+  it('renders with one relationship without crashing', () => {
+    shallow(<Familytree personList={[]} relationshipList={RELATIONSHIP_DATA}/>);
+  });
+  
+  it('includes reationship at page load if exists in API', () => {
+    const app = shallow(<Familytree personList={[]} relationshipList={RELATIONSHIP_DATA}/>);
+    expect(app.containsMatchingElement(<Relationship />)).toEqual(true)
+  });
+  
+  it('includes multiple Relationships at page load if exists in API', () => {
+    const app = shallow(<Familytree personList={[]} relationshipList={MULTIPLE_RELATIONSHIP_DATA}/>);
+    expect(app.find('Relationship').getElements()).toHaveLength(MULTIPLE_RELATIONSHIP_DATA.length)
+  });
+  
+  it('includes one if double Relationships at page load if exists in API', () => {
+    // by id_1, id_2
+    const app = shallow(<Familytree personList={[]} relationshipList={DOUBLED_RELATIONSHIP_DATA}/>);
+    expect(app.find('Relationship').getElements()).toHaveLength(1)
+  });
+  
+  it('renders multiple persons & relationship without crashing', () => {
+    shallow(<Familytree personList={MULTIPLE_PERSON_DATA} relationshipList={RELATIONSHIP_DATA}/>);
+  });
+  
+  it('includes multiple persons & relationships at page load if exists in API', () => {
+    const app = shallow(<Familytree personList={MULTIPLE_PERSON_DATA} relationshipList={MULTIPLE_RELATIONSHIP_DATA}/>);
+    expect(app.find('Person').getElements()).toHaveLength(MULTIPLE_PERSON_DATA.length)
+    expect(app.find('Relationship').getElements()).toHaveLength(MULTIPLE_RELATIONSHIP_DATA.length)
+  });
 });
