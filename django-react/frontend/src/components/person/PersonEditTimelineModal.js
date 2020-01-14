@@ -109,7 +109,7 @@
           params: { person_id: this.props.activeItem.id }
         })
         .then(res => {
-          res.data.map(item => {
+          Array.from(res.data).map(item => {
             var dateStr = item.date.split("-");
             var togetherWithNames = [];
             var togetherWith = this.state.personList.filter(el => el.id !== this.props.activeItem.id && item.person_id.includes(el.id));
@@ -139,7 +139,7 @@
             params: { id_1: this.props.activeItem.id }
           })
           .then(res => {
-            res.data.map(item => {
+            Array.from(res.data).map(item => {
               var dateStr = item.begin_date.split("-");
               var togetherWithNames = [];
               var togetherWith = this.state.personList.filter(el => el.id !== this.props.activeItem.id && el.id === item.id_2);
@@ -171,7 +171,7 @@
               params: { id_2: this.props.activeItem.id }
             })
             .then(res => {
-              res.data.map(item => {
+              Array.from(res.data).map(item => {
                 var dateStr = item.begin_date.split("-");
                 var togetherWithNames = [];
                 var togetherWith = this.state.personList.filter(el => el.id !== this.props.activeItem.id && el.id === item.id_1);
@@ -416,17 +416,6 @@
               <ModalHeader className={"modal-header-"+this.props.theme} toggle={toggle}> 
                 Person
                 <Form>
-                  <FormGroup>
-                    <Input
-                    type="number"
-                    className={'form-control ' + this.props.theme}
-                    name="user_id"
-                    value={localStorage.getItem('user_id')}
-                    hidden
-                    readOnly
-                    >
-                    </Input>
-                  </FormGroup>
                   <Row form>
                     <Col md={4}>
                       <FormGroup>
@@ -528,7 +517,7 @@
                       <Label for="avatar">Change Avatar</Label>
                       <Input
                         type="file"
-                        className={this.props.theme}
+                        className={"form-control " + this.props.theme}
                         name="avatar"
                         onChange={this.handleChangeFile}
                       />

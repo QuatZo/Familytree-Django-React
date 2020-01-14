@@ -77,16 +77,6 @@
             <ModalHeader className={"modal-header-"+this.props.theme} toggle={toggle}> Person </ModalHeader>
             <ModalBody className={"modal-body-"+this.props.theme}>
               <Form>
-              <FormGroup >
-                <Input 
-                type="number"
-                name="user_id"
-                value={localStorage.getItem('user_id')}
-                hidden
-                readOnly
-                >
-                </Input>
-              </FormGroup>
               <FormGroup>
                   <Label for="first_name">First Name</Label>
                   <Input
