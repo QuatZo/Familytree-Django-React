@@ -141,13 +141,13 @@
                   <div>
                     <button
                       onClick={() => this.editItem(this.props.person)}
-                      className="btn btn-outline-info btn-xl personbutton"
+                      className={"btn " + (this.props.theme === 'dark' ? 'dark btn-outline-' : 'light btn-') + "primary btn-xl personbutton"}
                     >
                       <i className="fas fa-user-edit"></i>
                     </button>
                     <button
                       onClick={() => this.props.toggleConfirmModal("Delete Person", "Are you sure you want to delete " + this.props.person.first_name + " " + this.props.person.last_name + " with connected relationships from Familytree?", "Delete", "Cancel", () => this.handleDelete(this.props.person))}
-                      className="btn btn-outline-danger btn-xl personbutton"
+                      className={"btn " + (this.props.theme === 'dark' ? 'dark btn-outline-' : 'light btn-') + "primary btn-xl personbutton"}
                     >
                       <i className="fas fa-user-minus"></i>
                     </button>

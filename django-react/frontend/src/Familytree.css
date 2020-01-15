@@ -1,13 +1,3 @@
-/* Active person */
-.active{
-  border-color: #66ff66 !important;
-}
-
-/* Error in Forms */
-.error {
-  border: 1px solid red;
-}
-
 /* Scalable Vector Graphics */
 .relationshipContainer-dark,
 .relationshipContainer-light
@@ -65,19 +55,23 @@
   z-index: 99;
 }
 
-/* Datepicker container */
-.react-datepicker-wrapper{
-  width: 100%;
+.btn.famtree.dark{
+  border-color: var(--main-secondary-dark);
+  color: var(--main-secondary-dark);
 }
 
-/* Relationship names on hover (Tooltip) */
-.relationshipNames{
-  font-size: calc(12px + .5vw);
-  font-family: fantasy;
-  font-style: oblique;
+.btn.famtree.dark:hover{
+  background-color: var(--main-secondary-dark);
+  color: var(--main-on-secondary-dark);
 }
 
-/* List for Form -> Select*/
-ul.select-list li{
-  margin: 0px;
+.btn.famtree.light{
+  background-color: var(--main-secondary-light);
+  border-color: var(--main-secondary-light);
+  color: var(--main-on-secondary-light);
+}
+.btn.famtree.light:hover{
+  background-color: var(--main-secondary-hover-light);
+  border-color: var(--main-secondary-hover-light);
+  color: var(--main-on-secondary-hover-light);
 }

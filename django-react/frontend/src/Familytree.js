@@ -495,25 +495,22 @@
             {this.state.printable ? null :(
             <div className="buttons">
               <div className="download-buttons">
-                <button onClick={() => this.downloadPDF()} className={this.props.theme==="dark"? "btn btn-outline-light btn-circle btn-xl":"btn btn-outline-secondary btn-circle btn-xl"}>
+                <button onClick={() => this.downloadPDF()} className={"btn " + (this.props.theme === 'dark' ? 'dark btn-outline-' : 'light btn-') + "primary btn-circle btn-xl famtree"}>
                   <i className="fas fa-download"></i>
                 </button>
               </div>
               <div className="operating-buttons">
-                <button onClick={() => this.toggleConfirmModal("Delete Familytree", "Are you sure you want to delete WHOLE familytree?", "Delete", "Cancel", () => this.deleteEverything())} className="btn btn-outline-danger btn-circle btn-xl">
+                <button onClick={() => this.toggleConfirmModal("Delete Familytree", "Are you sure you want to delete WHOLE familytree?", "Delete", "Cancel", () => this.deleteEverything())} className={"btn " + (this.props.theme === 'dark' ? 'dark btn-outline-' : 'light btn-') + "primary btn-circle btn-xl famtree"}>
                   <i className="fas fa-times"></i>
                 </button>
-                <button onClick={this.resetCoords.bind(this)} className="btn btn-outline-secondary btn-circle btn-xl">
+                <button onClick={this.resetCoords.bind(this)} className={"btn " + (this.props.theme === 'dark' ? 'dark btn-outline-' : 'light btn-') + "primary btn-circle btn-xl famtree"}>
                   <i className="fas fa-redo"></i>
                 </button>
-                <button disabled={this.state.saving} onClick={() => this.toggleConfirmModal("Save coords", "Are you sure you want to save coords for every person in Familytree?", "Save", "Cancel", () => this.saveCoords())} className="btn btn-outline-info btn-circle btn-xl">
+                <button disabled={this.state.saving} onClick={() => this.toggleConfirmModal("Save coords", "Are you sure you want to save coords for every person in Familytree?", "Save", "Cancel", () => this.saveCoords())} className={"btn " + (this.props.theme === 'dark' ? 'dark btn-outline-' : 'light btn-') + "primary btn-circle btn-xl famtree"}>
                   <i className="far fa-save"></i>
                 </button>
-                <button onClick={this.createPerson} className="btn btn-outline-success btn-circle btn-xl">
+                <button onClick={this.createPerson} className={"btn " + (this.props.theme === 'dark' ? 'dark btn-outline-' : 'light btn-') + "primary btn-circle btn-xl famtree"}>
                   <i className="fas fa-plus"></i>
-                </button>
-                <button onClick={this.props.changeThemeMode} className={this.props.theme === "dark" ? "btn btn-outline-light btn-circle btn-xl" : "btn btn-outline-secondary btn-circle btn-xl"}>
-                  <i className={this.props.theme === "dark" ? "fas fa-sun" : "fa fa-moon"}></i>
                 </button>
               </div>
             </div>

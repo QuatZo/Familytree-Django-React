@@ -16,6 +16,7 @@
     import ModalMilestone from './MilestoneModal'
     import ModalRelationship from '../relationship/RelationshipModal'
     import ReactPlayer from 'react-player'
+    import moment from 'moment'
     
     import {
       Button,
@@ -358,7 +359,7 @@
 
       // handles change for Date Fields
       handleChangeDate = date => {
-        const activeItem = { ...this.state.activeItem, ["birth_date"]: (new Date(date)).toISOString().slice(0, 10)};
+        const activeItem = { ...this.state.activeItem, ["birth_date"]: moment(date).format('YYYY-MM-DD')};
         this.setState({activeItem});
       };
 
@@ -429,8 +430,8 @@
                           onChange={this.handleChange}
                           placeholder="First Name"
                         />
-                        {errors.first_name?(<small className='errortext'>Please insert first name</small>):null}
-                        {errors.first_name_too_long?(<small className='errortext'>This name is too long, max length is 50</small>):null}
+                        {errors.first_name?(<small className={'errortext ' + this.props.theme}>Please insert first name</small>):null}
+                        {errors.first_name_too_long?(<small className={'errortext ' + this.props.theme}>This name is too long, max length is 50</small>):null}
                       </FormGroup>
                     </Col>
                     <Col md={4}>
@@ -445,8 +446,8 @@
                           onChange={this.handleChange}
                           placeholder="Last Name"
                         />
-                        {errors.last_name?(<small className='errortext'>Please insert last name</small>):null}
-                        {errors.last_name_too_long?(<small className='errortext'>This name is too long, max length is 50</small>):null}
+                        {errors.last_name?(<small className={'errortext ' + this.props.theme}>Please insert last name</small>):null}
+                        {errors.last_name_too_long?(<small className={'errortext ' + this.props.theme}>This name is too long, max length is 50</small>):null}
                       </FormGroup>
                     </Col>
                     <Col md={4}>
@@ -507,7 +508,7 @@
                           onChange={this.handleChange}
                           placeholder="Place of birth"
                         />
-                        {errors.birth_place ? (<small className='errortext'>This birth place is too long, max length is 50</small>) : null}
+                        {errors.birth_place ? (<small className={'errortext ' + this.props.theme}>This birth place is too long, max length is 50</small>) : null}
                       </FormGroup>
                     </Col>
                   </Row>
@@ -534,7 +535,7 @@
                       </FormGroup>
                     </Col>
                     <Col>
-                      <Button color="success" onClick={() => this.createMilestone()} style={{float: 'right'}}>
+                      <Button className="confirm" onClick={() => this.createMilestone()} style={{float: 'right'}}>
                         Add Milestone
                       </Button>
                     </Col>
@@ -549,7 +550,7 @@
               </ModalBody>
               }
               <ModalFooter className={"modal-footer-"+this.props.theme}>
-                <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem)}>
+                <Button disabled={!isEnabled} className="confirm" onClick={() => onSave(this.state.activeItem)}>
                   Save
                 </Button>
               </ModalFooter>

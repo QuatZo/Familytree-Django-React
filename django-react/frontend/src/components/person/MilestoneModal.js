@@ -9,7 +9,8 @@
     import MultiSelect from "@khanacademy/react-multi-select";    
     import {NOTIFY} from '../Enums.ts';
     import ShowNotification from '../notification/Notification';
-    import '../Modal.css'
+    import '../Modal.css';
+    import moment from 'moment';
     
     import {
       Button,
@@ -71,7 +72,7 @@
       handleChangeDate = date => {
         var dt;
         try{
-          dt = (new Date(date)).toISOString().slice(0, 10);
+          dt = moment(date).format('YYYY-MM-DD')
         }
         catch(RangeError){
           dt = "";
@@ -138,8 +139,8 @@
                     onChange={this.handleChange}
                     placeholder="Title"
                   />
-                  {errors.title?(<small className='errortext'>Please insert title</small>):null}
-                  {errors.title_too_long?(<small className='errortext'>This title is too long, max length is 64</small>):null}
+                  {errors.title?(<small className={'errortext ' + this.props.theme}>Please insert title</small>):null}
+                  {errors.title_too_long?(<small className={'errortext ' + this.props.theme}>This title is too long, max length is 64</small>):null}
                 </FormGroup>
                 <FormGroup>
                   <Label for="text">Text</Label>
@@ -151,7 +152,7 @@
                     onChange={this.handleChange}
                     placeholder="Text"
                   />
-                  {errors.text?(<small className='errortext'>This text is too long, max length is 512</small>):null}
+                  {errors.text?(<small className={'errortext ' + this.props.theme}>This text is too long, max length is 512</small>):null}
                 </FormGroup>
                 <FormGroup>
                   <Label for="date">Date</Label><br />
@@ -165,7 +166,7 @@
                     showMonthDropdown
                     showYearDropdown
                     dropdownMode="select"/>
-                    {errors.date?(<small className='errortext'>Please choose date</small>):null}
+                    {errors.date?(<small className={'errortext ' + this.props.theme}>Please choose date</small>):null}
                 </FormGroup>
                 <FormGroup>
                   <Label for="person_id">Persons {errors.person_id ? "" : null}</Label><br />
@@ -177,23 +178,23 @@
                     onBlur={this.handleBlur('person_id')}
                     onSelectedChanged={this.handleChangeSelect}
                   />
-                  {errors.person_id?(<small className='errortext'> Please, choose at least one person from the list</small>):null}
+                  {errors.person_id?(<small className={'errortext ' + this.props.theme}> Please, choose at least one person from the list</small>):null}
                   </FormGroup>
                   <FormGroup>
                     <Label for="imageUrl">Image/Movie</Label>
                     <Input
                       type="file"
                       name="imageUrl"
-                      className={this.props.theme + (errors.file ? " error" : "")}
+                      className={"form-control " + this.props.theme + (errors.file ? " error" : "")}
                       onBlur={this.handleBlur('imageUrl')}
                       onChange={this.handleChangeFile}
                     />
-                    {errors.file?(<small className='errortext'>Please input your image or movie</small>):null}
+                    {errors.file?(<small className={'errortext ' + this.props.theme}>Please input your image or movie</small>):null}
                   </FormGroup>
               </Form>
             </ModalBody>
             <ModalFooter className={"modal-footer-"+this.props.theme}>
-              <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem)}>
+              <Button disabled={!isEnabled} className="confirm" onClick={() => onSave(this.state.activeItem)}>
                 Save
               </Button>
             </ModalFooter>

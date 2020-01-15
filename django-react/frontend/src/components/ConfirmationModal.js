@@ -36,7 +36,7 @@
               <Button onClick={toggle}>
                 {this.state.cancelText}
               </Button>
-              <Button color="danger" onClick={() => onConfirm()}>
+              <Button className="confirm" onClick={() => onConfirm()}>
                 {this.state.confirmText}
               </Button>
             </ModalFooter>

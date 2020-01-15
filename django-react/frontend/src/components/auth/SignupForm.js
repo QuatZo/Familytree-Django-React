@@ -71,14 +71,14 @@ class SignupForm extends React.Component {
               required
               />
             </div>
-            <div className="form-group password-req">
+            <div className={"form-group password-req " + this.props.theme}>
               <ul>
-                <span className={(errors.password_number || errors.password_uppercase || errors.password_lowercase || errors.password_nonalpha || errors.password_length) ? "errortext" : null}>Password must contain at least:</span>
-                <li className={errors.password_number ? "errortext wrong" : "good"}> 1 number (0-9) </li>
-                <li className={errors.password_uppercase ? "errortext wrong" : "good"}> 1 uppercase letters </li>
-                <li className={errors.password_lowercase ? "errortext wrong" : "good"}> 1 lowercase letters </li>
-                <li className={errors.password_nonalpha ? "errortext wrong" : "good"}> 1 non-alpha numeric number </li>
-                <li className={errors.password_length ? "errortext wrong" : "good"}> 8 characters with no space </li>
+                <span className={((errors.password_number || errors.password_uppercase || errors.password_lowercase || errors.password_nonalpha || errors.password_length) ? 'errortext ' : '') + this.props.theme}>Password must contain at least:</span>
+                <li className={(errors.password_number ? "errortext " : " ") + this.props.theme}> 1 number (0-9) </li>
+                <li className={(errors.password_uppercase ? "errortext " : " ") + this.props.theme}> 1 uppercase letters </li>
+                <li className={(errors.password_lowercase ? "errortext " : " ") + this.props.theme}> 1 lowercase letters </li>
+                <li className={(errors.password_nonalpha ? "errortext " : " ") + this.props.theme}> 1 non-alpha numeric number </li>
+                <li className={(errors.password_length ? "errortext " : " ") + this.props.theme}> 8 characters with no space </li>
               </ul>
             </div>
             <div className="form-group"><button disabled={!isEnabled} className="btn btn-primary btn-block" type="submit">Register</button></div>

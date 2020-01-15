@@ -1,45 +1,76 @@
+:root{
+  --main-background-light: #FAFAFA;
+  --main-background-dark: #121212;
+
+  --main-box-shadow: 3px 3px 4px rgba(0,0,0,.5);
+
+  --main-error-text-light: #B00020;
+  --main-error-text-dark: #CF6679;
+
+  --main-nav-button-border: none;
+
+  --main-nav-button-hover-light: #C2C2C2;
+  --main-nav-button-hover-dark: #404040;
+  
+  --main-nav-box-shadow-light: 0px 3px 4px rgba(0,0,0,0.2);
+  --main-nav-box-shadow-dark: 0px 3px 4px rgba(0,0,0,0.2);
+
+  --main-on-background-light: #121212;
+  --main-on-background-dark: #EDEDED;
+
+  --main-on-surface-light: #121212;
+  --main-on-surface-dark: #EDEDED;
+  
+  --main-on-primary-light: #EDEDED;
+  --main-on-primary-dark: #121212;
+  
+  --main-on-secondary-light: #EDEDED;
+  --main-on-secondary-dark: #1F1F1F;
+  
+  --main-on-secondary-hover-light: #EDEDED;
+  --main-on-secondary-hover-dark: #1F1F1F;
+
+  --main-person-active-light: none;
+  --main-person-active-dark: none;
+
+  --main-primary-light: #1F1F1F;
+  --main-primary-dark: #FFAD00;
+
+  --main-primary-hover-light: #393939;
+  --main-primary-hover-dark: #B97E00;
+
+  --main-secondary-light: #8B4957;
+  --main-secondary-dark: #63FFF9;
+
+  --main-secondary-hover-light: #393939;
+  --main-secondary-hover-dark: #ACFA4D;
+
+  --main-surface-light: #F1F1F1;
+  --main-surface-dark: #1F1F1F;
+}
+
 .App-logo {
   height: 40vmin;
 }
 
 .App-light{
-  background-color:#e5e7e9;
+  background-color: var(--main-background-light);
   height: 100%;
 }
 
 .App-dark{
-  background-color: #262626;
+  background-color: var(--main-background-dark);
   height: 100%;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #09d3ac;
-}
-/* Nav bar buttons container*/
-.nav_buttons {
-  display: inline-block;
-  
-} 
-
-/* Nav bar button */
-.nav_button {
-  margin-left: 5px;
+/* Text for Error in formfield */
+.errortext.dark{
+  color: var(--main-error-text-dark);
 }
 
 /* Text for Error in formfield */
-.errortext{
-  color:#cf6679;
+.errortext.light{
+  color: var(--main-error-text-light);
 }
 
 /* Toastify */

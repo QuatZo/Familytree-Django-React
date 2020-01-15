@@ -1,0 +1,60 @@
+/* Shared */
+
+/* Nav bar buttons container */
+.nav_buttons {
+  display: inline-block;
+} 
+
+.nav_buttons .username{
+  font-size: 1rem;
+}
+
+/* Nav bar button */
+.nav_button {
+  margin-left: 5px;
+  border: var(--main-nav-button-border);
+  margin-top: 0;
+  margin-bottom: 0;
+  height: 40px;
+  padding-top: 0;
+  padding-bottom: 0;
+  font-size: 1.5rem;
+}
+
+
+/* Light */
+
+/* Nav bar container */
+.navbar-light{
+  background-color: var(--main-surface-light);
+  box-shadow: var(--main-nav-box-shadow-light)
+}
+
+/* Nav bar button */
+.nav_button.light {
+  color: var(--main-on-surface-light);
+}
+
+/* Nav bar button on hover */
+.nav_button.light:hover{
+  background-color: var(--main-nav-button-hover-light);
+  color: var(--main-on-surface-light);
+}
+
+/* Dark */
+
+/* Nav bar container */
+.navbar-dark{
+  background-color: var(--main-surface-dark);
+  box-shadow: var(--main-nav-box-shadow-dark)
+}
+/* Nav bar button */
+.nav_button.dark {
+  color: var(--main-on-surface-dark);
+}
+
+/* Nav bar button on hover */
+.nav_button.dark:hover{
+  background-color: var(--main-nav-button-hover-dark);
+  color: var(--main-on-surface-dark);
+}

@@ -9,7 +9,15 @@
 .header {
   text-align: center;
   margin: 5px;
-  font-family: monospace
+  font-family: monospace;
+}
+
+.header.dark{
+  color: var(--main-primary-dark);
+}
+
+.header.light{
+  color: var(--main-primary-light);
 }
 
 /* Modal List */
