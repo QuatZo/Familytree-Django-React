@@ -20,6 +20,7 @@
     
     import {
       Button,
+      CustomInput,
       Col,
       Modal,
       ModalHeader,
@@ -34,11 +35,12 @@
 
     // custom header for Timeline component, consists of different date format (yyyy-mm-dd)
     const CustomHeader = (props) => {
-      const {title, date} = props.event;
+      const {title, date, extras} = props.event;
       return (
         <div className="custom-header">
           <h2 className="rt-title">{title}</h2>
           <p className="rt-date">{(new Date(date)).toISOString().slice(0, 10)}</p>
+          {extras !== null && extras.theme !== undefined ? (<hr className={"hr-body " + extras.theme}/>) : null}
         </div>
       )
     }
@@ -58,10 +60,12 @@
       const {text, extras} = props.event;
       return (
         <div className="custom-text-body">
+          {extras !== null && extras.theme !== undefined ? (<hr className={"hr-body " + extras.theme}/>) : null}
           <p>{text}</p>
           <p><b>{extras !== null && extras.end_date !== undefined && extras.end_date !== null? "End: " + extras.end_date + "\n": ""}</b></p>
           <p><b>{extras !== null && extras.relationship !== undefined ? "Type: " + extras.relationship : ""}</b></p>
           <p><b>{extras !== null && extras.together_with !== undefined && extras.together_with.length ? "Together with: " + extras.together_with.join(", ") : ""}</b></p>
+          {extras !== null && extras.theme !== undefined ? (<hr className={"hr-body " + extras.theme}/>) : null}
         </div>
       );
     }
@@ -127,6 +131,7 @@
               imageUrl: item.image,
               extras: {
                 together_with: togetherWithNames,
+                theme: this.props.theme,
               },
               onClick: () => { this.state.deleteMode ? this.props.toggleConfirmModal("Delete Milestone", "Are you sure you want to delete this milestone?", "Delete", "Cancel", () => this.handleDeleteMilestone(item)) : this.editMilestone(item) }
             });
@@ -159,6 +164,7 @@
                   end_date: item.end_date,
                   relationship: item.relationships,
                   together_with: togetherWithNames,
+                  theme: this.props.theme,
                 },
                 onClick: () => { this.state.deleteMode ? this.props.toggleConfirmModal("Delete Relationship", "Are you sure you want to delete this relationship?", "Delete", "Cancel", () => this.handleDeleteRelationship(item)) : this.editRelationship(item)}
               })
@@ -191,6 +197,7 @@
                     end_date: item.end_date,
                     relationship: item.relationships,
                     together_with: togetherWithNames,
+                    theme: this.props.theme,
                   },
                   onClick: () => { this.state.deleteMode ? this.props.toggleConfirmModal("Delete Relationship", "Are you sure you want to delete this relationship?", "Delete", "Cancel", () => this.handleDeleteRelationship(item)) : this.editRelationship(item)}
                 })
@@ -453,7 +460,9 @@
                     <Col md={4}>
                       <FormGroup>
                         <Label for="sex_choices">Sex</Label>
-                        <select
+                        <CustomInput 
+                          id="sex_choices"
+                          type="select"
                           className={"form-control " + this.props.theme}
                           name = "sex_choices"
                           value={this.state.activeItem.sex_choices}
@@ -462,7 +471,7 @@
                           <option value="male">Male</option>
                           <option value="female">Female</option>
                           <option value="other">Other</option>
-                        </select>
+                        </CustomInput>
                       </FormGroup>
                     </Col>
                   </Row>
@@ -470,7 +479,9 @@
                     <Col md={4}>
                       <FormGroup>
                         <Label for="status_choices">Status of life</Label>
-                        <select
+                        <CustomInput 
+                          id="status_choices"
+                          type="select"
                           className={"form-control " + this.props.theme}
                           name = "status_choices"
                           value={this.state.activeItem.status_choices}
@@ -479,7 +490,7 @@
                           <option value="living">Living</option>
                           <option value="deceased">Deceased</option>
                           <option value="unknown">Unknown</option>
-                        </select>
+                        </CustomInput>
                       </FormGroup>
                     </Col>
                     <Col md={4}>

@@ -1,8 +1,32 @@
-/* Person Edit Modal */
+/* Shared */
 
 /* Title */
 .modal-title{
   width: 100%;
+}
+
+/* Year label (bubble) & Event Timeline */
+.rt-label,
+.rt-content
+{
+  border: 1px solid;
+}
+
+/* Header Timeline */
+.rt-header-container{
+  border-radius: 0;
+}
+
+/* Header Horizontal Line Timeline */
+.rt-header-container .hr-body{
+  margin: 0;
+  padding: 0;
+}
+
+/* Text Timeline */
+.modal .rt-text-container{
+  padding-top: 0;
+  margin-top: -13px;
 }
 
 /* Arrow & dot in Timeline component */
@@ -11,7 +35,108 @@
   z-index: 0 !important;
 }
 
+/* Button per event */
+.modal .rt-btn{
+  border: none;
+  font-weight: normal;
+}
+
+/* Before text, totally useless */
+.rt-text-container::before{
+  background: none !important;
+}
+
 /* Timeline component */
 .rt-timeline{
   min-width: 100%;
+}
+
+
+/* Dark */
+
+/* Year label (bubble) */
+.modal-body-dark .rt-label{
+  background: var(--main-surface-dark);
+  border-color: var(--main-primary-dark);
+  color: var(--main-primary-dark);
+}
+
+/* Arrow & Dot in Timeline Component */
+.modal-body-dark .rt-arrow,
+.modal-body-dark .rt-dot
+{
+  color: var(--main-primary-dark) !important;
+  filter: drop-shadow(var(--main-box-shadow));
+}
+
+/* Event content Timeline */
+.modal-body-dark .rt-content{
+  border: 1px solid var(--main-primary-dark);
+  box-shadow: var(--main-box-shadow);
+  border-radius: .3em;
+}
+
+/* Event background Timeline */
+.modal-body-dark .rt-backing{
+  background-color: var(--main-surface-dark);
+  border-radius: 0;
+  color: var(--main-on-surface-dark);
+}
+
+/* Header Timeline */
+.modal-body-dark .rt-header-container{
+  background: none;
+  color: var(--main-on-surface-dark);
+}
+
+/* Button per event */
+.modal-body-dark .rt-btn{
+  box-shadow: var(--main-box-shadow);
+  background-color: var(--main-primary-dark);
+  color: var(--main-on-primary-dark);
+}
+
+
+/* Light */
+
+/* Year label (bubble) */
+.modal-body-light .rt-label{
+  background: var(--main-surface-light);
+  border-color: var(--main-primary-light);
+  color: var(--main-primary-light);
+}
+
+/* Arrow & Dot in Timeline Component */
+.modal-body-light .rt-arrow,
+.modal-body-light .rt-dot
+{
+  color: var(--main-primary-light) !important;
+  filter: drop-shadow(var(--main-box-shadow));
+}
+
+/* Event content Timeline */
+.modal-body-light .rt-content{
+  border: 1px solid var(--main-primary-light);
+  box-shadow: var(--main-box-shadow);
+  border-radius: .3em;
+}
+
+/* Event background Timeline */
+.modal-body-light .rt-backing{
+  background-color: var(--main-surface-light);
+  border-radius: 0;
+  color: var(--main-on-surface-light);
+}
+
+/* Header Timeline */
+.modal-body-light .rt-header-container{
+  background: none;
+  color: var(--main-on-surface-light);
+}
+
+/* Button per event */
+.modal-body-light .rt-btn{
+  box-shadow: var(--main-box-shadow);
+  background-color: var(--main-primary-light);
+  color: var(--main-on-primary-light);
 }

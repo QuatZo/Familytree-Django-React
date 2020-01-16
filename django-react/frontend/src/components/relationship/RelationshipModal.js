@@ -12,6 +12,7 @@
 
     import {
       Button,
+      CustomInput,
       Modal,
       ModalHeader,
       ModalBody,
@@ -199,7 +200,9 @@
                 </FormGroup>
                 <FormGroup>
                   <Label for="relationships">What's {this.getPerson(this.state.activeItem.id_2)} to the {this.getPerson(this.state.activeItem.id_1)}</Label>
-                  <select
+                  <CustomInput 
+                    id="relationships"
+                    type="select"
                     className={"form-control " + this.props.theme}
                     name = "relationships"
                     onChange={this.handleChange}
@@ -215,7 +218,7 @@
                     <option value="niece/nephew">Niece/Nephew</option>
                     <option value="child">Child</option>
                     <option value="adopted child">Adopted Child</option>
-                  </select>
+                  </CustomInput>
                 </FormGroup>
               </Form>
             </ModalBody>

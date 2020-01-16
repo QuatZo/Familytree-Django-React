@@ -5,6 +5,7 @@
   display: inline-block;
 } 
 
+/* Nav bar username pseudo-button */
 .nav_buttons .username{
   font-size: 1rem;
 }
@@ -19,6 +20,25 @@
   padding-top: 0;
   padding-bottom: 0;
   font-size: 1.5rem;
+}
+
+
+/* Dark */
+
+/* Nav bar container */
+.navbar-dark{
+  background-color: var(--main-surface-dark);
+  box-shadow: var(--main-nav-box-shadow-dark)
+}
+/* Nav bar button */
+.nav_button.dark {
+  color: var(--main-on-surface-dark);
+}
+
+/* Nav bar button on hover */
+.nav_button.dark:hover{
+  background-color: var(--main-nav-button-hover-dark);
+  color: var(--main-on-surface-dark);
 }
 
 
@@ -39,22 +59,4 @@
 .nav_button.light:hover{
   background-color: var(--main-nav-button-hover-light);
   color: var(--main-on-surface-light);
-}
-
-/* Dark */
-
-/* Nav bar container */
-.navbar-dark{
-  background-color: var(--main-surface-dark);
-  box-shadow: var(--main-nav-box-shadow-dark)
-}
-/* Nav bar button */
-.nav_button.dark {
-  color: var(--main-on-surface-dark);
-}
-
-/* Nav bar button on hover */
-.nav_button.dark:hover{
-  background-color: var(--main-nav-button-hover-dark);
-  color: var(--main-on-surface-dark);
 }

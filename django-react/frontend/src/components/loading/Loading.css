@@ -42,6 +42,12 @@
   width: calc(100% - 300px);
 }
 
+/* Loading animation button */
+[role=button]{
+  float: right;
+}
+
+
 /* Dark */
 
 /* Loading container */
@@ -57,9 +63,4 @@
 .loading-light{
   background-color: var(--main-surface-light);
   color: var(--main-on-surface-light);
-}
-
-/* Loading animation button */
-[role=button]{
-  float: right;
 }

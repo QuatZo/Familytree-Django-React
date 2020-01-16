@@ -1,3 +1,5 @@
+/* Shared */
+
 /* Person container */
 .person{
   display: inline-block;
@@ -10,32 +12,12 @@
   box-shadow: var(--main-box-shadow)
 }
 
-/* Person container Light */
-.person.light{
-  background: var(--main-surface-light);
-  color: var(--main-on-surface-light);
-}
-
-/* Person container Dark */
-.person.dark{
-  background: var(--main-surface-dark);
-  color: var(--main-on-surface-dark);
-}
- 
 /* Person IMG */
 .person img{
   width: 100%;
   height: 15vh;
   min-height: 135px;
   padding: 0;
-}
-
-.person.dark img{
-  border-color: var(--main-nav-button-hover-dark);
-}
-
-.person.light img{
-  border-color: var(--main-nav-button-hover-light);
 }
 
 /* Person name */
@@ -69,30 +51,63 @@
   padding: 6px;
 }
 
-/* Active person */
-.person.active.light{
-  border-color: var(--main-primary-hover-light) !important;
+
+/* Dark */
+
+/* Person container */
+.person.dark{
+  background: var(--main-surface-dark);
+  color: var(--main-on-surface-dark);
 }
 
+/* Person IMG */
+.person.dark img{
+  border-color: var(--main-nav-button-hover-dark);
+}
+
+/* Active person */
 .person.active.dark{
   border-color: var(--main-primary-hover-dark) !important;
 }
 
+/* Person buttons */
 .btn.personbutton.dark{
   border-color: var(--main-primary-dark);
   color: var(--main-primary-dark);
 }
+
+/* Person buttons on hover */
 .btn.personbutton.dark:hover{
   background-color: var(--main-primary-dark);
   color: var(--main-on-primary-dark);
 }
 
+/* Light */
+
+/* Person container Light */
+.person.light{
+  background: var(--main-surface-light);
+  color: var(--main-on-surface-light);
+}
+
+/* Person IMG */
+.person.light img{
+  border-color: var(--main-nav-button-hover-light);
+}
+
+/* Active person */
+.person.active.light{
+  border-color: var(--main-primary-hover-light) !important;
+}
+
+/* Person buttons */
 .btn.personbutton.light{
   background-color: var(--main-on-primary-light);
   border-color: var(--main-primary-light);
   color: var(--main-primary-light);
 }
 
+/* Person buttons on hover */
 .btn.personbutton.light:hover{
   background-color: var(--main-primary-light);
   border-color: var(--main-primary-light);

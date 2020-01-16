@@ -50,7 +50,7 @@
           displayed_form: localStorage.getItem('token') ? '' : 'login', // form to display
           logged_in: localStorage.getItem('token') ? true : false, // flag, if user is already logged in
           username: '',
-          theme: 'dark',
+          theme: localStorage.getItem('theme') || 'dark',
         };
       }
 
@@ -184,8 +184,10 @@
       };
 
       changeThemeMode = () => {
+        var newTheme = this.state.theme === "dark" ? "light" : "dark"
+        localStorage.setItem('theme', newTheme)
         this.setState({
-            theme: this.state.theme === "dark" ? "light" : "dark" 
+            theme: newTheme,
           }, () => ShowNotification(NOTIFY.CHANGE_THEME)
         );
       }

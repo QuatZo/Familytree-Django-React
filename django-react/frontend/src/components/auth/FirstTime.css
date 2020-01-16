@@ -1,4 +1,4 @@
-/* First Time Modal */
+/* Shared */
 
 /* Whole modal body */
 .first-time-body {
@@ -12,15 +12,23 @@
   font-family: monospace;
 }
 
+/* Modal List */
+.first-time-list li{
+  margin: 0 !important;
+}
+
+
+/* Dark */
+
+/* First Time Modal Header */
 .header.dark{
   color: var(--main-primary-dark);
 }
 
+
+/* Light */
+
+/* First Time Modal Header */
 .header.light{
   color: var(--main-primary-light);
-}
-
-/* Modal List */
-.first-time-list li{
-  margin: 0 !important;
 }

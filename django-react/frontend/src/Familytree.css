@@ -1,3 +1,5 @@
+/* Shared */
+
 /* Scalable Vector Graphics */
 .relationshipContainer-dark,
 .relationshipContainer-light
@@ -6,11 +8,6 @@
   top: 0;
   left: 0;
   z-index: 0;
-}
-
-/* Scalable Vector Graphics  Light */
-.relationshipContainer-light{
-  filter: invert(1)
 }
 
 /* Bottom-Right buttons */
@@ -37,7 +34,7 @@
   margin: 2px;
 }
 
-/* Person buttons */
+/* Famtree download button */
 .buttons{
   display: inline-block;
   position: fixed;
@@ -46,7 +43,7 @@
   z-index: 99;
 }
 
-/* Person operating buttons (delete/reset/save/add) */
+/* Operating buttons (delete/reset/save/add) */
 .operating-buttons{
   display: inline-block;
   position: fixed;
@@ -55,23 +52,38 @@
   z-index: 99;
 }
 
+
+/* Dark */
+
+/* Bottom-part buttons Familytree */
 .btn.famtree.dark{
   border-color: var(--main-secondary-dark);
   color: var(--main-secondary-dark);
 }
-
+/* Bottom-part buttons Familytree on hover*/
 .btn.famtree.dark:hover{
   background-color: var(--main-secondary-dark);
   color: var(--main-on-secondary-dark);
 }
 
+
+/* Light */
+
+/* Bottom-part buttons Familytree */
 .btn.famtree.light{
   background-color: var(--main-secondary-light);
   border-color: var(--main-secondary-light);
   color: var(--main-on-secondary-light);
 }
+
+/* Bottom-part buttons Familytree on hover*/
 .btn.famtree.light:hover{
   background-color: var(--main-secondary-hover-light);
   border-color: var(--main-secondary-hover-light);
   color: var(--main-on-secondary-hover-light);
+}
+
+/* Scalable Vector Graphics  Light */
+.relationshipContainer-light{
+  filter: invert(1)
 }

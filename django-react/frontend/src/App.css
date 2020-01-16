@@ -1,3 +1,6 @@
+/* Shared */
+
+/* Variables */
 :root{
   --main-background-light: #FAFAFA;
   --main-background-dark: #121212;
@@ -49,15 +52,21 @@
   --main-surface-dark: #1F1F1F;
 }
 
+/* Height of logo */
 .App-logo {
   height: 40vmin;
 }
 
-.App-light{
-  background-color: var(--main-background-light);
-  height: 100%;
+/* Toastify */
+.Toastify__toast-container--top-right {
+  top: 4em !important;
+  right: .5em !important;
 }
 
+
+/* Dark */
+
+/* Whole app */
 .App-dark{
   background-color: var(--main-background-dark);
   height: 100%;
@@ -68,13 +77,16 @@
   color: var(--main-error-text-dark);
 }
 
+
+/* Light */
+
+/* Whole app */
+.App-light{
+  background-color: var(--main-background-light);
+  height: 100%;
+}
+
 /* Text for Error in formfield */
 .errortext.light{
   color: var(--main-error-text-light);
-}
-
-/* Toastify */
-.Toastify__toast-container--top-right {
-  top: 4em !important;
-  right: .5em !important;
 }

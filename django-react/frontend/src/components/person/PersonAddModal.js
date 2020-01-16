@@ -9,6 +9,7 @@
     
     import {
       Button,
+      CustomInput,
       Modal,
       ModalHeader,
       ModalBody,
@@ -121,7 +122,9 @@
                 </FormGroup>
                 <FormGroup>
                   <Label for="status_choices">Status of life</Label>
-                  <select
+                  <CustomInput 
+                    id="status_choices"
+                    type="select"
                     className={"form-control " + this.props.theme}
                     name = "status_choices"
                     value={this.state.activeItem.status_choices}
@@ -130,11 +133,13 @@
                     <option value="living">Living</option>
                     <option value="deceased">Deceased</option>
                     <option value="unknown">Unknown</option>
-                  </select>
+                  </CustomInput>
                 </FormGroup>
                 <FormGroup>
                   <Label for="sex_choices">Sex</Label>
-                  <select
+                  <CustomInput 
+                    id="sex_choices"
+                    type="select"
                     className={"form-control " + this.props.theme}
                     name = "sex_choices"
                     value={this.state.activeItem.sex_choices}
@@ -143,7 +148,7 @@
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                     <option value="other">Other</option>
-                  </select>
+                  </CustomInput>
                 </FormGroup>
                 <FormGroup>
                   <Label for="birth_place">Birthplace</Label>
