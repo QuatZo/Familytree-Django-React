@@ -499,19 +499,17 @@
                   <i className="fas fa-download"></i>
                 </button>
               </div>
-              <div className="operating-buttons">
-                <button onClick={() => this.toggleConfirmModal("Delete Familytree", "Are you sure you want to delete WHOLE familytree?", "Delete", "Cancel", () => this.deleteEverything())} className={"btn " + (this.props.theme === 'dark' ? 'dark btn-outline-' : 'light btn-') + "primary btn-circle btn-xl famtree"}>
-                  <i className="fas fa-times"></i>
+              <div className={"operating-buttons " + this.props.theme} id="operating-buttons">
+                <button className="floating-btn" onClick={() => document.getElementById('operating-buttons').classList.toggle('active')}>
+                  <i className="fa fa-bars"></i>
                 </button>
-                <button onClick={this.resetCoords.bind(this)} className={"btn " + (this.props.theme === 'dark' ? 'dark btn-outline-' : 'light btn-') + "primary btn-circle btn-xl famtree"}>
-                  <i className="fas fa-redo"></i>
-                </button>
-                <button disabled={this.state.saving} onClick={() => this.toggleConfirmModal("Save coords", "Are you sure you want to save coords for every person in Familytree?", "Save", "Cancel", () => this.saveCoords())} className={"btn " + (this.props.theme === 'dark' ? 'dark btn-outline-' : 'light btn-') + "primary btn-circle btn-xl famtree"}>
-                  <i className="far fa-save"></i>
-                </button>
-                <button onClick={this.createPerson} className={"btn " + (this.props.theme === 'dark' ? 'dark btn-outline-' : 'light btn-') + "primary btn-circle btn-xl famtree"}>
-                  <i className="fas fa-plus"></i>
-                </button>
+
+                <menu className="items-wrapper">
+                  <button className="menu-item fas fa-plus" onClick={this.createPerson}></button>
+                  <button href="#" className="menu-item far fa-save" onClick={() => this.toggleConfirmModal("Save coords", "Are you sure you want to save coords for every person in Familytree?", "Save", "Cancel", () => this.saveCoords())}></button>
+                  <button href="#" className="menu-item fas fa-redo" onClick={this.resetCoords.bind(this)}></button>
+                  <button href="#" className="menu-item fas fa-times" onClick={() => this.toggleConfirmModal("Delete Familytree", "Are you sure you want to delete WHOLE familytree?", "Delete", "Cancel", () => this.deleteEverything())}></button>
+                  </menu>
               </div>
             </div>
             )}

@@ -43,15 +43,123 @@
   z-index: 99;
 }
 
-/* Operating buttons (delete/reset/save/add) */
+/* Operating buttons div */
 .operating-buttons{
   display: inline-block;
   position: fixed;
-  bottom: 10px;
-  right: 10px;
+  bottom: 1em;
+  right: 1em;
   z-index: 99;
 }
 
+/* Operating buttons Buttons */
+.operating-buttons .floating-btn {
+  display: block;
+  width: 3.5em;
+  height: 3.5em;
+  border-radius: 50%;
+  border: 1px solid;
+  text-align: center;
+  line-height: 3.9;
+  cursor: pointer;
+  outline: 0;
+}
+
+/* Active button */
+.operating-buttons.active .floating-btn {
+  box-shadow: var(--main-box-shadow);
+}
+
+/* Active button - CSS Active State */
+.operating-buttons .floating-btn:active {
+  box-shadow: var(--main-box-shadow);
+}
+
+/* FA Icon */
+.operating-buttons .floating-btn i {
+  font-size: 1.75em;
+  transition: transform .2s;  
+}
+
+/* Button 'bars' rotation */
+.operating-buttons.active .floating-btn i {
+  transform: rotate(-90deg);
+}
+
+/* Button 'bars' after click */
+.operating-buttons:after {
+  display: block;
+  content: ' ';
+  width: 3.5em;
+  height: 3.5em;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: -2;
+  transition: all .3s ease;
+}
+
+/* Active 'bars' button after click */
+.operating-buttons.active:after {
+  transform: scale3d(5.5, 5.5, 1);
+  transition-timing-function: cubic-bezier(.68, 1.55, .265, 1);
+}
+
+/* Inside buttons wrapper */
+.operating-buttons .items-wrapper {
+  padding: 0;
+  margin: 0;
+}
+
+/* Inside buttons */
+.operating-buttons .menu-item {
+  position: absolute;
+  top: .2em;
+  right: .2em;
+  z-index: -1;
+  display: block;
+  text-decoration: none;
+  font-size: 1em;
+  width: 3em;
+  height: 3em;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 3;
+  transition: transform .3s ease, background .2s ease;
+}
+
+/* Item on hover */
+.operating-buttons .menu-item:hover {
+  background-color: hsla(0,0%,0%,.35);
+}
+
+/* Inside buttons */
+.operating-buttons.dark.active .menu-item,
+.operating-buttons.light.active .menu-item
+{
+  border: 1px solid;
+}
+
+/* First button */
+.operating-buttons.active .menu-item:nth-child(1) {
+  transform: translate3d(1em,-7em,0);
+}
+
+/* Second button */
+.operating-buttons.active .menu-item:nth-child(2) {
+  transform: translate3d(-3.5em,-6.3em,0);
+}
+
+/* Third button */
+.operating-buttons.active .menu-item:nth-child(3) {
+  transform: translate3d(-6.5em,-3.2em,0);
+}
+
+/* Fourth button */
+.operating-buttons.active .menu-item:nth-child(4) {
+  transform: translate3d(-7em,1em,0);
+}
 
 /* Dark */
 
@@ -60,9 +168,61 @@
   border-color: var(--main-secondary-dark);
   color: var(--main-secondary-dark);
 }
+
 /* Bottom-part buttons Familytree on hover*/
 .btn.famtree.dark:hover{
   background-color: var(--main-secondary-dark);
+  color: var(--main-on-secondary-dark);
+}
+
+/* Operating buttons Buttons */
+.operating-buttons.dark .floating-btn {
+  background: var(--main-background-dark);
+  border-color: var(--main-secondary-dark);
+  color: var(--main-secondary-dark);
+}
+
+/* Operating buttons Buttons */
+.operating-buttons.dark .floating-btn:hover {
+  background: var(--main-secondary-dark);
+  border-color: var(--main-secondary-dark);
+  color: var(--main-on-secondary-dark);
+}
+
+/* Button Font Awesome Icon Color on hover */
+.operating-buttons.dark a.floating-btn:hover{
+  color: var(--main-on-secondary-dark);
+}
+
+/* Button 'bars' after click */
+.operating-buttons.dark:after {
+  background-color: var(--main-surface-dark);
+}
+
+/* Inside buttons */
+.operating-buttons.dark .menu-item {
+  color: var(--main-on-surface-dark);
+  border: none;
+}
+
+/* Menu button after click */
+.operating-buttons.dark.active .floating-btn{
+  background-color: var(--main-secondary-dark);
+  border-color: var(--main-surface-dark);
+  color: var(--main-on-secondary-dark);
+}
+
+/* Inside buttons visible */
+.operating-buttons.dark.active .menu-item{
+  background-color: var(--main-surface-dark);
+  border-color: var(--main-secondary-dark);
+  color: var(--main-secondary-dark);
+}
+
+/* Inside buttons visible on hover */
+.operating-buttons.dark.active .menu-item:hover{
+  background-color: var(--main-secondary-dark);
+  border-color: var(--main-secondary-dark);
   color: var(--main-on-secondary-dark);
 }
 
@@ -71,16 +231,66 @@
 
 /* Bottom-part buttons Familytree */
 .btn.famtree.light{
-  background-color: var(--main-secondary-light);
   border-color: var(--main-secondary-light);
-  color: var(--main-on-secondary-light);
+  background: none;
+  color: var(--main-secondary-light);
 }
 
 /* Bottom-part buttons Familytree on hover*/
 .btn.famtree.light:hover{
-  background-color: var(--main-secondary-hover-light);
-  border-color: var(--main-secondary-hover-light);
-  color: var(--main-on-secondary-hover-light);
+  background-color: var(--main-secondary-light);
+  color: var(--main-on-secondary-light);
+}
+
+/* Operating buttons Buttons */
+.operating-buttons.light .floating-btn {
+  background: var(--main-background-light);
+  border-color: var(--main-secondary-light);
+  color: var(--main-secondary-light);
+}
+
+/* Operating buttons Buttons */
+.operating-buttons.light .floating-btn:hover {
+  background: var(--main-secondary-light);
+  border-color: var(--main-secondary-light);
+  color: var(--main-on-secondary-light);
+}
+
+/* Button Font Awesome Icon Color on hover */
+.operating-buttons.light a.floating-btn:hover{
+  color: var(--main-on-secondary-light);
+}
+
+/* Button 'bars' after click */
+.operating-buttons.light:after {
+  background-color: var(--main-surface-light);
+}
+
+/* Inside buttons */
+.operating-buttons.light .menu-item {
+  color: var(--main-on-surface-light);
+  border: none;
+}
+
+/* Menu button after click */
+.operating-buttons.light.active .floating-btn{
+  background-color: var(--main-secondary-light);
+  border-color: var(--main-surface-light);
+  color: var(--main-on-secondary-light);
+}
+
+/* Insde buttons visible */
+.operating-buttons.light.active .menu-item{
+  background-color: var(--main-surface-light);
+  border-color: var(--main-secondary-light);
+  color: var(--main-secondary-light);
+}
+
+/* Insde buttons visible on hover */
+.operating-buttons.light.active .menu-item:hover{
+  background-color: var(--main-secondary-light);
+  border-color: var(--main-secondary-light);
+  color: var(--main-on-secondary-light);
 }
 
 /* Scalable Vector Graphics  Light */

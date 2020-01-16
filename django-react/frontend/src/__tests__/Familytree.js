@@ -162,13 +162,13 @@ describe('Initial load', () => {
     expect(app.containsMatchingElement(<Relationship />)).not.toEqual(true)
   });
   
-  it('has 6 Buttons', () => {
+  it('has 2 Buttons & hidden menu', () => {
     const app = shallow(<Familytree personList={[]} relationshipList={[]}/>);
     var download = app.find('div.download-buttons').getElements().map(el => el.props.children.type)
     var operating = app.find('div.operating-buttons').getElements().map(gr => gr.props.children.map(el => el.type))
     var types = download.concat(operating[0])
     types = types.filter(Boolean)
-    expect(types).toEqual(['button', 'button', 'button', 'button', 'button', 'button'])
+    expect(types).toEqual(['button', 'button', 'menu'])
   });
 });
 
