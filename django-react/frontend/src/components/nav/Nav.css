@@ -22,6 +22,50 @@
   font-size: 1.5rem;
 }
 
+.color-picker{
+  width: 5em;
+  height: 40px;
+}
+
+.color-picker button{
+  background: none;
+  border: none;
+  border-radius: .25rem !important;
+  font-size: 1.25em;
+}
+
+.color-picker .dropdown-menu{
+  margin: 0;
+  padding: 0;
+  min-width: 5em;
+  width: 5em;
+}
+
+.color-picker button.dropdown-item{
+  height: 25px;
+}
+
+/* Height of logo */
+.logo {
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  display: -webkit-inline-box;
+}
+
+.logo .logo-img{
+  padding: 0;
+  margin: 0;
+  margin-right: 10px;
+  width: 40px;
+  height: 40px;
+}
+
+.logo .name{
+  vertical-align: middle;
+  vertical-align: -webkit-baseline-middle;
+}
 
 /* Dark */
 
@@ -41,6 +85,22 @@
   color: var(--main-on-surface-dark);
 }
 
+.color-picker.dark button{
+  color: var(--main-on-surface-dark);
+}
+
+.color-picker.dark button:hover{
+  background: var(--main-nav-button-hover-dark);
+  color: var(--main-on-surface-dark);
+}
+
+.color-picker.dark .dropdown-menu{
+  background: var(--main-background-dark)
+}
+
+.logo.dark .logo-img{
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAABhWlDQ1BJQ0MgcHJvZmlsZQAAKJF9kT1Iw1AUhU9TRZGqiB2KKGSoThZERRylikWwUNoKrTqYvPQPmjQkKS6OgmvBwZ/FqoOLs64OroIg+APi5Oik6CIl3pcUWsR44fE+zrvn8N59gFAvM9XsmABUzTKSsaiYya6KXa/wYQB9CGFEYqYeTy2m4Vlf99RNdRfhWd59f1avkjMZ4BOJ55huWMQbxDObls55nzjIipJCfE48btAFiR+5Lrv8xrngsMAzg0Y6OU8cJBYLbSy3MSsaKvE0cVhRNcoXMi4rnLc4q+Uqa96TvzCQ01ZSXKc1jBiWEEcCImRUUUIZFiK0a6SYSNJ51MM/5PgT5JLJVQIjxwIqUCE5fvA/+D1bMz816SYFokDni21/jAJdu0CjZtvfx7bdOAH8z8CV1vJX6sDsJ+m1lhY+Avq3gYvrlibvAZc7QOhJlwzJkfy0hHweeD+jb8oCg7dAz5o7t+Y5Th+ANM1q+QY4OATGCpS97vHu7va5/dvTnN8PXodyn9Sgjh0AAAAGYktHRADtAO0A7VaGZScAAAAJcEhZcwAALiMAAC4jAXilP3YAAAAHdElNRQfkAREOGDg0Q+ezAAAAGXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBHSU1QV4EOFwAAAG5JREFUWMPt1csJwCAQhGENdrANW0aanBr0ungwBBJ8/QMevMjHKmMIZPNEv5FU/N7M4mjgNfsEAQIE+JD01UGSclNReaoe/KtDeYMAAa4O7NbMqPiK4oq3B776ayUVt24mCBAgQIAAAQIESI5PBfHHJjqsRmBfAAAAAElFTkSuQmCC);
+}
 
 /* Light */
 
@@ -59,4 +119,19 @@
 .nav_button.light:hover{
   background-color: var(--main-nav-button-hover-light);
   color: var(--main-on-surface-light);
+}
+
+.color-picker.light button{
+  color: var(--main-on-surface-light);
+}
+.color-picker.light button:hover{
+  background: var(--main-nav-button-hover-light);
+  color: var(--main-on-surface-light);
+}
+.color-picker.light .dropdown-menu{
+  background: var(--main-background-light)
+}
+
+.logo.light .logo-img{
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAABhWlDQ1BJQ0MgcHJvZmlsZQAAKJF9kT1Iw1AUhU9TRZGqiB2KKGSoThZERRylikWwUNoKrTqYvPQPmjQkKS6OgmvBwZ/FqoOLs64OroIg+APi5Oik6CIl3pcUWsR44fE+zrvn8N59gFAvM9XsmABUzTKSsaiYya6KXa/wYQB9CGFEYqYeTy2m4Vlf99RNdRfhWd59f1avkjMZ4BOJ55huWMQbxDObls55nzjIipJCfE48btAFiR+5Lrv8xrngsMAzg0Y6OU8cJBYLbSy3MSsaKvE0cVhRNcoXMi4rnLc4q+Uqa96TvzCQ01ZSXKc1jBiWEEcCImRUUUIZFiK0a6SYSNJ51MM/5PgT5JLJVQIjxwIqUCE5fvA/+D1bMz816SYFokDni21/jAJdu0CjZtvfx7bdOAH8z8CV1vJX6sDsJ+m1lhY+Avq3gYvrlibvAZc7QOhJlwzJkfy0hHweeD+jb8oCg7dAz5o7t+Y5Th+ANM1q+QY4OATGCpS97vHu7va5/dvTnN8PXodyn9Sgjh0AAAAGYktHRADtAO0A7VaGZScAAAAJcEhZcwAALiMAAC4jAXilP3YAAAAHdElNRQfkAREOGRL24x8kAAAAGXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBHSU1QV4EOFwAAAHJJREFUWMPt1rENwCAMRFETZY9bL1uENTLeTZK0Fg0pIoHCv84NesIIO4L8PCUXku5c2y6jgdvsNwgQIMBO9q8OklSbL6pOBYyIs6krbxAgQICddWtU8ppHi9d6gy9mbR5nl+2DFgMECBAgQIAAAZKl8wCGIRJFiq5rigAAAABJRU5ErkJggg==);
 }

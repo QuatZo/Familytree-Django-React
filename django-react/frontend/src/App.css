@@ -52,15 +52,10 @@
   --main-surface-dark: #1F1F1F;
 }
 
-/* Height of logo */
-.App-logo {
-  height: 40vmin;
-}
-
 /* Toastify */
-.Toastify__toast-container--top-right {
+.Toastify__toast-container--top-left {
   top: 4em !important;
-  right: .5em !important;
+  left: .5em !important;
 }
 
 

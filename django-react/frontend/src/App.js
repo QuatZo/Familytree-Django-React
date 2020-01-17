@@ -12,7 +12,7 @@
     import Lottie from "react-lottie";
     import * as stillLoadingData from "./components/loading/stillloading.json";
     import * as doneLoadingData from "./components/loading/doneloading.json";
-    import { ToastContainer} from 'react-toastify';
+    import { ToastContainer, toast} from 'react-toastify';
     import {NOTIFY} from './components/Enums.ts';
     import ShowNotification from './components/notification/Notification';
 
@@ -50,13 +50,20 @@
           displayed_form: localStorage.getItem('token') ? '' : 'login', // form to display
           logged_in: localStorage.getItem('token') ? true : false, // flag, if user is already logged in
           username: '',
-          theme: localStorage.getItem('theme') || 'dark',
+          theme: localStorage.getItem('theme') ?? 'dark',
         };
       }
 
       loginCounter = 0; // it makes sure noone will log into 2 different accounts from one browser (probably simple flag should be enough)
 
       componentDidMount() {
+        var theme = localStorage.getItem('theme') ?? 'dark';
+        if(!localStorage.getItem('color')){
+          if(theme === "dark"){ localStorage.setItem('color', '#FFAD00'); }
+          else { localStorage.setItem('color', '#005200'); }
+        }
+        document.documentElement.style.setProperty("--main-primary-" + theme, localStorage.getItem('color'))
+
         if (this.state.logged_in) { // if person is logged in, dont force user to relog
           axios
             .get('http://localhost:8000/current_user/', {
@@ -259,7 +266,7 @@
                   )
               ) : null
             }
-              <ToastContainer />
+              <ToastContainer position={toast.POSITION.TOP_LEFT}/>
           </div>
         );         
       }
