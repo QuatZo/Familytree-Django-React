@@ -1,3 +1,5 @@
+/* Shared */
+
 /* Person container */
 .person{
   display: inline-block;
@@ -7,28 +9,14 @@
   padding: 5px;
   z-index: 1;
   visibility: visible !important;
+  box-shadow: var(--main-box-shadow)
 }
 
-/* Person container Light */
-.person.light{
-  background: #d0d3d3;
-  color: black;
-  border: 10px 10px 10px 10px !important;
-  border-color: rgb(104, 101, 101) !important;
-}
-
-/* Person container Dark */
-.person.dark{
-  background: #262626;
-  color: white;
-}
- 
 /* Person IMG */
 .person img{
   width: 100%;
   height: 15vh;
   min-height: 135px;
-  border-color: #484848;
   padding: 0;
 }
 
@@ -38,6 +26,8 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  padding: 0;
+  margin: 5px 2px;
 }
 
 /* Person container made for draggable */
@@ -53,4 +43,73 @@
 /* Person buttons */
 .personbutton{
   margin: 2px;
+}
+
+/* Inactive person */
+.person.inactive{
+  border: none !important;
+  padding: 6px;
+}
+
+
+/* Dark */
+
+/* Person container */
+.person.dark{
+  background: var(--main-surface-dark);
+  color: var(--main-on-surface-dark);
+}
+
+/* Person IMG */
+.person.dark img{
+  border-color: var(--main-nav-button-hover-dark);
+}
+
+/* Active person */
+.person.active.dark{
+  border-color: var(--main-primary-hover-dark) !important;
+}
+
+/* Person buttons */
+.btn.personbutton.dark{
+  border-color: var(--main-primary-dark);
+  color: var(--main-primary-dark);
+}
+
+/* Person buttons on hover */
+.btn.personbutton.dark:hover{
+  background-color: var(--main-primary-dark);
+  color: var(--main-on-primary-dark);
+}
+
+/* Light */
+
+/* Person container Light */
+.person.light{
+  background: var(--main-surface-light);
+  color: var(--main-on-surface-light);
+}
+
+/* Person IMG */
+.person.light img{
+  border-color: var(--main-nav-button-hover-light);
+}
+
+/* Active person */
+.person.active.light{
+  border-color: var(--main-primary-hover-light) !important;
+}
+
+/* Person buttons */
+.btn.personbutton.light{
+  background-color: var(--main-on-primary-light);
+  border-color: var(--main-primary-light);
+  color: var(--main-primary-light);
+}
+
+/* Person buttons on hover */
+.btn.personbutton.light:hover{
+  background-color: var(--main-primary-light);
+  border-color: var(--main-primary-light);
+  color: var(--main-on-primary-light);
 }

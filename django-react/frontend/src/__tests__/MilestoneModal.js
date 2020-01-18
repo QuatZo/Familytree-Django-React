@@ -108,7 +108,7 @@ describe('Form validation', () =>{
     app.find('[name="title"]').simulate('change', {target: {name: 'title', value: ''}})
     expect(app.find('[name="title"]').getElement().props.className.split(" ")).toContain('error')
 
-    app.find('[name="date"]').simulate('change', undefined)
+    app.find('[name="date"]').simulate('change', "")
     expect(app.find('[name="date"]').getElement().props.className.split(" ")).toContain('error')
     
     app.find('[type="file"]').simulate('change', {target: {name: 'file', files: []}})

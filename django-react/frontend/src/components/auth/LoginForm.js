@@ -26,7 +26,7 @@ class LoginForm extends React.Component {
             <div className="illustration"><i className="far fa-user"></i></div>
             <div className="form-group">
               <input 
-              className="form-control" 
+              className={"form-control " + this.props.theme}
               type="text"
               name="username" 
               placeholder="Username" 

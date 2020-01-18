@@ -24,7 +24,7 @@
   position:absolute;
   top:40%;
   left:50%;
-  box-shadow:3px 3px 4px rgba(0,0,0,0.2);
+  box-shadow: var(--main-box-shadow);
 }
 
 /* Illustration (fa-fa image) */
@@ -46,7 +46,6 @@
 {
   background:none;
   border:none;
-  border-bottom:1px solid #434a52;
   border-radius:0;
   box-shadow:none;
   outline:none;
@@ -68,7 +67,7 @@
   outline:none;
 }
 
-/* Form buttons on hover & active*/
+/* Form buttons on hover & active */
 .login-dark form .btn-primary:hover, 
 .login-dark form .btn-primary:active,
 .login-light form .btn-primary:hover, 
@@ -88,77 +87,6 @@
 .signup-light form .btn-primary:active
 {
   transform:translateY(1px);
-}
-
-
-/* Dark */
-
-/* Form */
-.login-dark form,
-.signup-dark form {
-  background-color:#343a40;
-  color:#fff;
-}
-
-/* Light */
-
-/* Form */
-.login-light form,
-.signup-light form {
-  background-color:#f8f9fa;
-  color:#000;
-}
-
-
-/* Login */
-
-/* Illustration (fa-fa image) */
-.login-dark .illustration,
-.login-light .illustration 
-{
-  color:#2980ef;
-}
-
-/* Form buttons */
-.login-dark form .btn-primary,
-.login-light form .btn-primary
-{
-  background:#2f6ec2;
-}
-
-/* Form buttons on hover & active*/
-.login-dark form .btn-primary:hover, 
-.login-dark form .btn-primary:active,
-.login-light form .btn-primary:hover, 
-.login-light form .btn-primary:active
-{
-  background:#214a80;
-}
-
-/* Signup */
-
-/* Illustration (fa-fa image) */
-.signup-dark .illustration,
-.signup-light .illustration 
-{
-  color:#e02929;
-}
-
-/* Form buttons */
-.signup-dark form .btn-primary,
-.signup-light form .btn-primary
-{
-  background:#ef2929;
-}
-
-/* Form buttons on hover & active*/
-.signup-dark form .btn-primary:hover, 
-.signup-dark form .btn-primary:active,
-.signup-light form .btn-primary:hover, 
-.signup-light form .btn-primary:active
-{
-  background:#940f0f;
-  outline:none;
 }
 
 /* Password requirements div */
@@ -188,11 +116,91 @@
 }
 
 /* Password requirements list element before (icon) for true regex */
-.password-req ul li.good:before{
+.password-req ul li:before{
   content: "\f00c";
 }
 
 /* Password requirements list element before (icon) for false regex */
-.password-req ul li.wrong:before{
+.password-req ul li.errortext:before{
   content: "\f00d";
+}
+
+
+/* Dark */
+
+/* Form */
+.login-dark form,
+.signup-dark form {
+  background-color: var(--main-surface-dark);
+  color: var(--main-on-surface-dark);
+}
+
+/* Form fields */
+.login-dark form .form-control,
+.signup-dark form .form-control
+{
+  border-bottom:1px solid var(--main-primary-dark);
+}
+
+/* Illustration (fa-fa image) */
+.login-dark .illustration,
+.signup-dark .illustration
+{
+  color: var(--main-primary-dark);
+}
+
+/* Form buttons */
+.login-dark form .btn-primary,
+.signup-dark form .btn-primary{
+  background-color: var(--main-primary-dark);
+  color: var(--main-on-primary-dark);
+}
+
+/* Form buttons on hover & active*/
+.login-dark form .btn-primary:hover, 
+.login-dark form .btn-primary:active,
+.signup-dark form .btn-primary:hover, 
+.signup-dark form .btn-primary:active
+{
+  background: var(--main-primary-hover-dark);
+}
+
+
+/* Light */
+
+/* Form */
+.login-light form,
+.signup-light form {
+  background-color: var(--main-surface-light);;
+  color: var(--main-on-surface-light);
+}
+
+/* Form fields */
+.login-light form .form-control,
+.signup-light form .form-control
+{
+  border-bottom:1px solid var(--main-primary-light);
+}
+
+/* Illustration (fa-fa image) */
+.login-light .illustration,
+.signup-light .illustration
+{
+  color: var(--main-primary-light);
+}
+
+/* Form buttons */
+.login-light form .btn-primary,
+.signup-light form .btn-primary{
+  background-color: var(--main-primary-light);
+  color: var(--main-on-primary-light);
+}
+
+/* Form buttons on hover & active*/
+.login-light form .btn-primary:hover, 
+.login-light form .btn-primary:active,
+.signup-light form .btn-primary:hover, 
+.signup-light form .btn-primary:active
+{
+  background: var(--main-primary-hover-light);
 }

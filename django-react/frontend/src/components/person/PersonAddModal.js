@@ -5,9 +5,11 @@
     import DatePicker from "react-datepicker";
     import 'react-datepicker/dist/react-datepicker.css';
     import '../Modal.css';
+    import moment from 'moment'
     
     import {
       Button,
+      CustomInput,
       Modal,
       ModalHeader,
       ModalBody,
@@ -39,7 +41,7 @@
 
       // handles change of Date Field
       handleChangeDate = date => {
-        const activeItem = { ...this.state.activeItem, ["birth_date"]: (new Date(date)).toISOString().slice(0, 10)};
+        const activeItem = { ...this.state.activeItem, ["birth_date"]: moment(date).format('YYYY-MM-DD')};
         this.setState({activeItem});
       };
 
@@ -89,8 +91,8 @@
                     placeholder="First Name"
                     
                   />
-                  {errors.first_name?(<small className='errortext'>Please insert first name</small>):null}
-                  {errors.first_name_too_long?(<small className='errortext'>This name is too long, max length is 50</small>):null}
+                  {errors.first_name?(<small className={'errortext ' + this.props.theme}>Please insert first name</small>):null}
+                  {errors.first_name_too_long?(<small className={'errortext ' + this.props.theme}>This name is too long, max length is 50</small>):null}
                 </FormGroup>
                 <FormGroup>
                   <Label for="last_name">Last Name</Label>
@@ -103,8 +105,8 @@
                     onChange={this.handleChange}
                     placeholder="Last Name"
                   />
-                  {errors.last_name?(<small className='errortext'>Please insert last name</small>):null}
-                  {errors.last_name_too_long?(<small className='errortext'>This name is too long, max length is 50</small>):null}
+                  {errors.last_name?(<small className={'errortext ' + this.props.theme}>Please insert last name</small>):null}
+                  {errors.last_name_too_long?(<small className={'errortext ' + this.props.theme}>This name is too long, max length is 50</small>):null}
                 </FormGroup>
                 <FormGroup>
                   <Label for="birth_date">Birth Date</Label><br />
@@ -120,7 +122,9 @@
                 </FormGroup>
                 <FormGroup>
                   <Label for="status_choices">Status of life</Label>
-                  <select
+                  <CustomInput 
+                    id="status_choices"
+                    type="select"
                     className={"form-control " + this.props.theme}
                     name = "status_choices"
                     value={this.state.activeItem.status_choices}
@@ -129,11 +133,13 @@
                     <option value="living">Living</option>
                     <option value="deceased">Deceased</option>
                     <option value="unknown">Unknown</option>
-                  </select>
+                  </CustomInput>
                 </FormGroup>
                 <FormGroup>
                   <Label for="sex_choices">Sex</Label>
-                  <select
+                  <CustomInput 
+                    id="sex_choices"
+                    type="select"
                     className={"form-control " + this.props.theme}
                     name = "sex_choices"
                     value={this.state.activeItem.sex_choices}
@@ -142,7 +148,7 @@
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                     <option value="other">Other</option>
-                  </select>
+                  </CustomInput>
                 </FormGroup>
                 <FormGroup>
                   <Label for="birth_place">Birthplace</Label>
@@ -154,23 +160,23 @@
                     onChange={this.handleChange}
                     placeholder="Place of birth"
                   />
-                  {errors.birth_place?(<small className='errortext'>This birth place is too long, max length is 50</small>):null}
+                  {errors.birth_place?(<small className={'errortext ' + this.props.theme}>This birth place is too long, max length is 50</small>):null}
                 </FormGroup>
                 <FormGroup>
                   <Label for="avatar">Avatar</Label>
                   <Input
                     type="file"
                     name="avatar"
-                    className={this.props.theme + (errors.file ? " error" : "")}
+                    className={"form-control " + this.props.theme + (errors.file ? " error" : "")}
                     onBlur={this.handleBlur('avatar')}
                     onChange={this.handleChangeFile}
                   />
-                  {errors.file?(<small className='errortext'>Please input your avatar</small>):null}
+                  {errors.file?(<small className={'errortext ' + this.props.theme}>Please input your avatar</small>):null}
                 </FormGroup>
               </Form>
             </ModalBody>
             <ModalFooter className={"modal-footer-"+this.props.theme}>
-              <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem)}>
+              <Button disabled={!isEnabled} className="confirm" onClick={() => onSave(this.state.activeItem)}>
                 Save
               </Button>
             </ModalFooter>

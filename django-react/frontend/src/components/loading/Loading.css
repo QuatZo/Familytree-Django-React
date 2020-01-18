@@ -11,8 +11,8 @@
   position: fixed;
   left: 35vw;
   top: 35%;
-  border-radius:4px;
-  box-shadow:3px 3px 4px rgba(0,0,0,0.2);
+  border-radius: 4px;
+  box-shadow: var(--main-box-shadow);
 }
 
 /* Loading type container (i.e. Fetching Persons) */
@@ -42,12 +42,18 @@
   width: calc(100% - 300px);
 }
 
+/* Loading animation button */
+[role=button]{
+  float: right;
+}
+
+
 /* Dark */
 
 /* Loading container */
 .loading-dark{
-  background-color:#343a40;
-  color:#fff;
+  background-color: var(--main-surface-dark);
+  color: var(--main-on-surface-dark);
 }
 
 
@@ -55,11 +61,6 @@
 
 /* Loading container */
 .loading-light{
-  background-color:#f8f9fa;
-  color:#000;
-}
-
-/* Loading animation button */
-[role=button]{
-  float: right;
+  background-color: var(--main-surface-light);
+  color: var(--main-on-surface-light);
 }

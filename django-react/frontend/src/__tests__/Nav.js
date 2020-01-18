@@ -35,14 +35,14 @@ describe('Initial load', () => {
 describe('Buttons according to state', () => {
   it('has 3 Buttons at page load', () => {
     const app = shallow(<Nav  logged_in={false}/>);
-    var types = app.find('div.nav_buttons').getElement().props.children.map(el => el.type)
+    var types = app.find('div.nav_buttons').getElement().props.children.map(el => el.type === 'button' ? el.type : undefined)
     types = types.filter(Boolean)
     expect(types).toEqual(['button', 'button', 'button'])
   });
   
   it('has 3 Buttons after login', () => {
     const app = shallow(<Nav logged_in={true}/>);
-    var types = app.find('div.nav_buttons').getElement().props.children.map(el => el.type)
+    var types = app.find('div.nav_buttons').getElement().props.children.map(el => el.type === 'button' ? el.type : undefined)
     types = types.filter(Boolean)
     expect(types).toEqual(['button', 'button', 'button'])
   });

@@ -16,9 +16,11 @@
     import ModalMilestone from './MilestoneModal'
     import ModalRelationship from '../relationship/RelationshipModal'
     import ReactPlayer from 'react-player'
+    import moment from 'moment'
     
     import {
       Button,
+      CustomInput,
       Col,
       Modal,
       ModalHeader,
@@ -33,11 +35,12 @@
 
     // custom header for Timeline component, consists of different date format (yyyy-mm-dd)
     const CustomHeader = (props) => {
-      const {title, date} = props.event;
+      const {title, date, extras} = props.event;
       return (
         <div className="custom-header">
           <h2 className="rt-title">{title}</h2>
           <p className="rt-date">{(new Date(date)).toISOString().slice(0, 10)}</p>
+          {extras !== null && extras.theme !== undefined ? (<hr className={"hr-body " + extras.theme}/>) : null}
         </div>
       )
     }
@@ -57,10 +60,12 @@
       const {text, extras} = props.event;
       return (
         <div className="custom-text-body">
+          {extras !== null && extras.theme !== undefined ? (<hr className={"hr-body " + extras.theme}/>) : null}
           <p>{text}</p>
           <p><b>{extras !== null && extras.end_date !== undefined && extras.end_date !== null? "End: " + extras.end_date + "\n": ""}</b></p>
           <p><b>{extras !== null && extras.relationship !== undefined ? "Type: " + extras.relationship : ""}</b></p>
           <p><b>{extras !== null && extras.together_with !== undefined && extras.together_with.length ? "Together with: " + extras.together_with.join(", ") : ""}</b></p>
+          {extras !== null && extras.theme !== undefined ? (<hr className={"hr-body " + extras.theme}/>) : null}
         </div>
       );
     }
@@ -95,7 +100,7 @@
           .then(this.downloadTimelineData())
           .catch(err => {
             console.log(err);
-            ShowNotification(NOTIFY.ERROR);
+            ShowNotification(NOTIFY.ERROR, this.props.theme);
           });
       };
 
@@ -126,6 +131,7 @@
               imageUrl: item.image,
               extras: {
                 together_with: togetherWithNames,
+                theme: this.props.theme,
               },
               onClick: () => { this.state.deleteMode ? this.props.toggleConfirmModal("Delete Milestone", "Are you sure you want to delete this milestone?", "Delete", "Cancel", () => this.handleDeleteMilestone(item)) : this.editMilestone(item) }
             });
@@ -158,6 +164,7 @@
                   end_date: item.end_date,
                   relationship: item.relationships,
                   together_with: togetherWithNames,
+                  theme: this.props.theme,
                 },
                 onClick: () => { this.state.deleteMode ? this.props.toggleConfirmModal("Delete Relationship", "Are you sure you want to delete this relationship?", "Delete", "Cancel", () => this.handleDeleteRelationship(item)) : this.editRelationship(item)}
               })
@@ -190,6 +197,7 @@
                     end_date: item.end_date,
                     relationship: item.relationships,
                     together_with: togetherWithNames,
+                    theme: this.props.theme,
                   },
                   onClick: () => { this.state.deleteMode ? this.props.toggleConfirmModal("Delete Relationship", "Are you sure you want to delete this relationship?", "Delete", "Cancel", () => this.handleDeleteRelationship(item)) : this.editRelationship(item)}
                 })
@@ -200,7 +208,7 @@
         })
         .catch(err => {
           console.log(err);
-          ShowNotification(NOTIFY.ERROR);
+          ShowNotification(NOTIFY.ERROR, this.props.theme);
           this.setState({timelineData: []});
         });
       }
@@ -259,10 +267,10 @@
             }
           })
             .then(() => this.downloadTimelineData())
-            .then(() => ShowNotification(NOTIFY.SAVE_MILESTONE))
+            .then(() => ShowNotification(NOTIFY.SAVE_MILESTONE, this.props.theme))
             .catch(err => {
               console.log(err);
-              ShowNotification(NOTIFY.ERROR);
+              ShowNotification(NOTIFY.ERROR, this.props.theme);
             });
           return;
         }
@@ -290,10 +298,10 @@
           }
         })
           .then(() => this.downloadTimelineData())
-          .then(() => ShowNotification(NOTIFY.ADD_MILESTONE))
+          .then(() => ShowNotification(NOTIFY.ADD_MILESTONE, this.props.theme))
           .catch(err => {
             console.log(err);
-            ShowNotification(NOTIFY.ERROR);
+            ShowNotification(NOTIFY.ERROR, this.props.theme);
           });
       };
 
@@ -309,10 +317,10 @@
           })
             .then(() => this.downloadTimelineData())
             .then(() => this.props.refreshRelationships())
-            .then(() => ShowNotification(NOTIFY.SAVE_RELATIONSHIP))
+            .then(() => ShowNotification(NOTIFY.SAVE_RELATIONSHIP, this.props.theme))
             .catch(err => {
               console.log(err);
-              ShowNotification(NOTIFY.ERROR);
+              ShowNotification(NOTIFY.ERROR, this.props.theme);
             });
           return;
         } 
@@ -326,10 +334,10 @@
             headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
           })
           .then(() => this.downloadTimelineData())
-          .then(() => ShowNotification(NOTIFY.DELETE_MILESTONE))
+          .then(() => ShowNotification(NOTIFY.DELETE_MILESTONE, this.props.theme))
           .catch(err => {
             console.log(err);
-            ShowNotification(NOTIFY.ERROR);
+            ShowNotification(NOTIFY.ERROR, this.props.theme);
           });
       };
 
@@ -342,10 +350,10 @@
           })
           .then(() => this.downloadTimelineData())
           .then(() => this.props.refreshRelationships())
-          .then(() => ShowNotification(NOTIFY.DELETE_RELATIONSHIP))
+          .then(() => ShowNotification(NOTIFY.DELETE_RELATIONSHIP, this.props.theme))
           .catch(err => {
             console.log(err);
-            ShowNotification(NOTIFY.ERROR);
+            ShowNotification(NOTIFY.ERROR, this.props.theme);
           });
       };
 
@@ -358,7 +366,7 @@
 
       // handles change for Date Fields
       handleChangeDate = date => {
-        const activeItem = { ...this.state.activeItem, ["birth_date"]: (new Date(date)).toISOString().slice(0, 10)};
+        const activeItem = { ...this.state.activeItem, ["birth_date"]: moment(date).format('YYYY-MM-DD')};
         this.setState({activeItem});
       };
 
@@ -429,8 +437,8 @@
                           onChange={this.handleChange}
                           placeholder="First Name"
                         />
-                        {errors.first_name?(<small className='errortext'>Please insert first name</small>):null}
-                        {errors.first_name_too_long?(<small className='errortext'>This name is too long, max length is 50</small>):null}
+                        {errors.first_name?(<small className={'errortext ' + this.props.theme}>Please insert first name</small>):null}
+                        {errors.first_name_too_long?(<small className={'errortext ' + this.props.theme}>This name is too long, max length is 50</small>):null}
                       </FormGroup>
                     </Col>
                     <Col md={4}>
@@ -445,14 +453,16 @@
                           onChange={this.handleChange}
                           placeholder="Last Name"
                         />
-                        {errors.last_name?(<small className='errortext'>Please insert last name</small>):null}
-                        {errors.last_name_too_long?(<small className='errortext'>This name is too long, max length is 50</small>):null}
+                        {errors.last_name?(<small className={'errortext ' + this.props.theme}>Please insert last name</small>):null}
+                        {errors.last_name_too_long?(<small className={'errortext ' + this.props.theme}>This name is too long, max length is 50</small>):null}
                       </FormGroup>
                     </Col>
                     <Col md={4}>
                       <FormGroup>
                         <Label for="sex_choices">Sex</Label>
-                        <select
+                        <CustomInput 
+                          id="sex_choices"
+                          type="select"
                           className={"form-control " + this.props.theme}
                           name = "sex_choices"
                           value={this.state.activeItem.sex_choices}
@@ -461,7 +471,7 @@
                           <option value="male">Male</option>
                           <option value="female">Female</option>
                           <option value="other">Other</option>
-                        </select>
+                        </CustomInput>
                       </FormGroup>
                     </Col>
                   </Row>
@@ -469,7 +479,9 @@
                     <Col md={4}>
                       <FormGroup>
                         <Label for="status_choices">Status of life</Label>
-                        <select
+                        <CustomInput 
+                          id="status_choices"
+                          type="select"
                           className={"form-control " + this.props.theme}
                           name = "status_choices"
                           value={this.state.activeItem.status_choices}
@@ -478,7 +490,7 @@
                           <option value="living">Living</option>
                           <option value="deceased">Deceased</option>
                           <option value="unknown">Unknown</option>
-                        </select>
+                        </CustomInput>
                       </FormGroup>
                     </Col>
                     <Col md={4}>
@@ -507,7 +519,7 @@
                           onChange={this.handleChange}
                           placeholder="Place of birth"
                         />
-                        {errors.birth_place ? (<small className='errortext'>This birth place is too long, max length is 50</small>) : null}
+                        {errors.birth_place ? (<small className={'errortext ' + this.props.theme}>This birth place is too long, max length is 50</small>) : null}
                       </FormGroup>
                     </Col>
                   </Row>
@@ -534,7 +546,7 @@
                       </FormGroup>
                     </Col>
                     <Col>
-                      <Button color="success" onClick={() => this.createMilestone()} style={{float: 'right'}}>
+                      <Button className="confirm" onClick={() => this.createMilestone()} style={{float: 'right'}}>
                         Add Milestone
                       </Button>
                     </Col>
@@ -549,7 +561,7 @@
               </ModalBody>
               }
               <ModalFooter className={"modal-footer-"+this.props.theme}>
-                <Button disabled={!isEnabled} color="success" onClick={() => onSave(this.state.activeItem)}>
+                <Button disabled={!isEnabled} className="confirm" onClick={() => onSave(this.state.activeItem)}>
                   Save
                 </Button>
               </ModalFooter>

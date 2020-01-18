@@ -2,6 +2,7 @@
 
 export enum NOTIFY {
     CHANGE_THEME,
+    CHANGE_COLOR,
 
     SUCCESS_LOGIN,
     SUCCESS_REGISTER,

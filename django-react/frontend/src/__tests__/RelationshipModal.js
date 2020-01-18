@@ -79,7 +79,10 @@ describe('Form validation', () =>{
     app.find('[name="title"]').simulate('change', {target: {name: 'title', value: ''}})
     expect(app.find('[name="title"]').getElement().props.className.split(" ")).toContain('error')
 
-    app.find('[name="begin_date"]').simulate('change', undefined)
+    app.find('[name="begin_date"]').simulate('change', "")
+
+    console.log(app.state().activeItem);
+
     expect(app.find('[name="begin_date"]').getElement().props.className.split(" ")).toContain('error')
   });
 

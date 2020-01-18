@@ -1,4 +1,5 @@
 // frontend/src/App.js
+/*eslint array-callback-return: 0*/
 
     import React, { Component } from "react";
     import './App.css';
@@ -12,7 +13,7 @@
     import Lottie from "react-lottie";
     import * as stillLoadingData from "./components/loading/stillloading.json";
     import * as doneLoadingData from "./components/loading/doneloading.json";
-    import { ToastContainer} from 'react-toastify';
+    import { ToastContainer, toast} from 'react-toastify';
     import {NOTIFY} from './components/Enums.ts';
     import ShowNotification from './components/notification/Notification';
 
@@ -50,23 +51,42 @@
           displayed_form: localStorage.getItem('token') ? '' : 'login', // form to display
           logged_in: localStorage.getItem('token') ? true : false, // flag, if user is already logged in
           username: '',
-          theme: 'dark',
+          theme: localStorage.getItem('theme') ?? 'dark',
         };
       }
 
       loginCounter = 0; // it makes sure noone will log into 2 different accounts from one browser (probably simple flag should be enough)
 
       componentDidMount() {
+        if(!localStorage.getItem('theme')){ localStorage.setItem('theme', 'dark'); }
+
+        const cssStyles = [
+          ['--main-primary-dark', '#FFAD00'],
+          ['--main-primary-hover-dark', '#B97E00'],
+          ['--main-secondary-dark', '#63FFF9'],
+          ['--main-secondary-hover-dark', '#00F7F7'],
+
+          ['--main-primary-light', '#005200'],
+          ['--main-primary-hover-light', '#29811F'],
+          ['--main-secondary-light', '#723C47'],
+          ['--main-secondary-hover-light', '#834852'],
+        ];
+
+        cssStyles.map(item => {
+          if(!localStorage.getItem(item[0])){ localStorage.setItem(item[0], item[1]); }
+          document.documentElement.style.setProperty(item[0], localStorage.getItem(item[0]))
+        })
+
         if (this.state.logged_in) { // if person is logged in, dont force user to relog
           axios
             .get('http://localhost:8000/current_user/', {
               headers: { Authorization: `JWT ${localStorage.getItem('token')}`},
             })
             .then(res => {
-              this.setState({ username: res.data.username }, () => ShowNotification(NOTIFY.SUCCESS_LOGIN));
+              this.setState({ username: res.data.username }, () => ShowNotification(NOTIFY.SUCCESS_LOGIN, this.state.theme));
             })
             .catch(() => {
-              ShowNotification(NOTIFY.ERROR_TIMEOUT)
+              ShowNotification(NOTIFY.ERROR_TIMEOUT, this.state.theme)
               this.handle_logout();
             })
           }
@@ -132,9 +152,9 @@
               logged_in: true,
               displayed_form: '', // familytree page
               username: res.data.user.username,
-            }, () => ShowNotification(NOTIFY.SUCCESS_LOGIN));
+            }, () => ShowNotification(NOTIFY.SUCCESS_LOGIN, this.state.theme));
           })
-          .catch(() => ShowNotification(NOTIFY.ERROR_LOGIN));
+          .catch(() => ShowNotification(NOTIFY.ERROR_LOGIN, this.state.theme));
       };
     
       // register user to website; throws error when username already exists
@@ -151,9 +171,9 @@
               logged_in: false,
               displayed_form: 'login', // redirect to login page
               username: res.data.username
-            }, () => ShowNotification(NOTIFY.SUCCESS_REGISTER));
+            }, () => ShowNotification(NOTIFY.SUCCESS_REGISTER, this.state.theme));
           })
-          .catch(() => ShowNotification(NOTIFY.ERROR_REGISTER));
+          .catch(() => ShowNotification(NOTIFY.ERROR_REGISTER, this.state.theme));
       };
     
       // log out user from website
@@ -173,7 +193,7 @@
           displayed_form: 'login', // redirect to login page
           loadingRelationshipList: undefined,
           doneRelationshipList: undefined,
-        }, () => ShowNotification(NOTIFY.SUCCESS_LOGOUT));
+        }, () => ShowNotification(NOTIFY.SUCCESS_LOGOUT, this.state.theme));
       };
     
       // display specific form (login/signup)
@@ -184,9 +204,11 @@
       };
 
       changeThemeMode = () => {
+        var newTheme = this.state.theme === "dark" ? "light" : "dark"
+        localStorage.setItem('theme', newTheme)
         this.setState({
-            theme: this.state.theme === "dark" ? "light" : "dark" 
-          }, () => ShowNotification(NOTIFY.CHANGE_THEME)
+            theme: newTheme,
+          }, () => ShowNotification(NOTIFY.CHANGE_THEME, this.state.theme)
         );
       }
       
@@ -257,7 +279,7 @@
                   )
               ) : null
             }
-              <ToastContainer />
+              <ToastContainer position={toast.POSITION.TOP_LEFT}/>
           </div>
         );         
       }

@@ -1,6 +1,13 @@
 /* Global Modal */
 
 /* Shared */
+
+/* Whole modal */
+.modal .modal-content{
+    border-radius: .5em;
+}
+
+/* Modal header */
 .modal .modal-header-dark,
 .modal .modal-header-light
 {
@@ -10,6 +17,7 @@
     padding: 1rem 1rem;
 }
 
+/* Modal close button */
 .modal .modal-open-dark .close,
 .modal .modal-open-light .close
 {
@@ -20,26 +28,54 @@
     opacity: .5;
 }
 
+/* Modal body */
+.modal .modal-body-dark,
+.modal .modal-body-light{
+    position: relative;
+    flex: 1 1 auto;
+    padding: 1rem;
+}
+
+/* Form Fields */
 .form-control.dark,
-.form-control.light{
+.form-control.light,
+.modal .modal-body-dark .dropdown-heading,
+.modal .modal-body-light .dropdown-heading
+{
+    background: none !important;
+    border: none !important;
+    border-radius: .35em;
+    box-shadow: none;
+    outline: none;
+    color: inherit;
     height: calc(1.5em + .75rem + 2px);
-    color: #495057;
-    border-radius: .25rem;
     width: 100%;
 }
 
+/* Form File Field */
 .form-control-file.dark,
 .form-control-file.light
 {
-    border: 1px solid #ced4da;
+    border: none;
 }
 
-.form-control-file.dark.error,
-.form-control-file.light.error
-{
-    border: 1px solid red;
+/* Horizontal line */
+.hr-body{
+    border: 0;
+    height: 1px;
 }
 
+/* Datepicker container */
+.react-datepicker-wrapper{
+    width: 100%;
+}
+
+/* List for Form -> Select */
+ul.select-list li{
+    margin: 0px;
+}
+
+/* Modal footer */
 .modal .modal-footer-dark,
 .modal .modal-footer-light
 {
@@ -49,73 +85,171 @@
     padding: 1rem;
 }
 
+
 /* Dark */
+
+/* Modal header */
 .modal .modal-header-dark{
-    border-bottom: 1px solid black;
-    border-top-left-radius: .2rem;
-    border-top-right-radius: .2rem;
-    background: #262626;
-    color: white;
+    border: 1px solid;
+    border-image: linear-gradient(90deg, var(--main-surface-dark) 0%, var(--main-primary-dark) 25%, var(--main-primary-dark) 50%, var(--main-primary-dark) 75%, var(--main-surface-dark) 100%) 0 0 1 0;
+    background: var(--main-surface-dark);
+    color: var(--main-on-surface-dark);
 } 
 
+/* Modal close button */
 .modal .modal-open-dark .close {
-    color: #fff;
-    text-shadow: 0 1px 0 #fff;
+    color: var(--main-on-surface-dark);
+    text-shadow: 0 1px 0 var(--main-on-surface-dark);
 }
 
-.modal .modal-footer-dark {
-    border-top: 1px solid black;
-    border-bottom-right-radius: .2rem;
-    border-bottom-left-radius: .2rem;
-    background: #262626;
-}
-
+/* Modal body */
 .modal .modal-body-dark {
-    position: relative;
-    flex: 1 1 auto;
-    padding: 1rem;
-    background: #262626 ;
-    color: #fff;
+    background: var(--main-surface-dark);
+    color: var(--main-on-surface-dark);
 }
 
-.form-control.dark{
-    background-color: black;
-}
-
-.modal .modal-body-dark .form-control.dark,
+/* Form Fields */
+.form-control.dark,
 .modal .modal-body-dark .dropdown-heading
 {
-    background-color: black !important;
-    height: calc(1.5em + .75rem + 2px);
-    color: #495057;
-    border-radius: .25rem;
-    width: 100%; 
+    border-bottom:1px solid var(--main-primary-dark) !important;
 }
+
+/* Form multiselect Field */
 .modal .modal-body-dark .select-panel,
 .modal .modal-body-dark label.select-item
 {
-    background-color: #262626 !important;
+    background-color: var(--main-surface-dark) !important;
 }
+
+/* Form multiselect options field */
+.modal .modal-body-dark .dropdown-heading-value,
+.modal .modal-body-dark .dropdown-content .select-panel .select-item
+{
+    color: var(--main-on-surface-dark) !important;
+}
+
+/* Form File Error Field */
+.form-control-file.dark.error{
+    border-bottom: 1px solid var(--main-error-text-dark);
+}
+
+/* Error in Forms */
+form .error.dark{
+    border-bottom: 1px solid var(--main-error-text-dark) !important;
+}
+
+/* Form Custom Select Field */
+.form-control.dark.custom-select option{
+    background: var(--main-surface-dark);
+    color: var(--main-on-surface-dark);
+}
+
+/* Form Autocomplete */
+input.dark:-webkit-autofill,
+input.dark:-webkit-autofill:hover, 
+input.dark:-webkit-autofill:focus,
+select.dark:-webkit-autofill,
+select.dark:-webkit-autofill:hover,
+select.dark:-webkit-autofill:focus{
+    -webkit-text-fill-color: var(--main-on-surface-dark);
+    -webkit-box-shadow: 0 0 0px 1000px var(--main-nav-button-hover-dark) inset;
+    box-shadow: 0 0 0px 1000px var(--main-nav-button-hover-dark) inset;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Horizontal line */
+.hr-body.dark{
+    background-image: linear-gradient(to right, var(--main-surface-dark), var(--main-primary-dark), var(--main-surface-dark));
+}
+
+/* Footer button for Confirm Modal */
+.modal .modal-footer-dark .confirm{
+    background-color: var(--main-primary-dark);
+    color: var(--main-on-primary-dark);
+    border: none;
+}
+
+/* Modal Footer */
+.modal .modal-footer-dark {
+    border: 1px solid;
+    border-image: linear-gradient(90deg, var(--main-surface-dark) 0%, var(--main-primary-dark) 25%, var(--main-primary-dark) 50%, var(--main-primary-dark) 75%, var(--main-surface-dark) 100%) 1 0 0 0;
+    background: var(--main-surface-dark);
+}
+
 
 /* Light */
 .modal .modal-header-light {
-    border-bottom: 1px solid #dee2e6;
-    border-top-left-radius: .3rem;
-    border-top-right-radius: .3rem;
+    border: 1px solid;
+    border-image: linear-gradient(90deg, var(--main-surface-light) 0%, var(--main-primary-light) 25%, var(--main-primary-light) 50%, var(--main-primary-light) 75%, var(--main-surface-light) 100%) 0 0 1 0;
+    background: var(--main-surface-light);
+    color: var(--main-on-surface-light);
 } 
 
+/* Modal close button */
 .modal .modal-open-light .close {
-    color: #000;
-    text-shadow: 0 1px 0 #000;
+    color: var(--main-on-surface-light);
+    text-shadow: 0 1px 0 var(--main-on-surface-light);
 }
 
-.modal .modal-footer-light {
-    border-top: 1px solid #dee2e6;
-    border-bottom-right-radius: .3rem;
-    border-bottom-left-radius: .3rem;
+/* Modal body */
+.modal .modal-body-light {
+    background: var(--main-surface-light);
+    color: var(--main-on-surface-light);
 }
 
-.form-control.light
+/* Form Fields */
+.form-control.light,
+.modal .modal-body-light .dropdown-heading
 {
-    background-color: white;
+    border-bottom: 1px solid var(--main-primary-light) !important;
+}
+
+/* Form File error */
+.form-control-file.light.error{
+    border-bottom: 1px solid var(--main-error-text-light);
+}
+
+/* Horizontal line */
+.hr-body.light{
+    background-image: linear-gradient(to right, var(--main-surface-light), var(--main-primary-light), var(--main-surface-light));
+}
+
+/* Error in Forms */
+form .error.light{
+    border-bottom: 1px solid var(--main-error-text-light) !important;
+}
+
+/* Form Custom Select Field */
+.form-control.light.custom-select option{
+    background: var(--main-surface-light);
+    color: var(--main-on-surface-light);
+}
+
+/* Form Autocomplete */
+input.light:-webkit-autofill,
+input.light:-webkit-autofill:hover, 
+input.light:-webkit-autofill:focus,
+select.light:-webkit-autofill,
+select.light:-webkit-autofill:hover,
+select.light:-webkit-autofill:focus 
+{
+  -webkit-text-fill-color: var(--main-on-surface-light);
+  -webkit-box-shadow: 0 0 0px 1000px var(--main-nav-button-hover-light) inset;
+  box-shadow: 0 0 0px 1000px var(--main-nav-button-hover-light) inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Footer Button for Confirm Modal */
+.modal .modal-footer-light .confirm{
+    background-color: var(--main-primary-light);
+    color: var(--main-on-primary-light);
+    border: none;
+}
+
+/* Form Footer */
+.modal .modal-footer-light {
+    border: 1px solid;
+    border-image: linear-gradient(90deg, var(--main-surface-light) 0%, var(--main-primary-light) 25%, var(--main-primary-light) 50%, var(--main-primary-light) 75%, var(--main-surface-light) 100%) 1 0 0 0;
+    background: var(--main-surface-light);
 }
