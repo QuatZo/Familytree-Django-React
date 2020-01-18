@@ -73,7 +73,7 @@
           .then(() => this.getCoordinates())
           .catch(err => {
             console.log(err);
-            ShowNotification(NOTIFY.ERROR);
+            ShowNotification(NOTIFY.ERROR, this.props.theme);
           });
       };
 
@@ -87,7 +87,7 @@
           .then(() => this.renderRelationships())
           .catch(err => {
             console.log(err);
-            ShowNotification(NOTIFY.ERROR);
+            ShowNotification(NOTIFY.ERROR, this.props.theme);
           });
       };
 
@@ -154,10 +154,10 @@
           }
         })
         .then(() => this.refreshPersonList())
-        .then(() => ShowNotification(NOTIFY.ADD_PERSON))
+        .then(() => ShowNotification(NOTIFY.ADD_PERSON, this.props.theme))
         .catch(err => {
           console.log(err);
-          ShowNotification(NOTIFY.ERROR);
+          ShowNotification(NOTIFY.ERROR, this.props.theme);
         });
       };
 
@@ -172,10 +172,10 @@
           }
         })
           .then(() => this.refreshRelationshipList())
-          .then(() => ShowNotification(NOTIFY.ADD_RELATIONSHIP))
+          .then(() => ShowNotification(NOTIFY.ADD_RELATIONSHIP, this.props.theme))
           .catch(err => {
             console.log(err);
-            ShowNotification(NOTIFY.ERROR);
+            ShowNotification(NOTIFY.ERROR, this.props.theme);
           });
       };
       
@@ -269,14 +269,14 @@
           personClassCoordinates: personListCoords,
         }, () => {
           this.renderRelationships();
-          ShowNotification(NOTIFY.RESET);
+          ShowNotification(NOTIFY.RESET, this.props.theme);
         });
       }
       
       // saves new Person's coords to the API
       saveCoords(){
         this.toggleConfirmModal();
-        ShowNotification(NOTIFY.SAVING)
+        ShowNotification(NOTIFY.SAVING, this.props.theme)
         var saved = true;
         var personListCoords = [...this.state.personClassCoordinates]
         var personList = [...this.state.personList]
@@ -298,13 +298,13 @@
               .catch(err => {
                 console.log(err);
                 saved = false;
-                ShowNotification(NOTIFY.ERROR);
+                ShowNotification(NOTIFY.ERROR, this.props.theme);
               })
           }          
         })
         setTimeout(() => {
           this.setState({saving: false});
-          if (saved) { ShowNotification(NOTIFY.SAVE_COORDS) };
+          if (saved) { ShowNotification(NOTIFY.SAVE_COORDS, this.props.theme) };
         }, 5000);
       }
 
@@ -351,11 +351,11 @@
             })
           })
           .then(() => {
-            ShowNotification(NOTIFY.DELETE);
+            ShowNotification(NOTIFY.DELETE, this.props.theme);
           })
           .catch(err => {
             console.log(err);
-            ShowNotification(NOTIFY.ERROR);
+            ShowNotification(NOTIFY.ERROR, this.props.theme);
           });
       }
 

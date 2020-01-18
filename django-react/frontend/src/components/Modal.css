@@ -135,7 +135,7 @@ ul.select-list li{
 }
 
 /* Error in Forms */
-.error.dark{
+form .error.dark{
     border-bottom: 1px solid var(--main-error-text-dark) !important;
 }
 
@@ -216,7 +216,7 @@ select.dark:-webkit-autofill:focus{
 }
 
 /* Error in Forms */
-.error.light{
+form .error.light{
     border-bottom: 1px solid var(--main-error-text-light) !important;
 }
 

@@ -100,7 +100,7 @@
           .then(this.downloadTimelineData())
           .catch(err => {
             console.log(err);
-            ShowNotification(NOTIFY.ERROR);
+            ShowNotification(NOTIFY.ERROR, this.props.theme);
           });
       };
 
@@ -208,7 +208,7 @@
         })
         .catch(err => {
           console.log(err);
-          ShowNotification(NOTIFY.ERROR);
+          ShowNotification(NOTIFY.ERROR, this.props.theme);
           this.setState({timelineData: []});
         });
       }
@@ -267,10 +267,10 @@
             }
           })
             .then(() => this.downloadTimelineData())
-            .then(() => ShowNotification(NOTIFY.SAVE_MILESTONE))
+            .then(() => ShowNotification(NOTIFY.SAVE_MILESTONE, this.props.theme))
             .catch(err => {
               console.log(err);
-              ShowNotification(NOTIFY.ERROR);
+              ShowNotification(NOTIFY.ERROR, this.props.theme);
             });
           return;
         }
@@ -298,10 +298,10 @@
           }
         })
           .then(() => this.downloadTimelineData())
-          .then(() => ShowNotification(NOTIFY.ADD_MILESTONE))
+          .then(() => ShowNotification(NOTIFY.ADD_MILESTONE, this.props.theme))
           .catch(err => {
             console.log(err);
-            ShowNotification(NOTIFY.ERROR);
+            ShowNotification(NOTIFY.ERROR, this.props.theme);
           });
       };
 
@@ -317,10 +317,10 @@
           })
             .then(() => this.downloadTimelineData())
             .then(() => this.props.refreshRelationships())
-            .then(() => ShowNotification(NOTIFY.SAVE_RELATIONSHIP))
+            .then(() => ShowNotification(NOTIFY.SAVE_RELATIONSHIP, this.props.theme))
             .catch(err => {
               console.log(err);
-              ShowNotification(NOTIFY.ERROR);
+              ShowNotification(NOTIFY.ERROR, this.props.theme);
             });
           return;
         } 
@@ -334,10 +334,10 @@
             headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
           })
           .then(() => this.downloadTimelineData())
-          .then(() => ShowNotification(NOTIFY.DELETE_MILESTONE))
+          .then(() => ShowNotification(NOTIFY.DELETE_MILESTONE, this.props.theme))
           .catch(err => {
             console.log(err);
-            ShowNotification(NOTIFY.ERROR);
+            ShowNotification(NOTIFY.ERROR, this.props.theme);
           });
       };
 
@@ -350,10 +350,10 @@
           })
           .then(() => this.downloadTimelineData())
           .then(() => this.props.refreshRelationships())
-          .then(() => ShowNotification(NOTIFY.DELETE_RELATIONSHIP))
+          .then(() => ShowNotification(NOTIFY.DELETE_RELATIONSHIP, this.props.theme))
           .catch(err => {
             console.log(err);
-            ShowNotification(NOTIFY.ERROR);
+            ShowNotification(NOTIFY.ERROR, this.props.theme);
           });
       };
 

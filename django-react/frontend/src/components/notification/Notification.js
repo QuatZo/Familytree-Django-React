@@ -3,81 +3,177 @@
     import {toast} from 'react-toastify';
     import {NOTIFY} from '../Enums.ts';
     import 'react-toastify/dist/ReactToastify.css';
+    import './Notification.css'
 
     // function which shows specific notification, depending on given NOTIFY enum
-     function ShowNotification(notifyEnum) {
+     function ShowNotification(notifyEnum, theme) {
         switch(notifyEnum){
           case NOTIFY.CHANGE_THEME:
-            toast("Theme has been changed.");
+            toast("Theme has been changed and saved.", {
+                className: 'custom-toast info ' + theme,
+                bodyClassName: 'body',
+                progressClassName: 'progress',
+            });
+            break;
+          case NOTIFY.CHANGE_COLOR:
+            toast("Color has been changed and saved.", {
+                className: 'custom-toast info ' + theme,
+                bodyClassName: 'body',
+                progressClassName: 'progress',
+            });
             break;
 
           case NOTIFY.SUCCESS_LOGIN:
-            toast.success("You logged in. Have a nice use!");
+            toast("You logged in. Have a nice use!", {
+                className: 'custom-toast success ' + theme,
+                bodyClassName: 'body',
+                progressClassName: 'progress',
+            });
             break;
           case NOTIFY.SUCCESS_REGISTER:
-            toast.success("You registered a new account and will be redirected to login page. Log in to use this website!");
+            toast("You registered a new account and will be redirected to login page. Log in to use this website!", {
+                className: 'custom-toast success ' + theme,
+                bodyClassName: 'body',
+                progressClassName: 'progress',
+            });
             break;
           case NOTIFY.SUCCESS_LOGOUT:
-            toast.success("You logged out, have a nice day!");
+            toast("You logged out, have a nice day!", {
+                className: 'custom-toast success ' + theme,
+                bodyClassName: 'body',
+                progressClassName: 'progress',
+            });
             break;
 
           case NOTIFY.ERROR:
-              toast.error("Something went wrong! Refresh page or try again later! If it doesn't help, contact administrator.");
+              toast("Something went wrong! Refresh page or try again later! If it doesn't help, contact administrator.", {
+                className: 'custom-toast error ' + theme,
+                bodyClassName: 'body',
+                progressClassName: 'progress',
+            });
               break;
           case NOTIFY.ERROR_LOGIN:
-              toast.error("Incorrect username and/or password!");
+              toast("Incorrect username and/or password!", {
+                className: 'custom-toast error ' + theme,
+                bodyClassName: 'body',
+                progressClassName: 'progress',
+            });
               break;
           case NOTIFY.ERROR_REGISTER:
-              toast.error("This username is already taken!")
+              toast("This username is already taken!", {
+                className: 'custom-toast error ' + theme,
+                bodyClassName: 'body',
+                progressClassName: 'progress',
+            });
               break;
           case NOTIFY.ERROR_TIMEOUT:
-              toast.error("Your session has expired. Please, log in!");
+              toast("Your session has expired. Please, log in!", {
+                className: 'custom-toast error ' + theme,
+                bodyClassName: 'body',
+                progressClassName: 'progress',
+            });
               break;
 
           case NOTIFY.RESET:
-              toast.info("The position of all persons has been set to the initial!");
+              toast("The position of all persons has been set to the initial values!", {
+                className: 'custom-toast info ' + theme,
+                bodyClassName: 'body',
+                progressClassName: 'progress',
+            });
               break;
 
           case NOTIFY.SAVE_PERSON:
-              toast.success("New data of the person has been saved!");
+              toast("New data of the person has been saved!", {
+                className: 'custom-toast success ' + theme,
+                bodyClassName: 'body',
+                progressClassName: 'progress',
+            });
               break;
           case NOTIFY.SAVE_RELATIONSHIP:
-              toast.success("New data of the relationship has been saved!");
+              toast("New data of the relationship has been saved!", {
+                className: 'custom-toast success ' + theme,
+                bodyClassName: 'body',
+                progressClassName: 'progress',
+            });
               break;
           case NOTIFY.SAVE_COORDS:
-              toast.success("New coords have been saved!");
+              toast("New coords have been saved!", {
+                className: 'custom-toast success ' + theme,
+                bodyClassName: 'body',
+                progressClassName: 'progress',
+            });
               break;
           case NOTIFY.SAVE_MILESTONE:
-              toast.success("New milestone have been saved!");
+              toast("New milestone have been saved!", {
+                className: 'custom-toast success ' + theme,
+                bodyClassName: 'body',
+                progressClassName: 'progress',
+            });
               break;
           case NOTIFY.SAVING:
-              toast.info("Saving coordinates... Do not leave the page until the saving process is finished!");
+              toast("Saving coordinates... Do not leave the page until the saving process is finished!", {
+                className: 'custom-toast info ' + theme,
+                bodyClassName: 'body',
+                progressClassName: 'progress',
+            });
               break;
 
           case NOTIFY.ADD_PERSON:
-              toast.success("New person has been added, it should be at the top-left corner of the page!");
+              toast("New person has been added, it should be at the top-left corner of the page!", {
+                className: 'custom-toast success ' + theme,
+                bodyClassName: 'body',
+                progressClassName: 'progress',
+            });
               break;
           case NOTIFY.ADD_RELATIONSHIP:
-              toast.success("New relationship has been added, it should be visible. If not, try to move something around!");
+              toast("New relationship has been added, it should be visible. If not, try to move something around!", {
+                className: 'custom-toast success ' + theme,
+                bodyClassName: 'body',
+                progressClassName: 'progress',
+            });
               break;
           case NOTIFY.ADD_MILESTONE:
-              toast.success("New milestone has been added, it should be visible. If not, try to reopen Edit Person modal!");
+              toast("New milestone has been added, it should be visible. If not, try to reopen Edit Person modal!", {
+                className: 'custom-toast success ' + theme,
+                bodyClassName: 'body',
+                progressClassName: 'progress',
+            });
               break;
 
           case NOTIFY.DELETE:
-              toast.warn("Everything has been deleted! Now you can start from scratch.");
+              toast("Everything has been deleted! Now you can start from scratch.", {
+                className: 'custom-toast warn ' + theme,
+                bodyClassName: 'body',
+                progressClassName: 'progress',
+            });
               break;
           case NOTIFY.DELETE_PERSON:
-              toast.warn("Person has been deleted!");
+              toast("Person has been deleted!", {
+                className: 'custom-toast warn ' + theme,
+                bodyClassName: 'body',
+                progressClassName: 'progress',
+            });
               break;
           case NOTIFY.DELETE_RELATIONSHIP:
-              toast.warn("Relationship has been deleted!");
+              toast("Relationship has been deleted!", {
+                className: 'custom-toast warn ' + theme,
+                bodyClassName: 'body',
+                progressClassName: 'progress',
+            });
               break;
           case NOTIFY.DELETE_MILESTONE:
-              toast.warn("Milestone has been deleted!");
+              toast("Milestone has been deleted!", {
+                className: 'custom-toast warn ' + theme,
+                bodyClassName: 'body',
+                progressClassName: 'progress',
+            });
               break;
           default:
-            toast.error("Why is it empty? Contact administrator, please.");
+            toast("Why is it empty? Contact administrator, please.", {
+                className: 'custom-toast error ' + theme,
+                bodyClassName: 'body',
+                progressClassName: 'progress',
+            });
             break;
         }
       }

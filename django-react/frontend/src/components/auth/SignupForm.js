@@ -48,7 +48,7 @@ class SignupForm extends React.Component {
             <div className="illustration"><i className="far fa-user"></i></div>
             <div className="form-group">
               <input 
-              className={"form-control" + (errors.username ? " error" : "")}
+              className={"form-control " + this.props.theme + (errors.username ? " error" : "")}
               type="text" 
               name="username" 
               placeholder="Username" 

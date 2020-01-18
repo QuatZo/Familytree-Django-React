@@ -1,4 +1,5 @@
 // frontend/src/App.js
+/*eslint array-callback-return: 0*/
 
     import React, { Component } from "react";
     import './App.css';
@@ -57,12 +58,24 @@
       loginCounter = 0; // it makes sure noone will log into 2 different accounts from one browser (probably simple flag should be enough)
 
       componentDidMount() {
-        var theme = localStorage.getItem('theme') ?? 'dark';
-        if(!localStorage.getItem('color')){
-          if(theme === "dark"){ localStorage.setItem('color', '#FFAD00'); }
-          else { localStorage.setItem('color', '#005200'); }
-        }
-        document.documentElement.style.setProperty("--main-primary-" + theme, localStorage.getItem('color'))
+        if(!localStorage.getItem('theme')){ localStorage.setItem('theme', 'dark'); }
+
+        const cssStyles = [
+          ['--main-primary-dark', '#FFAD00'],
+          ['--main-primary-hover-dark', '#B97E00'],
+          ['--main-secondary-dark', '#63FFF9'],
+          ['--main-secondary-hover-dark', '#00F7F7'],
+
+          ['--main-primary-light', '#005200'],
+          ['--main-primary-hover-light', '#29811F'],
+          ['--main-secondary-light', '#723C47'],
+          ['--main-secondary-hover-light', '#834852'],
+        ];
+
+        cssStyles.map(item => {
+          if(!localStorage.getItem(item[0])){ localStorage.setItem(item[0], item[1]); }
+          document.documentElement.style.setProperty(item[0], localStorage.getItem(item[0]))
+        })
 
         if (this.state.logged_in) { // if person is logged in, dont force user to relog
           axios
@@ -70,10 +83,10 @@
               headers: { Authorization: `JWT ${localStorage.getItem('token')}`},
             })
             .then(res => {
-              this.setState({ username: res.data.username }, () => ShowNotification(NOTIFY.SUCCESS_LOGIN));
+              this.setState({ username: res.data.username }, () => ShowNotification(NOTIFY.SUCCESS_LOGIN, this.state.theme));
             })
             .catch(() => {
-              ShowNotification(NOTIFY.ERROR_TIMEOUT)
+              ShowNotification(NOTIFY.ERROR_TIMEOUT, this.state.theme)
               this.handle_logout();
             })
           }
@@ -139,9 +152,9 @@
               logged_in: true,
               displayed_form: '', // familytree page
               username: res.data.user.username,
-            }, () => ShowNotification(NOTIFY.SUCCESS_LOGIN));
+            }, () => ShowNotification(NOTIFY.SUCCESS_LOGIN, this.state.theme));
           })
-          .catch(() => ShowNotification(NOTIFY.ERROR_LOGIN));
+          .catch(() => ShowNotification(NOTIFY.ERROR_LOGIN, this.state.theme));
       };
     
       // register user to website; throws error when username already exists
@@ -158,9 +171,9 @@
               logged_in: false,
               displayed_form: 'login', // redirect to login page
               username: res.data.username
-            }, () => ShowNotification(NOTIFY.SUCCESS_REGISTER));
+            }, () => ShowNotification(NOTIFY.SUCCESS_REGISTER, this.state.theme));
           })
-          .catch(() => ShowNotification(NOTIFY.ERROR_REGISTER));
+          .catch(() => ShowNotification(NOTIFY.ERROR_REGISTER, this.state.theme));
       };
     
       // log out user from website
@@ -180,7 +193,7 @@
           displayed_form: 'login', // redirect to login page
           loadingRelationshipList: undefined,
           doneRelationshipList: undefined,
-        }, () => ShowNotification(NOTIFY.SUCCESS_LOGOUT));
+        }, () => ShowNotification(NOTIFY.SUCCESS_LOGOUT, this.state.theme));
       };
     
       // display specific form (login/signup)
@@ -195,7 +208,7 @@
         localStorage.setItem('theme', newTheme)
         this.setState({
             theme: newTheme,
-          }, () => ShowNotification(NOTIFY.CHANGE_THEME)
+          }, () => ShowNotification(NOTIFY.CHANGE_THEME, this.state.theme)
         );
       }
       

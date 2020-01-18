@@ -1,0 +1,104 @@
+/* Shared */
+
+/* Notification container */
+.custom-toast{
+    width: 22.5em;
+    border-radius: 2em;
+    box-shadow: var(--main-box-shadow);
+    border: 1px solid;
+}
+
+/* Notification close button */
+.custom-toast button{
+    padding-right: .5em;
+    padding-top: .1em;
+    opacity: 1;
+}
+
+/* Notification body (text) */
+.custom-toast .body{
+    text-align: center;
+    border-radius: 2em;
+    font-size: 15px;
+    font-weight: lighter;
+    width: 80%;
+    height: 100%;
+}
+
+
+/* Dark */
+
+/* Notification container */
+.custom-toast.dark{
+    border-color: var(--main-primary-dark);
+    background-color: var(--main-surface-dark);
+}
+
+/* Notification close button */
+.custom-toast.dark button{
+    color: var(--main-on-surface-dark);
+}
+
+/* Notification body (text) */
+.custom-toast.dark .body{
+    color: var(--main-on-surface-dark);
+}
+
+/* Notification progress bar ERROR */
+.custom-toast.error.dark .progress{
+    background: var(--main-error-text-dark);
+}
+
+/* Notification progress bar INFO */
+.custom-toast.info.dark .progress{
+    background: #63FFF9;
+}
+
+/* Notification progress bar SUCCESS */
+.custom-toast.success.dark .progress{
+    background: #B8FF61;
+}
+
+/* Notification progress bar WARN */
+.custom-toast.warn.dark .progress{
+    background: #FFF24C;
+}
+
+
+/* Light */
+
+/* Notification container */
+.custom-toast.light{
+    border-color: var(--main-primary-light);
+    background-color: var(--main-surface-light);
+}
+
+/* Notification close button */
+.custom-toast.light button{
+    color: var(--main-on-surface-light);
+}
+
+/* Notification body (text) */
+.custom-toast.light .body{
+    color: var(--main-on-surface-light);
+}
+
+/* Notification progress bar ERROR */
+.custom-toast.error.light .progress{
+    background: var(--main-error-text-light);
+}
+
+/* Notification progress bar INFO */
+.custom-toast.info.light .progress{
+    background: #00C9C9;
+}
+
+/* Notification progress bar SUCCESS */
+.custom-toast.success.light .progress{
+    background: #88CF00;
+}
+
+/* Notification progress bar WARN */
+.custom-toast.warn.light .progress{
+    background: #FEAB00;
+}

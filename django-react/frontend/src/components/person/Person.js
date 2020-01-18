@@ -52,10 +52,10 @@
             }
           })
             .then(() => this.props.refresh())
-            .then(() => ShowNotification(NOTIFY.SAVE_PERSON))
+            .then(() => ShowNotification(NOTIFY.SAVE_PERSON, this.props.theme))
             .catch(err => {
               console.log(err);
-              ShowNotification(NOTIFY.ERROR);
+              ShowNotification(NOTIFY.ERROR, this.props.theme);
             });
         }
       };
@@ -77,10 +77,10 @@
           })
           .then(() => this.props.refresh())
           .then(() => this.props.refreshRelationships())
-          .then(() => ShowNotification(NOTIFY.DELETE_PERSON))
+          .then(() => ShowNotification(NOTIFY.DELETE_PERSON, this.props.theme))
           .catch(err => {
             console.log(err);
-            ShowNotification(NOTIFY.ERROR);
+            ShowNotification(NOTIFY.ERROR, this.props.theme);
           });
       };
 

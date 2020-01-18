@@ -57,7 +57,7 @@
           })
           .catch(err => {
             console.log(err);
-            ShowNotification(NOTIFY.ERROR);
+            ShowNotification(NOTIFY.ERROR, this.props.theme);
           });
       }
 

@@ -36,17 +36,17 @@
   --main-person-active-light: none;
   --main-person-active-dark: none;
 
-  --main-primary-light: #045700;
+  --main-primary-light: #005200;
   --main-primary-dark: #FFAD00;
 
-  --main-primary-hover-light: #393939;
+  --main-primary-hover-light: #29811F;
   --main-primary-hover-dark: #B97E00;
 
-  --main-secondary-light: #8B4957;
+  --main-secondary-light: #723C47;
   --main-secondary-dark: #63FFF9;
 
-  --main-secondary-hover-light: #393939;
-  --main-secondary-hover-dark: #ACFA4D;
+  --main-secondary-hover-light: #834852;
+  --main-secondary-hover-dark: #00F7F7;
 
   --main-surface-light: #F1F1F1;
   --main-surface-dark: #1F1F1F;
