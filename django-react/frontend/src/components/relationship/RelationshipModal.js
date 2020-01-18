@@ -131,7 +131,7 @@
           title: form.title.trim().length === 0,
           title_too_long: form.title.trim().length > 64,
           description: form.description.trim().length > 512,
-          begin_date: form.begin_date.toString().trim().length === 0,
+          begin_date: form.begin_date.toString().trim().length === 0 || !(moment(form.begin_date.toString(), "YYYY-MM-DD").isValid()),
           end_date_earlier_than_begin: form.end_date !== null && form.end_date !== undefined && form.end_date !== "" && form.end_date.toString().trim() < form.begin_date.toString().trim(),
         }
       }

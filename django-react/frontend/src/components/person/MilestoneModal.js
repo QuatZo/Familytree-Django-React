@@ -113,7 +113,7 @@
           title: form.title.trim().length === 0,
           title_too_long: form.title.trim().length > 64,
           text: form.text.trim().length > 512,
-          date: form.date.toString().trim().length === 0,
+          date: form.date.toString().trim().length === 0 || !(moment(form.date.toString(), "YYYY-MM-DD").isValid()),
           person_id: form.person_id.length === 0,
           file: (form.image === null || form.image === undefined) && form.id === undefined,
         }

@@ -75,7 +75,7 @@ describe('Form validation', () =>{
   it('has 3 Input Text Field, Input Date, 2 Select Field & File Field', () => {
     const app = shallow(<PersonEditTimelineModal activeItem={PERSON_DATA} />);
     expect(app.find('[type="text"]')).toHaveLength(3)
-    expect(app.find('select')).toHaveLength(2)
+    expect(app.find('[type="select"]')).toHaveLength(2)
     expect(app.find('[name="birth_date"]').exists()).toEqual(true)
     expect(app.find('[type="file"]')).toHaveLength(1)
   });
