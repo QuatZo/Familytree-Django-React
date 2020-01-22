@@ -15,6 +15,8 @@ export enum NOTIFY {
 
     RESET,
 
+    SNEAKY_PASSWORD, // deleting 'disabled' from HTML Submit Button w/ insufficient password
+
     SAVE_PERSON,
     SAVE_RELATIONSHIP,
     SAVE_COORDS,

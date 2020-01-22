@@ -82,6 +82,14 @@
             });
               break;
 
+            case NOTIFY.SNEAKY_PASSWORD:
+              toast("Don't you try to fool us by deleting 'disabled' attribute from Submit button! You wanted to outsmart us, we outsmarted you!", {
+                className: 'custom-toast error ' + theme,
+                bodyClassName: 'body',
+                progressClassName: 'progress',
+            });
+              break;
+
           case NOTIFY.SAVE_PERSON:
               toast("New data of the person has been saved!", {
                 className: 'custom-toast success ' + theme,

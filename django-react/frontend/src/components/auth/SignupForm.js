@@ -5,10 +5,6 @@ class SignupForm extends React.Component {
   state = {
     username: "",
     password: "",
-    touched: {
-      username: false,
-      password: false,
-    },
   };
 
   // handles change for any Form Field
@@ -31,13 +27,6 @@ class SignupForm extends React.Component {
     }
   }
 
-  // error handling
-  handleBlur = (field) => (evt) => {
-    this.setState({
-      touched: { ...this.state.touched, [field]: true },
-    });
-  }
-
   render() {
     const errors = this.validate(this.state.username, this.state.password);
     const isEnabled = !Object.keys(errors).some(x => errors[x]); // button is disabled as long as error exists
@@ -52,7 +41,6 @@ class SignupForm extends React.Component {
               type="text" 
               name="username" 
               placeholder="Username" 
-              onBlur={this.handleBlur('username')}
               value={this.state.username}
               onChange={this.handle_change}
               required 
@@ -65,7 +53,6 @@ class SignupForm extends React.Component {
               type="password" 
               name="password" 
               placeholder="Password"
-              onBlur={this.handleBlur('password')}
               value={this.state.password}
               onChange={this.handle_change}
               required

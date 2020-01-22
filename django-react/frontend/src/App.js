@@ -160,6 +160,12 @@
       // register user to website; throws error when username already exists
       handle_signup = (e, data) => {
         e.preventDefault();
+
+        var valid_password = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$/.test(data.password)
+        if(!valid_password){
+          ShowNotification(NOTIFY.SNEAKY_PASSWORD, this.state.theme);
+          return;
+        }
         
         axios.post('http://localhost:8000/users/', data, {
           headers: {
