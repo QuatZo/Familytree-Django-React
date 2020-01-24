@@ -45,7 +45,7 @@
       componentDidMount(){
         var options = [];
         axios
-          .get("http://localhost:8000/api/familytreepersons/", {
+          .get("/api/familytreepersons/", {
             headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
           })
           .then(res => {

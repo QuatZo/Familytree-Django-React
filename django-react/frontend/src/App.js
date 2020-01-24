@@ -79,7 +79,7 @@
 
         if (this.state.logged_in) { // if person is logged in, dont force user to relog
           axios
-            .get('http://localhost:8000/current_user/', {
+            .get('/current_user/', {
               headers: { Authorization: `JWT ${localStorage.getItem('token')}`},
             })
             .then(res => {
@@ -105,7 +105,7 @@
       fetchPersonList = () => {
         setTimeout(() => {
           axios
-            .get("http://localhost:8000/api/familytreepersons/", {
+            .get("/api/familytreepersons/", {
               headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
             })
             .then(res => this.setState({ personList: res.data }))
@@ -122,7 +122,7 @@
       fetchRelationshipList = () => {
         setTimeout(() => {
         axios
-          .get("http://localhost:8000/api/familytreerelationship/", {
+          .get("/api/familytreerelationship/", {
             headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
           })
           .then(res => this.setState({ relationshipList: res.data }))
@@ -138,7 +138,7 @@
       // check in API, if provided credentials are correct
       handle_login = (e, data) => {
         e.preventDefault();
-        axios.post('http://localhost:8000/token-auth/', data, {
+        axios.post('/token-auth/', data, {
           headers: {
             'Content-Type': 'application/json'
           }
@@ -167,7 +167,7 @@
           return;
         }
         
-        axios.post('http://localhost:8000/users/', data, {
+        axios.post('/users/', data, {
           headers: {
             'Content-Type': 'application/json'
           }

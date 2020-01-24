@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.conf import settings
+from django.conf.urls import url
 from django.urls import path, include
 from rest_framework import routers
 from familytree import views
@@ -32,4 +33,5 @@ urlpatterns = [
     path('token-auth/', obtain_jwt_token, name="token-auth"), # page to get the token
     path('current_user/', views.current_user, name="current_user"), # page to check if logged in
     path('users/', views.UserList.as_view(), name="users"), # list of users, page to check if specific user exists
+    url('app/', views.FrontendAppView.as_view()),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # media (files)

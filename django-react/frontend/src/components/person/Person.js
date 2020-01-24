@@ -45,7 +45,7 @@
           } 
 
           axios
-          .patch(`http://localhost:8000/api/familytreepersons/${item.id}/`, data, {
+          .patch(`/api/familytreepersons/${item.id}/`, data, {
             headers: {
               'Content-Type': 'multipart/form-data',
               Authorization: `JWT ${localStorage.getItem('token')}`
@@ -72,7 +72,7 @@
         // Delete Relationship function hasn't been deleted from familytree.js, because it'll probably be used for single relationship delete
         // this.props.deleteRelationships(item.id)
         axios
-          .delete(`http://localhost:8000/api/familytreepersons/${item.id}`, {
+          .delete(`/api/familytreepersons/${item.id}`, {
             headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
           })
           .then(() => this.props.refresh())

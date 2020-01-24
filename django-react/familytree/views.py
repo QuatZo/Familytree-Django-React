@@ -1,6 +1,9 @@
+import os
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
+from django.views.generic import View
+from django.conf import settings
 
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import api_view
@@ -92,3 +95,14 @@ class FamilytreeMilestoneView(viewsets.ModelViewSet):
         if person is not None:
             return FamilytreeMilestone.objects.filter(user_id=user, person_id=person) # return milestones only for certain user & person
         return FamilytreeMilestone.objects.filter(user_id=user) # return milestones only for certain user
+		
+		
+class FrontendAppView(View):
+    def get(self, request):
+        print (os.path.join(settings.REACT_APP_DIR, 'build', 'index.html'))
+        try:
+            with open(os.path.join(settings.REACT_APP_DIR, 'build', 'index.html')) as f:
+                return HttpResponse(f.read())
+        except FileNotFoundError:
+            logging.exception('Production build of app not found')
+            return HttpResponse(status=501,)

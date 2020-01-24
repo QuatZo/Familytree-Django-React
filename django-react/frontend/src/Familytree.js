@@ -66,7 +66,7 @@
       // refreshes persons list and then gets their coords
       refreshPersonList = () => {
         axios
-          .get("http://localhost:8000/api/familytreepersons/", {
+          .get("/api/familytreepersons/", {
             headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
           })
           .then(res => this.setState({ personList: res.data }))
@@ -80,7 +80,7 @@
       // refreshes relationships list
       refreshRelationshipList = () => {
         axios
-          .get("http://localhost:8000/api/familytreerelationship/", {
+          .get("/api/familytreerelationship/", {
             headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
           })
           .then(res => this.setState({ relationshipList: res.data }))
@@ -147,7 +147,7 @@
         data.append('relationship_choices', item.relationship_choices);
         data.append('avatar', item.avatar, newFilename); // SHA256 encryption
     
-        axios.post('http://localhost:8000/api/familytreepersons/', data, {
+        axios.post('/api/familytreepersons/', data, {
           headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: `JWT ${localStorage.getItem('token')}`
@@ -164,7 +164,7 @@
       // handles new Relationship submission
       handleSubmitRelationship = item => {
         this.toggleRelationshipModal();
-        axios.post('http://localhost:8000/api/familytreerelationship/', item, {
+        axios.post('/api/familytreerelationship/', item, {
           headers: {
             'Content-Type': 'application/json',
             Accept : 'application/json',
@@ -289,7 +289,7 @@
             formData.append('x', coords.x);
             formData.append('y', coords.y);
             axios
-            .patch(`http://localhost:8000/api/familytreepersons/${item.id}/`, formData, {
+            .patch(`/api/familytreepersons/${item.id}/`, formData, {
               headers: {
                 'Content-Type': 'multipart/form-data',
                 Authorization: `JWT ${localStorage.getItem('token')}`
@@ -335,13 +335,13 @@
       deleteEverything(){
         this.toggleConfirmModal();
         axios
-          .get("http://localhost:8000/api/familytreepersons/", {
+          .get("/api/familytreepersons/", {
             headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
           })
           .then(res => {
             res.data.map(item => {
               axios
-              .delete(`http://localhost:8000/api/familytreepersons/${item.id}`, {
+              .delete(`/api/familytreepersons/${item.id}`, {
                 headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
               })
               .then(() => {

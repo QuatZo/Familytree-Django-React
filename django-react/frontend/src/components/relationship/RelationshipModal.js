@@ -52,7 +52,7 @@
       // used only to get person's names from their ID's
       refreshPersonList = () => {
         axios
-          .get("http://localhost:8000/api/familytreepersons/", {
+          .get("/api/familytreepersons/", {
             headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
           })
           .then(res => this.setState({ personList: res.data }))

@@ -2,6 +2,4 @@
 call install.bat
 cd ..
 call migrate.bat
-cd ..
-start backend.bat
-frontend.bat
+call start_server_only.bat
