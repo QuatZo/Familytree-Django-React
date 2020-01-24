@@ -52,13 +52,6 @@
     width: 100%;
 }
 
-/* Form File Field */
-.form-control-file.dark,
-.form-control-file.light
-{
-    border: none;
-}
-
 /* Horizontal line */
 .hr-body{
     border: 0;
@@ -66,8 +59,25 @@
 }
 
 /* Datepicker container */
-.react-datepicker-wrapper{
+.modal .react-datepicker-wrapper{
     width: 100%;
+}
+
+/* Datepicker choose date */
+.modal .react-datepicker-popper div{
+    border-radius: .35em;
+}
+
+/* Datepicker month/year select div */
+.modal .react-datepicker__header__dropdown--select{
+    margin: .5em;
+}
+
+/* Datepicker month/year select */
+.modal .react-datepicker__month-select,
+.modal .react-datepicker__year-select
+{
+    border-radius: .35em;
 }
 
 /* List for Form -> Select */
@@ -85,6 +95,26 @@ ul.select-list li{
     padding: 1rem;
 }
 
+/* File Dropzone */
+.modal .dropzone{
+    display: flex;
+    width: 100%;
+    height: 5em;
+    border: 1px dashed;
+    border-radius: .35em;
+}
+
+/* File Dropzone Text */
+.modal .dropzone p{
+    margin: auto;
+    font-weight: lighter;
+}
+
+/* File Dropzone Error */
+.modal .dropzone.error{
+    border: 1px dashed !important;
+    border-radius: .35em;
+}
 
 /* Dark */
 
@@ -129,11 +159,6 @@ ul.select-list li{
     color: var(--main-on-surface-dark) !important;
 }
 
-/* Form File Error Field */
-.form-control-file.dark.error{
-    border-bottom: 1px solid var(--main-error-text-dark);
-}
-
 /* Error in Forms */
 form .error.dark{
     border-bottom: 1px solid var(--main-error-text-dark) !important;
@@ -161,6 +186,60 @@ select.dark:-webkit-autofill:focus{
 /* Horizontal line */
 .hr-body.dark{
     background-image: linear-gradient(to right, var(--main-surface-dark), var(--main-primary-dark), var(--main-surface-dark));
+}
+
+/* File Dropzone */
+.modal .dropzone.dark{
+    border-color: var(--main-primary-dark);
+    color: var(--main-on-surface-dark);
+}
+
+/* File Dropzone Error */
+.modal .dropzone.error.dark{
+    border-color: var(--main-error-text-dark) !important;
+}
+
+/* Datepicker div */
+.modal-open-dark .react-datepicker-popper div{
+    background-color: var(--main-surface-dark);
+    color: var(--main-on-surface-dark);
+    border-color: var(--main-primary-dark);
+}
+
+/* Datepicker div triangle */
+.modal-open-dark .react-datepicker-popper .react-datepicker__triangle{
+    border-bottom-color: var(--main-primary-dark);
+}
+
+/* Datepicker div previous button triangle */
+.modal-open-dark .react-datepicker-popper .react-datepicker__navigation--previous{
+    border-right-color: var(--main-primary-dark);
+}
+
+/* Datepicker div next button triangle */
+.modal-open-dark .react-datepicker-popper .react-datepicker__navigation--next{
+    border-left-color: var(--main-primary-dark);
+}
+
+/* Datepicker div month/year select */
+.modal-open-dark .react-datepicker__month-select,
+.modal-open-dark .react-datepicker__year-select
+{
+    border: 1px solid var(--main-primary-dark);
+    color: var(--main-on-surface-dark);
+    background-color: var(--main-nav-button-hover-dark);
+}
+
+/* Datepicker div date on hover */
+.modal-open-dark .react-datepicker-popper .react-datepicker__day:hover{
+    background-color: var(--main-nav-button-hover-dark);
+    color: var(--main-on-surface-dark);
+}
+
+/* Datepicker div date today */
+.modal-open-dark .react-datepicker-popper .react-datepicker__day--today{
+    background-color: var(--main-primary-dark);
+    color: var(--main-on-primary-dark);
 }
 
 /* Footer button for Confirm Modal */
@@ -205,11 +284,6 @@ select.dark:-webkit-autofill:focus{
     border-bottom: 1px solid var(--main-primary-light) !important;
 }
 
-/* Form File error */
-.form-control-file.light.error{
-    border-bottom: 1px solid var(--main-error-text-light);
-}
-
 /* Horizontal line */
 .hr-body.light{
     background-image: linear-gradient(to right, var(--main-surface-light), var(--main-primary-light), var(--main-surface-light));
@@ -240,8 +314,63 @@ select.light:-webkit-autofill:focus
   transition: background-color 5000s ease-in-out 0s;
 }
 
-/* Footer Button for Confirm Modal */
-.modal .modal-footer-light .confirm{
+/* File Dropzone */
+.modal .dropzone.light{
+    border-color: var(--main-primary-light);
+    color: var(--main-on-surface-light);
+}
+
+/* File Dropzone Error */
+.modal .dropzone.error.light{
+    border-color: var(--main-error-text-light) !important;
+}
+
+/* Datepicker div */
+.modal-open-light .react-datepicker-popper div{
+    background-color: var(--main-surface-light);
+    color: var(--main-on-surface-light);
+    border-color: var(--main-primary-light);
+}
+
+/* Datepicker div triangle */
+.modal-open-light .react-datepicker-popper .react-datepicker__triangle{
+    border-bottom-color: var(--main-primary-light);
+}
+
+/* Datepicker div triangle button previous */
+.modal-open-light .react-datepicker-popper .react-datepicker__navigation--previous{
+    border-right-color: var(--main-primary-light);
+}
+
+/* Datepicker div triangle button next */
+.modal-open-light .react-datepicker-popper .react-datepicker__navigation--next{
+    border-left-color: var(--main-primary-light);
+}
+
+/* Datepicker div month/year select */
+.modal-open-light .react-datepicker__month-select,
+.modal-open-light .react-datepicker__year-select
+{
+    border: 1px solid var(--main-primary-light);
+    color: var(--main-on-surface-light);
+    background-color: var(--main-nav-button-hover-light);
+}
+
+/* Datepicker date on hover */
+.modal-open-light .react-datepicker-popper .react-datepicker__day:hover{
+    background-color: var(--main-nav-button-hover-light);
+    color: var(--main-on-surface-light);
+}
+
+/* Datepicker date today */
+.modal-open-light .react-datepicker-popper .react-datepicker__day--today{
+    background-color: var(--main-primary-light);
+    color: var(--main-on-primary-light);
+}
+
+/* Footer & Header Button for Confirm Modal */
+.modal .modal-footer-light .confirm,
+.modal .modal-header-light .confirm{
     background-color: var(--main-primary-light);
     color: var(--main-on-primary-light);
     border: none;

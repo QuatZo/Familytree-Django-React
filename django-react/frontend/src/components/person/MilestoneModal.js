@@ -11,6 +11,7 @@
     import ShowNotification from '../notification/Notification';
     import '../Modal.css';
     import moment from 'moment';
+    import Dropzone from 'react-dropzone'
     
     import {
       Button,
@@ -37,6 +38,7 @@
             file: false,
           },
           personSelectOptions: [],
+          fileMessage: "Drag 'n' drop file here, or click to select file",
         };
       }
 
@@ -82,9 +84,14 @@
       };
 
       // handles change for File Field
-      handleChangeFile = (e) => {
-        const activeItem = { ...this.state.activeItem, ["image"]: e.target.files[0]};
-        this.setState({activeItem});
+      handleChangeFile = (file) => {
+        var fileMessage = "Drag 'n' drop file here, or click to select file";
+
+      if(file !== null){
+        fileMessage = file.name;
+      }
+        const activeItem = { ...this.state.activeItem, ["image"]: file};
+        this.setState({activeItem, fileMessage});
       }
 
       handleChangeSelect = selected => {
@@ -92,7 +99,7 @@
         this.setState({activeItem});
       }
 
-
+      
       // error handling
       handleBlur = (field) => (evt) => {
         this.setState({
@@ -102,6 +109,20 @@
       
       // error handling, validates given fields
       validate(form){
+        var file_extension_invalid = false;
+        if(form.image !== null && form.image !== undefined && form.image.name !== undefined){
+          var extensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.svg', '.raw', '.mp4', '.webm', '.wmv', '.avi', '.wav', '.mp3'];
+          var file_ext_check = false;
+          extensions.map(ext => {
+            var file_ext = form.image.name.substring(form.image.name.lastIndexOf('.'))
+            if(ext === file_ext){
+              file_ext_check = true;
+            }
+          })
+
+          if(!file_ext_check){ file_extension_invalid = true;}
+        }
+
         try{
           form.person_id = form.person_id.filter(el => el !== undefined);
         }
@@ -115,6 +136,7 @@
           text: form.text.trim().length > 512,
           date: form.date.toString().trim().length === 0 || !(moment(form.date.toString(), "YYYY-MM-DD").isValid()),
           person_id: form.person_id.length === 0,
+          file_extension: file_extension_invalid,
           file: (form.image === null || form.image === undefined) && form.id === undefined,
         }
       }
@@ -182,14 +204,22 @@
                   </FormGroup>
                   <FormGroup>
                     <Label for="imageUrl">Image/Movie</Label>
-                    <Input
-                      type="file"
-                      name="imageUrl"
-                      className={"form-control " + this.props.theme + (errors.file ? " error" : "")}
-                      onBlur={this.handleBlur('imageUrl')}
-                      onChange={this.handleChangeFile}
-                    />
-                    {errors.file?(<small className={'errortext ' + this.props.theme}>Please input your image or movie</small>):null}
+                    <Dropzone 
+                        onDrop={acceptedFiles => this.handleChangeFile(acceptedFiles[0])}
+                        onFileDialogCancel={() => this.handleChangeFile(null)}
+                        multiple={false}
+                      >
+                        {({getRootProps, getInputProps}) => (
+                          <section>
+                            <div {...getRootProps()} className={"dropzone " + this.props.theme + ((errors.file || errors.file_extension) ? " error" : "")}>
+                              <input {...getInputProps()} />
+                              <p>{this.state.fileMessage}</p>
+                            </div>
+                          </section>
+                        )}
+                      </Dropzone>
+                      {errors.file?(<small className={'errortext ' + this.props.theme}>Please upload Media File<br/></small>):null}
+                      {errors.file_extension?(<small className={'errortext ' + this.props.theme}>This File has unsupported extension. Supported extensions: <b>JPG, PNG, GIF, BMP, SVG, RAW, MP4, WEBM, WMV, AVI, WAV, MP3</b></small>):null}
                   </FormGroup>
               </Form>
             </ModalBody>
