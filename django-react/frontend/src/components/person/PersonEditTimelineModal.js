@@ -17,6 +17,7 @@
     import ModalRelationship from '../relationship/RelationshipModal'
     import ReactPlayer from 'react-player'
     import moment from 'moment'
+    import Dropzone from 'react-dropzone'
     
     import {
       Button,
@@ -84,6 +85,7 @@
           timelineData: [], // data used for Timeline
           deleteMode: false, // flag, if delete mode is enabled
           personList: [], // list of Persons
+          fileMessage: "Drag 'n' drop file here, or click to select file",
         };
       }
 
@@ -245,7 +247,7 @@
         // if Milestone already exists
         if (item.id) {
           SHA256 = require("crypto-js/sha256");
-          newFilename = item.image !== null ? SHA256(Date.now().toString() + item.image.name) + item.image.name.substring(item.image.name.indexOf(".")) : null; // SHA256 encryption for filename (media/image)
+          newFilename = item.image !== null && item.image.name !== undefined ? SHA256(Date.now().toString() + item.image.name) + item.image.name.substring(item.image.name.indexOf(".")) : null; // SHA256 encryption for filename (media/image)
           oldItem = this.props.activeItem;
 
           let data = new FormData();
@@ -257,7 +259,7 @@
           if(oldItem.date !== item.date) data.append('date', item.date);
           if(oldItem.text !== item.text) data.append('text', item.text);
           if(oldItem.title !== item.title) data.append('title', item.title);
-          if(oldItem.image !== item.image && item.image !== null) data.append('image', item.image, newFilename); // sha256 encryption
+          if(oldItem.image !== item.image && item.image !== null && newFilename !== null) data.append('image', item.image, newFilename); // sha256 encryption
 
           axios
           .patch(`http://localhost:8000/api/familytreemilestone/${item.id}/`, data, {
@@ -371,9 +373,14 @@
       };
 
       // handles change of file (upload)
-      handleChangeFile = (e) => {
-        const activeItem = { ...this.state.activeItem, ["avatar"]: e.target.files[0]};
-        this.setState({activeItem});
+      handleChangeFile = (file) => {
+        var fileMessage = "Drag 'n' drop file here, or click to select file";
+
+        if(file !== null){
+          fileMessage = file.name;
+        }
+        const activeItem = { ...this.state.activeItem, ["avatar"]: file};
+        this.setState({activeItem, fileMessage});
       }
 
       // handles mode change from Edit to Delete & vice versa
@@ -383,11 +390,26 @@
       
       // error handling, validates value in form fields
       validate(form){
+        var file_extension_invalid = false;
+        if(form.avatar !== null && form.avatar !== undefined && form.avatar.name !== undefined){
+          var extensions = ['.bmp', '.cgm', '.gif', '.ico', '.jpeg', '.jpg', '.png', '.ras', '.rgb', '.svg', '.tiff'];
+          var file_ext_check = false;
+          extensions.map(ext => {
+            var file_ext = form.avatar.name.substring(form.avatar.name.lastIndexOf('.'))
+            if(ext === file_ext){
+              file_ext_check = true;
+            }
+          })
+
+          if(!file_ext_check){ file_extension_invalid = true;}
+        }
+
         return{
           first_name: form.first_name.trim().length === 0,
           first_name_too_long: form.first_name.trim().length > 50,
           last_name: form.last_name.trim().length === 0,
           last_name_too_long: form.last_name.trim().length > 50,
+          file_extension: file_extension_invalid,
           birth_place: form.birth_place.trim().length > 50,
         }
       }
@@ -525,16 +547,28 @@
                   </Row>
                   <Row>
                     <Col>
-                    <FormGroup style={{display: 'flex'}}>
-                      <Label for="avatar">Change Avatar</Label>
-                      <Input
-                        type="file"
-                        className={"form-control " + this.props.theme}
-                        name="avatar"
-                        onChange={this.handleChangeFile}
-                      />
+                    <FormGroup>
+                      <Label for="avatar" style={{width: '12.5rem'}}>Change Avatar</Label>
+                      <Dropzone 
+                        onDrop={acceptedFiles => this.handleChangeFile(acceptedFiles[0])}
+                        onFileDialogCancel={() => this.handleChangeFile(null)}
+                        multiple={false}
+                      >
+                        {({getRootProps, getInputProps}) => (
+                          <section>
+                            <div {...getRootProps()} className={"dropzone " + this.props.theme + ((errors.file || errors.file_extension) ? " error" : "")}>
+                              <input {...getInputProps()} />
+                              <p>{this.state.fileMessage}</p>
+                            </div>
+                          </section>
+                        )}
+                      </Dropzone>
+                      {errors.file?(<small className={'errortext ' + this.props.theme}>Please upload Image<br/></small>):null}
+                      {errors.file_extension?(<small className={'errortext ' + this.props.theme}>This File has unsupported extension. Supported extensions: <b>BMP, CGM, GIF, ICO, JPEG, JPG, PNG, RAS, RGB, SVG, TIFF</b></small>):null}
                     </FormGroup>
                     </Col>
+                  </Row>
+                  <Row>
                     <Col>
                       <FormGroup style={{display: 'flex'}}>
                         <Label for="switch-delete-mode" style={{marginRight: '10px'}}>Delete Mode</Label>

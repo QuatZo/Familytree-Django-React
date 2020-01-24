@@ -1,12 +1,14 @@
 // frontend/src/components/PersonAddModal.js
 /*eslint no-useless-computed-key: 0*/
+/*eslint array-callback-return: 0*/
 
     import React, { Component } from "react";
     import DatePicker from "react-datepicker";
     import 'react-datepicker/dist/react-datepicker.css';
     import '../Modal.css';
     import moment from 'moment'
-    
+    import Dropzone from 'react-dropzone'
+
     import {
       Button,
       CustomInput,
@@ -29,6 +31,7 @@
             first_name: false,
             last_name: false,
           },
+          fileMessage: "Drag 'n' drop file here, or click to select file",
         };
       }
 
@@ -46,19 +49,36 @@
       };
 
       // handles change of File Field (upload)
-      handleChangeFile = (e) => {
-        const activeItem = { ...this.state.activeItem, ["avatar"]: e.target.files[0]};
-        this.setState({activeItem});
+      handleChangeFile = (file) => {
+        var fileMessage = "Drag 'n' drop file here, or click to select file";
+
+        if(file !== null){
+          fileMessage = file.name;
+        }
+
+        const activeItem = { ...this.state.activeItem, ["avatar"]: file};
+        this.setState({activeItem, fileMessage});
       }
 
       // error handling, validates given form fields
       validate(form){
+        var extensions = ['.bmp', '.cgm', '.gif', '.ico', '.jpeg', '.jpg', '.png', '.ras', '.rgb', '.svg', '.tiff']
+        var file_extension_invalid = true
+        if(form.avatar !== null && form.avatar !== undefined){
+          extensions.map(ext => {
+            var file_ext = form.avatar.name.substring(form.avatar.name.lastIndexOf('.'))
+            if(ext === file_ext){
+              file_extension_invalid = false;
+            }
+          })
+        }
         return{
           first_name: form.first_name.trim().length === 0,
           first_name_too_long: form.first_name.trim().length > 50,
           last_name: form.last_name.trim().length === 0,
           last_name_too_long: form.last_name.trim().length > 50,
           file: form.avatar === null || form.avatar === undefined,
+          file_extension: file_extension_invalid,
           birth_place: form.birth_place.trim().length > 50,
         }
       }
@@ -164,14 +184,22 @@
                 </FormGroup>
                 <FormGroup>
                   <Label for="avatar">Avatar</Label>
-                  <Input
-                    type="file"
-                    name="avatar"
-                    className={"form-control " + this.props.theme + (errors.file ? " error" : "")}
-                    onBlur={this.handleBlur('avatar')}
-                    onChange={this.handleChangeFile}
-                  />
-                  {errors.file?(<small className={'errortext ' + this.props.theme}>Please input your avatar</small>):null}
+                  <Dropzone 
+                    onDrop={acceptedFiles => this.handleChangeFile(acceptedFiles[0])}
+                    onFileDialogCancel={() => this.handleChangeFile(null)}
+                    multiple={false}
+                  >
+                    {({getRootProps, getInputProps}) => (
+                      <section>
+                        <div {...getRootProps()} className={"dropzone " + this.props.theme + ((errors.file || errors.file_extension) ? " error" : "")}>
+                          <input {...getInputProps()} />
+                          <p>{this.state.fileMessage}</p>
+                        </div>
+                      </section>
+                    )}
+                  </Dropzone>
+                  {errors.file?(<small className={'errortext ' + this.props.theme}>Please upload Image<br/></small>):null}
+                  {errors.file_extension?(<small className={'errortext ' + this.props.theme}>This File has unsupported extension. Supported extensions: <b>BMP, CGM, GIF, ICO, JPEG, JPG, PNG, RAS, RGB, SVG, TIFF</b></small>):null}
                 </FormGroup>
               </Form>
             </ModalBody>
