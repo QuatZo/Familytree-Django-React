@@ -24,6 +24,7 @@ dotenv_file = os.path.join(BASE_DIR, ".env")
 if os.path.isfile(dotenv_file):
     dotenv.load_dotenv(dotenv_file)
 
+
 LOGGING = {
  'version': 1,
  'disable_existing_loggers': False,
@@ -43,11 +44,12 @@ LOGGING = {
  }
 }
 
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'g_7#kv^*^az3baa^38u5q)j_@89qr&#^bx3^b&1nda&^$is)k&'
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
