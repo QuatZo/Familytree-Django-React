@@ -34,6 +34,10 @@
       Label,
     } from "reactstrap";
 
+    function getRelativePath(mediaFile){
+      return mediaFile.substring(mediaFile.indexOf('/media'))
+    }
+
     // custom header for Timeline component, consists of different date format (yyyy-mm-dd)
     const CustomHeader = (props) => {
       const {title, date, extras} = props.event;
@@ -51,7 +55,7 @@
       const { imageUrl } = props.event;
       return (
         <div className="custom-image-body">
-          {ReactPlayer.canPlay(imageUrl) ? <ReactPlayer url={imageUrl} controls={true} width='100%' height='100%'/> : <img src={imageUrl} alt="" className="rt-image" />}
+          {ReactPlayer.canPlay(imageUrl) ? <ReactPlayer url={getRelativePath(imageUrl)} controls={true} width='100%' height='100%'/> : <img src={getRelativePath(imageUrl)} alt="" className="rt-image" />}
         </div>
       );
     };
@@ -95,7 +99,7 @@
 
       refreshPersonList = () => {
         axios
-          .get("http://localhost:8000/api/familytreepersons/", {
+          .get("/api/familytreepersons/", {
             headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
           })
           .then(res => this.setState({ personList: res.data }))
@@ -111,7 +115,7 @@
         var data = [];
         // firstly, download all milestones for certain Person
         axios
-        .get("http://localhost:8000/api/familytreemilestone/", {
+        .get("/api/familytreemilestone/", {
           headers: { Authorization: `JWT ${localStorage.getItem('token')}`},
           params: { person_id: this.props.activeItem.id }
         })
@@ -142,7 +146,7 @@
         .then( () => {
           // then, download all relationship for certain Person, where it's 1st person in relationship
           axios
-          .get("http://localhost:8000/api/familytreerelationship/", {
+          .get("/api/familytreerelationship/", {
             headers: { Authorization: `JWT ${localStorage.getItem('token')}`},
             params: { id_1: this.props.activeItem.id }
           })
@@ -175,7 +179,7 @@
           .then( () => {
             // then, download remaining relationship for certain Person, where it's 2nd person in relationship
             axios
-            .get("http://localhost:8000/api/familytreerelationship/", {
+            .get("/api/familytreerelationship/", {
               headers: { Authorization: `JWT ${localStorage.getItem('token')}`},
               params: { id_2: this.props.activeItem.id }
             })
@@ -262,7 +266,7 @@
           if(oldItem.image !== item.image && item.image !== null && newFilename !== null) data.append('image', item.image, newFilename); // sha256 encryption
 
           axios
-          .patch(`http://localhost:8000/api/familytreemilestone/${item.id}/`, data, {
+          .patch(`/api/familytreemilestone/${item.id}/`, data, {
             headers: {
               'Content-Type': 'multipart/form-data',
               Authorization: `JWT ${localStorage.getItem('token')}`
@@ -293,7 +297,7 @@
         data.append('title', item.title);
         data.append('image', item.image, newFilename); // sha256 encryption
 
-        axios.post('http://localhost:8000/api/familytreemilestone/', data, {
+        axios.post('/api/familytreemilestone/', data, {
           headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: `JWT ${localStorage.getItem('token')}`
@@ -311,7 +315,7 @@
       handleSubmitRelationship = item => {
         this.toggleRelationshipModal();        
         if (item.id) {
-          axios.put(`http://localhost:8000/api/familytreerelationship/${item.id}/`, item, {
+          axios.put(`/api/familytreerelationship/${item.id}/`, item, {
             headers: {
               'Content-Type': 'application/json',
               Authorization: `JWT ${localStorage.getItem('token')}`
@@ -332,7 +336,7 @@
       handleDeleteMilestone = item => {
         this.props.toggleConfirmModal();
         axios
-          .delete(`http://localhost:8000/api/familytreemilestone/${item.id}`, {
+          .delete(`/api/familytreemilestone/${item.id}`, {
             headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
           })
           .then(() => this.downloadTimelineData())
@@ -347,7 +351,7 @@
       handleDeleteRelationship = item => {
         this.props.toggleConfirmModal();
         axios
-          .delete(`http://localhost:8000/api/familytreerelationship/${item.id}`, {
+          .delete(`/api/familytreerelationship/${item.id}`, {
             headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
           })
           .then(() => this.downloadTimelineData())

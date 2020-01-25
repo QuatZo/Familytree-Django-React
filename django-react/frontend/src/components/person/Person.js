@@ -45,7 +45,7 @@
           } 
 
           axios
-          .patch(`http://localhost:8000/api/familytreepersons/${item.id}/`, data, {
+          .patch(`/api/familytreepersons/${item.id}/`, data, {
             headers: {
               'Content-Type': 'multipart/form-data',
               Authorization: `JWT ${localStorage.getItem('token')}`
@@ -72,7 +72,7 @@
         // Delete Relationship function hasn't been deleted from familytree.js, because it'll probably be used for single relationship delete
         // this.props.deleteRelationships(item.id)
         axios
-          .delete(`http://localhost:8000/api/familytreepersons/${item.id}`, {
+          .delete(`/api/familytreepersons/${item.id}`, {
             headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
           })
           .then(() => this.props.refresh())
@@ -106,6 +106,11 @@
         }
       }
 
+
+      getRelativePath(mediaFile){
+        return mediaFile.substring(mediaFile.indexOf('/media'))
+      }
+
       render() {
         // free movement -> delete grid from handlers
         const dragHandlers = {onStart: this.onStart, onStop: this.onStop, grid: [1, 1]};
@@ -127,7 +132,7 @@
                   onMouseUp={this.handleClick.bind(this)}
                   onMouseMove={this.handleMovement.bind(this)}
                 >
-                  <img src={this.props.person.avatar}
+                  <img src={this.getRelativePath(this.props.person.avatar)}
                   draggable="false"
                   className = "img-thumbnail"
                   alt = "Error: not found"/>

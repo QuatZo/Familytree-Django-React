@@ -1,0 +1,19 @@
+*** INSTALLATION ***
+
+0. CMD -> pip install pipenv
+1. CMD -> Folder django-react
+2. pipenv --python 3.6
+3. open ***start_full.bat***
+
+
+
+*** USAGE ***
+1.a. open ***start_full.bat*** if new commit / DB change / new packages
+1.b. open ***start_server_only.bat*** if none of above
+
+
+
+*** NO FIELD IN DATABASE ERROR ***
+1. delete ***django-react/backend/db.sqlite3***
+2. delete all files from ***django-react/backend/familytree/migrations*** except ***__init__***
+3. open ***start_full.bat***

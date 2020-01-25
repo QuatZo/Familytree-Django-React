@@ -14,7 +14,7 @@ const PERSON_DATA = {
   "last_name": "Zo",
   "birth_date": "1000-01-01",
   "birth_place": "Earth",
-  "avatar": "http://localhost:8000/media/avatars/somesha256encryptedname.png",
+  "avatar": "/media/avatars/somesha256encryptedname.png",
   "status_choices": "living",
   "sex_choices": "other",
   "x": 0.2,
