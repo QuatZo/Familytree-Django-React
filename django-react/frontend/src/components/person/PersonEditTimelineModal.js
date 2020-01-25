@@ -34,6 +34,10 @@
       Label,
     } from "reactstrap";
 
+    function getRelativePath(mediaFile){
+      return mediaFile.substring(mediaFile.indexOf('/media'))
+    }
+
     // custom header for Timeline component, consists of different date format (yyyy-mm-dd)
     const CustomHeader = (props) => {
       const {title, date, extras} = props.event;
@@ -51,7 +55,7 @@
       const { imageUrl } = props.event;
       return (
         <div className="custom-image-body">
-          {ReactPlayer.canPlay(imageUrl) ? <ReactPlayer url={imageUrl} controls={true} width='100%' height='100%'/> : <img src={imageUrl} alt="" className="rt-image" />}
+          {ReactPlayer.canPlay(imageUrl) ? <ReactPlayer url={getRelativePath(imageUrl)} controls={true} width='100%' height='100%'/> : <img src={getRelativePath(imageUrl)} alt="" className="rt-image" />}
         </div>
       );
     };

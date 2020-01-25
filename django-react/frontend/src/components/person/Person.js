@@ -106,6 +106,11 @@
         }
       }
 
+
+      getRelativePath(mediaFile){
+        return mediaFile.substring(mediaFile.indexOf('/media'))
+      }
+
       render() {
         // free movement -> delete grid from handlers
         const dragHandlers = {onStart: this.onStart, onStop: this.onStop, grid: [1, 1]};
@@ -127,7 +132,7 @@
                   onMouseUp={this.handleClick.bind(this)}
                   onMouseMove={this.handleMovement.bind(this)}
                 >
-                  <img src={this.props.person.avatar}
+                  <img src={this.getRelativePath(this.props.person.avatar)}
                   draggable="false"
                   className = "img-thumbnail"
                   alt = "Error: not found"/>

@@ -14,6 +14,7 @@ djangorestframework-jwt = "*"
 pillow = "*"
 requests = "*"
 mock = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.6"
