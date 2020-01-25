@@ -81,8 +81,6 @@ describe('Form validation', () =>{
 
     app.find('[name="begin_date"]').simulate('change', "")
 
-    console.log(app.state().activeItem);
-
     expect(app.find('[name="begin_date"]').getElement().props.className.split(" ")).toContain('error')
   });
 
