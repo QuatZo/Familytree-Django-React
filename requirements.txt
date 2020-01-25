@@ -15,6 +15,7 @@ optional-django==0.1.0
 Pillow==7.0.0
 psycopg2==2.8.4
 PyJWT==1.7.1
+python-dotenv==0.10.5
 pytz==2019.3
 requests==2.22.0
 six==1.14.0

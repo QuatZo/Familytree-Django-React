@@ -15,6 +15,7 @@ pillow = "*"
 requests = "*"
 mock = "*"
 gunicorn = "*"
+python-dotenv = "*"
 
 [requires]
 python_version = "3.6"

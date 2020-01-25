@@ -12,10 +12,36 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 import datetime
+import dj_database_url
+import dotenv
+import django_heroku
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+dotenv_file = os.path.join(BASE_DIR, ".env")
+if os.path.isfile(dotenv_file):
+    dotenv.load_dotenv(dotenv_file)
+
+LOGGING = {
+ 'version': 1,
+ 'disable_existing_loggers': False,
+ 'handlers': {
+   'console': {
+     'level': 'ERROR',
+     'class': 'logging.StreamHandler',
+     'stream': sys.stderr
+   },
+  },
+ 'loggers': {
+   'django.request': {
+     'handlers': ['console'],
+     'propogate': True,
+     'level': 'ERROR',
+   }
+ }
+}
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -26,7 +52,10 @@ SECRET_KEY = 'g_7#kv^*^az3baa^38u5q)j_@89qr&#^bx3^b&1nda&^$is)k&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'familytree-django-react.herokuapp.com',
+    'localhost'
+]
 
 
 # Application definition
@@ -46,6 +75,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
 	'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -78,13 +108,16 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+DATABASES = {}
+DATABASES['default'] = dj_database_url.config()
 
+if len(DATABASES['default']) == 0:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -123,6 +156,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 REACT_APP_DIR = os.path.join(BASE_DIR, 'frontend') 
 
@@ -141,6 +176,7 @@ REST_FRAMEWORK = {
 
 CORS_ORIGIN_WHITELIST = (
 	'http://localhost:3000',
+    'http://familytree-django-react.herokuapp.com'
 )
 
 JWT_AUTH = {
@@ -150,3 +186,6 @@ JWT_AUTH = {
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # media root
 MEDIA_URL = '/media/' # media url
+
+
+django_heroku.settings(locals())
