@@ -27,10 +27,6 @@
         super(props);
         this.state = {
           activeItem: this.props.activeItem,
-          touched: {
-            first_name: false,
-            last_name: false,
-          },
           fileMessage: "Drag 'n' drop file here, or click to select file",
         };
       }
@@ -82,13 +78,6 @@
           birth_place: form.birth_place.trim().length > 50,
         }
       }
-
-      // error handling
-      handleBlur = (field) => (evt) => {
-        this.setState({
-          touched: { ...this.state.touched, [field]: true },
-        });
-      }
       
       render() {
         const { toggle, onSave } = this.props;
@@ -105,7 +94,6 @@
                     type="text"
                     name="first_name"
                     className={this.props.theme + ((errors.first_name || errors.first_name_too_long) ? " error" : "")}
-                    onBlur={this.handleBlur('first_name')}
                     value={this.state.activeItem.first_name}
                     onChange={this.handleChange}
                     placeholder="First Name"
@@ -120,7 +108,6 @@
                     type="text"
                     name="last_name"
                     className={this.props.theme + ((errors.last_name || errors.last_name_too_long) ? " error" : "")}
-                    onBlur={this.handleBlur('last_name')}
                     value={this.state.activeItem.last_name}
                     onChange={this.handleChange}
                     placeholder="Last Name"

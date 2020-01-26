@@ -30,13 +30,6 @@
         super(props);
         this.state = {
           activeItem: this.props.activeItem,
-          touched: {
-            title: false,
-            text: false,
-            date: false,
-            person_id: false,
-            file: false,
-          },
           personSelectOptions: [],
           fileMessage: "Drag 'n' drop file here, or click to select file",
         };
@@ -98,14 +91,6 @@
         const activeItem = { ...this.state.activeItem, ["person_id"]: selected.filter(el => el !== undefined)};
         this.setState({activeItem});
       }
-
-      
-      // error handling
-      handleBlur = (field) => (evt) => {
-        this.setState({
-          touched: { ...this.state.touched, [field]: true },
-        });
-      }
       
       // error handling, validates given fields
       validate(form){
@@ -156,7 +141,6 @@
                     type="text"
                     name="title"
                     className={this.props.theme + ((errors.title || errors.title_too_long) ? " error" : "")}
-                    onBlur={this.handleBlur('title')}
                     value={this.state.activeItem.title}
                     onChange={this.handleChange}
                     placeholder="Title"
@@ -183,7 +167,6 @@
                     className={"form-control " + this.props.theme + (errors.date ? " error" : "")}
                     value={this.state.activeItem.date}
                     onChange={ this.handleChangeDate} 
-                    onBlur={this.handleBlur('date')}
                     peekNextMonth
                     showMonthDropdown
                     showYearDropdown
@@ -197,7 +180,6 @@
                     options={this.state.personSelectOptions}
                     className={"form-control " + this.props.theme + (errors.person_id && this.state.activeItem.id === undefined ? " error" : "")}
                     selected={this.state.activeItem.person_id}
-                    onBlur={this.handleBlur('person_id')}
                     onSelectedChanged={this.handleChangeSelect}
                   />
                   {errors.person_id?(<small className={'errortext ' + this.props.theme}> Please, choose at least one person from the list</small>):null}

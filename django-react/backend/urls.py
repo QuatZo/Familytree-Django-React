@@ -33,5 +33,6 @@ urlpatterns = [
     path('token-auth/', obtain_jwt_token, name="token-auth"), # page to get the token
     path('current_user/', views.current_user, name="current_user"), # page to check if logged in
     path('users/', views.UserList.as_view(), name="users"), # list of users, page to check if specific user exists
+    url(r'^$', views.FrontendAppView.as_view()),
     url('app/', views.FrontendAppView.as_view()),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # media (files)

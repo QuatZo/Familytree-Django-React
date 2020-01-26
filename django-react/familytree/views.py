@@ -96,10 +96,9 @@ class FamilytreeMilestoneView(viewsets.ModelViewSet):
             return FamilytreeMilestone.objects.filter(user_id=user, person_id=person) # return milestones only for certain user & person
         return FamilytreeMilestone.objects.filter(user_id=user) # return milestones only for certain user
 		
-		
+# React in Django, it makes us possibility to run it on Heroku with only installing Django, but React build is needed
 class FrontendAppView(View):
     def get(self, request):
-        print (os.path.join(settings.REACT_APP_DIR, 'build', 'index.html'))
         try:
             with open(os.path.join(settings.REACT_APP_DIR, 'build', 'index.html')) as f:
                 return HttpResponse(f.read())

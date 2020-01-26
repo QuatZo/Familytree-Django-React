@@ -6,8 +6,6 @@ from django.core.validators import FileExtensionValidator
 
 AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User') # list of users
 
-# Create your models here
-
 class FamilytreePerson(models.Model):
     user_id = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE) # user ID, foreign key
     first_name = models.CharField(max_length=50) # first name

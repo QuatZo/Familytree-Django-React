@@ -38,8 +38,8 @@ function Nav(props) {
     ["#0013E9", "#361DF1"],
   ];
 
-  function changeColor(color){
-    var colorIndex, colorHover, secondColor, secondColorHover, cssStyles;
+  function getColors(color){
+    var colorIndex, colorHover, secondColor, secondColorHover;
 
     if(props.theme === "dark"){
       colorIndex = colors_dark.findIndex(clr => clr[0] === color);
@@ -54,7 +54,12 @@ function Nav(props) {
       colorHover = colors_light[colorIndex][1]
     }
 
-    cssStyles = [
+    return { colorHover, secondColor, secondColorHover }
+  }
+
+  function changeColor(color){
+    const { colorHover, secondColor, secondColorHover } = getColors(color)
+    const cssStyles = [
       ['--main-primary-' + props.theme, color],
       ['--main-primary-hover-' + props.theme, colorHover],
       ['--main-secondary-' + props.theme, secondColor],
@@ -70,20 +75,7 @@ function Nav(props) {
 
   function previewColor(color = undefined){
     color = color ?? localStorage.getItem("--main-primary-" + props.theme);
-    var colorIndex, colorHover, secondColor, secondColorHover;
-
-    if(props.theme === "dark"){
-      colorIndex = colors_dark.findIndex(clr => clr[0] === color);
-      secondColor = colors_dark[(colorIndex + 5) % colors_dark.length][0]
-      secondColorHover = colors_dark[(colorIndex + 5) % colors_dark.length][1]
-      colorHover = colors_dark[colorIndex][1]
-    }
-    else{
-      colorIndex = colors_light.findIndex(clr => clr[0] === color);
-      secondColor = colors_light[(colorIndex + colors_light.length - 1) % colors_light.length][0]
-      secondColorHover = colors_light[(colorIndex + colors_light.length - 1) % colors_light.length][1]
-      colorHover = colors_light[colorIndex][1]
-    }
+    const { colorHover, secondColor, secondColorHover } = getColors(color)
 
     document.documentElement.style.setProperty("--main-primary-" + props.theme, color)
     document.documentElement.style.setProperty("--main-primary-hover-" + props.theme, colorHover)
@@ -134,7 +126,6 @@ function Nav(props) {
   );
 
   const logged_in_nav = (
-
     <div className="nav_buttons">
       <button onClick={() => "#"} className={"btn my-2 my-sm-0 nav_button " + props.theme}><span className="username">{props.username}&nbsp;</span> <i className="far fa-user"></i></button>
       {color_picker}

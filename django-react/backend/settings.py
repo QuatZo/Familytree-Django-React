@@ -189,5 +189,4 @@ JWT_AUTH = {
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # media root
 MEDIA_URL = '/media/' # media url
 
-
 django_heroku.settings(locals())
