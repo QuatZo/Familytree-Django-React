@@ -18,17 +18,13 @@
         this.renderRelationship();
       }
 
-      toggle = () => {
-        this.setState({ modal: !this.state.modal });
-      };
-
       // calculate side centers w/ direction for 2 given person containers
       calcSideCenters(first, second){
         var nav;
-        try{
+        if(document.getElementById("nav") !== null){
           nav = document.getElementById("nav").getBoundingClientRect().height - 5; // get height of nav bar
         }
-        catch(TypeError){
+        else{
           nav = 30;
         }
 
@@ -102,9 +98,15 @@
       // renders given relationship
       renderRelationship(){
         var relationshipPairList = [];
+        var first, second;
 
-        var first = (this.props.personClassCoordinates.filter(el => parseInt(el.id) === parseInt(this.props.relationship.id_1)))[0]; // get 1st person coordinates
-        var second = (this.props.personClassCoordinates.filter(el => parseInt(el.id) === parseInt(this.props.relationship.id_2)))[0];// get 2nd person coordinates
+        if(this.props.personCoordinates === undefined){
+          first = second =  {id: 2137, screen: {x: 0, y: 0}}
+        }
+        else{
+          first = (this.props.personCoordinates.filter(el => parseInt(el.id) === parseInt(this.props.relationship.id_1)))[0]; // get 1st person coordinates
+          second =(this.props.personCoordinates.filter(el => parseInt(el.id) === parseInt(this.props.relationship.id_2)))[0];// get 2nd person coordinates
+        }
 
         var sideCoords = this.calcSideCenters(first, second); // calculate proper side coords for this pair of persons
 

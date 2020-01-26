@@ -16,14 +16,14 @@
          };
       }
 
-      // prepares data for Edit Person Modal
-      editItem = item => {
-        this.setState({ activeItem: item, modal: !this.state.modal });
+      // toggles the Edit Person Modal
+      toggleEditPersonModal = () => {
+        this.setState({ modal: !this.state.modal });
       };
 
       // handles Person's submission for existing person (changes its data in API)
       handleSubmit = (item) => {
-        this.toggle();
+        this.toggleEditPersonModal();
 
         if (item.id) {
           var SHA256 = require("crypto-js/sha256");
@@ -60,17 +60,11 @@
         }
       };
 
-      // toggles the Edit Person Modal
-      toggle = () => {
-        this.setState({ modal: !this.state.modal });
-      };
-
       // handles deletion of existing Person
       handleDelete = item => {
         this.props.toggleConfirmModal();
         // Django's foreign key & on_delete param handles the deletion of relationships, so it's no longer needed to do this manually
-        // Delete Relationship function hasn't been deleted from familytree.js, because it'll probably be used for single relationship delete
-        // this.props.deleteRelationships(item.id)
+        // Same with Milestones, deleting person means deleting its ID from Person & Milestone relation-table
         axios
           .delete(`/api/familytreepersons/${item.id}`, {
             headers: { Authorization: `JWT ${localStorage.getItem('token')}`}
@@ -105,7 +99,6 @@
           this.props.renderRelationships()
         }
       }
-
 
       getRelativePath(mediaFile){
         return mediaFile.substring(mediaFile.indexOf('/media'))
@@ -145,7 +138,7 @@
                   {this.props.printable ? null :(
                   <div>
                     <button
-                      onClick={() => this.editItem(this.props.person)}
+                      onClick={() => this.toggleEditPersonModal()}
                       className={"btn " + (this.props.theme === 'dark' ? 'dark btn-outline-' : 'light btn-') + "primary btn-xl personbutton"}
                     >
                       <i className="fas fa-user-edit"></i>
@@ -164,7 +157,7 @@
             {this.state.modal ? (
               <ModalPerson
                 activeItem={this.props.person}
-                toggle={this.toggle}
+                toggle={this.toggleEditPersonModal}
                 onSave={this.handleSubmit}
                 refreshRelationships={this.props.refreshRelationships.bind(this)}
                 toggleConfirmModal={this.props.toggleConfirmModal.bind(this)}

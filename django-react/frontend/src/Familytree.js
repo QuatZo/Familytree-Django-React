@@ -18,25 +18,20 @@
       constructor(props) {
         super(props);
         this.state = {
-          activePersonData: { // person
-            user_id: localStorage.getItem('user_id'),
-            first_name: '',
-            last_name: '',
-            birth_date: '',
-            status_choices: 'living',
-            sex_choices:  'male',
-            birth_place: '',
-          },
-          personList: this.props.personList, // list of persons
-          activePersons: [], // list of active persons (double-clicked)
-          personClassCoordinates: [], // list of person's coordinates
-          relationshipList: this.props.relationshipList, // list of relationships
-          personSize: [], // size of person's container (to calculate middle)
           windowSize: {width: 0, height: 0}, // size of the window
           saving: false, // flag, if it's saving coordinates
-          activeRelationship: [], // relationship
-          activeConfirmData: {},
           printable: false,
+
+          personList: this.props.personList, // list of persons
+          personCoordinates: [], // list of person's coordinates
+          personSize: [], // size of person's container (to calculate middle)
+          activePersonData: [], // data for creating new Person
+          activePersonIDList: [], // list of active persons (double-clicked)
+
+          relationshipList: this.props.relationshipList, // list of relationships
+          activeRelationshipData: [], // relationship
+
+          activeConfirmData: [],
         };
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
       }  
@@ -115,10 +110,10 @@
 
       // toggles Relationship Add modal
       toggleRelationshipModal = () => {
-        this.setState({ activeRelationship: {
+        this.setState({ activeRelationshipData: {
           user_id: localStorage.getItem('user_id'),
-          id_1: this.state.activePersons[0], // 1st active person
-          id_2: this.state.activePersons[1], // 2nd active person
+          id_1: this.state.activePersonIDList[0], // 1st active person
+          id_2: this.state.activePersonIDList[1], // 2nd active person
           color: "",
           title: "",
           description: "",
@@ -181,8 +176,16 @@
       
       // prepares activePersonData for new Person
       createPerson = () => {
-        const item = { user_id: localStorage.getItem('user_id'), first_name: "", last_name: "", birth_date: "", status_choices: 'living', sex_choices: 'male', birth_place: "", avatar: undefined};
-        this.setState({ activeItem: item, modal: !this.state.modal });
+        this.setState({ activePersonData: {
+          user_id: localStorage.getItem('user_id'), 
+          first_name: "", 
+          last_name: "", 
+          birth_date: "", 
+          status_choices: 'living', 
+          sex_choices: 'male', 
+          birth_place: "", 
+          avatar: undefined,
+        }, modal: !this.state.modal });
       };
 
       // gets the CSS Transform values for HTML element & its parent
@@ -205,14 +208,12 @@
       // gets coords for every Person element
       getCoordinates(){
         var personList = [...this.state.personList]
-        var personListCoords = [...this.state.personClassCoordinates]
+        var personListCoords = [...this.state.personCoordinates]
         var personListHTML = Array.from(document.querySelectorAll("div.person")); // all HTML element of DIV type, w/ 'person' in className
         var personCoords = [];
 
         personList.map(person => { // for every person in personList
           try{
-
-          
             var personHTML = document.getElementById(personListHTML.find(el => parseInt(el.id) === person.id).classList[1].split("_").pop()); // get HTML Element
             personCoords = personHTML.getBoundingClientRect(); // get rectangle of the previously mentioned HTML ELement
 
@@ -233,11 +234,11 @@
             }
           }
           catch(TypeError){
-            return;
+            return
           }
         })
         this.setState({
-          personClassCoordinates: personListCoords,
+          personCoordinates: personListCoords,
           personSize: {width: personCoords.width, height: personCoords.height}
         }, () => this.renderRelationships());
       }
@@ -245,7 +246,7 @@
       // resets the Person's coords to the initial (the ones from API)
       resetCoords(){
         var personList = [...this.state.personList]
-        var personListCoords = [...this.state.personClassCoordinates]
+        var personListCoords = [...this.state.personCoordinates]
         var personListHTML = Array.from(document.querySelectorAll("div.person")); // all HTML element of DIV type, w/ 'person' in className
 
         personList.map(person => { // for every person in personList
@@ -278,7 +279,7 @@
         this.toggleConfirmModal();
         ShowNotification(NOTIFY.SAVING, this.props.theme)
         var saved = true;
-        var personListCoords = [...this.state.personClassCoordinates]
+        var personListCoords = [...this.state.personCoordinates]
         var personList = [...this.state.personList]
 
         personListCoords.map(item => {
@@ -310,7 +311,7 @@
 
       // sets the Person to be active, if double-clicked
       setActivePerson(id) {
-        var array = [...this.state.activePersons];
+        var array = [...this.state.activePersonIDList];
 
           if(array.includes(id)){ // if it is active, then make it inactive
             var index = array.indexOf(id);
@@ -323,12 +324,12 @@
               array.splice(0, 1);
 
           if(array.length === 2){ // if we already got 2 active elements, then toggle New Relationship modal
-            this.setState({activePersons: array}, () => {
+            this.setState({activePersonIDList: array}, () => {
               this.toggleRelationshipModal();
-              this.setState({activePersons: []});
+              this.setState({activePersonIDList: []});
             });
           }
-          this.setState({activePersons: array});
+          this.setState({activePersonIDList: array});
       }
 
       // delete whole familytree; since relationships are connected w/ persons, we don't need to delete any relationship. Just persons.
@@ -366,7 +367,7 @@
           <Person 
             key={item.id}
             person={item}
-            activePersons={this.state.activePersons}
+            activePersons={this.state.activePersonIDList}
             printable={this.state.printable}
             refresh={this.refreshPersonList.bind(this)}
             setActivePerson={this.setActivePerson.bind(this)}
@@ -382,7 +383,7 @@
       // render Relationships by using Relationship component
       renderRelationships = () => {
         var relationshipList = [...this.state.relationshipList];
-        var coordinates = [...this.state.personClassCoordinates];
+        var coordinates = [...this.state.personCoordinates];
         var personSize = this.state.personSize;
         var pairs = [];
         
@@ -413,7 +414,7 @@
             <Relationship
               key={"relationship_" + item.id + Date.now()} // it forces our app to re-render relationships whenever person is dragged
               relationship={item}
-              personClassCoordinates={coordinates}
+              personCoordinates={coordinates}
               personSize={personSize}
             />
             )
@@ -424,7 +425,7 @@
       downloadPDF = () =>{
         this.setState({
           printable: true,
-        }, () =>{
+        }, () => {
           var css = '@page { size: 20in 9in; margin: 0;}',
           head = document.head || document.getElementsByTagName('head')[0],
           style = document.createElement('style');
@@ -474,7 +475,7 @@
               ) : null}
               {this.state.ModalRelationship ? (
                 <ModalRelationship
-                  activeItem={this.state.activeRelationship}
+                  activeItem={this.state.activeRelationshipData}
                   toggle={this.toggleRelationshipModal}
                   onSave={this.handleSubmitRelationship}
                   theme={this.props.theme}

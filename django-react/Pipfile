@@ -16,6 +16,7 @@ requests = "*"
 mock = "*"
 gunicorn = "*"
 python-dotenv = "*"
+waitress = "*"
 
 [requires]
 python_version = "3.6"

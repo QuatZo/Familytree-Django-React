@@ -42,16 +42,19 @@
       constructor(props) {
         super(props);
         this.state = {
-          personList: [], // list of persons
-          relationshipList: [], // list of relationships
           loadingPersonList: undefined, // flag, if it's still loading personList
           donePersonList: undefined, // flag, if it already loaded personList
+          personList: [], // list of persons
+
           loadingRelationshipList: undefined, // flag, if it's still loading relationshipList
           doneRelationshipList: undefined, // flag, if it already loaded relationshipList
+          relationshipList: [], // list of relationships
+          
           displayed_form: localStorage.getItem('token') ? '' : 'login', // form to display
+          theme: localStorage.getItem('theme') ?? 'dark',
+
           logged_in: localStorage.getItem('token') ? true : false, // flag, if user is already logged in
           username: '',
-          theme: localStorage.getItem('theme') ?? 'dark',
         };
       }
 
