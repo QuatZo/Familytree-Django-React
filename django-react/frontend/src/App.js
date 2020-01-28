@@ -3,6 +3,7 @@
 
     import React, { Component } from "react";
     import './App.css';
+    import './Mobile.css';
     import './components/loading/Loading.css'
     import Nav from './components/nav/Nav';
     import LoginForm from './components/auth/LoginForm';
@@ -62,6 +63,9 @@
 
       componentDidMount() {
         if(!localStorage.getItem('theme')){ localStorage.setItem('theme', 'dark'); }
+        
+        var body = document.body;
+        body.classList.add(localStorage.getItem('theme'));
 
         const cssStyles = [
           ['--main-primary-dark', '#FFAD00'],
@@ -214,7 +218,14 @@
 
       changeThemeMode = () => {
         var newTheme = this.state.theme === "dark" ? "light" : "dark"
+        var body = document.body;
+        body.classList.remove(localStorage.getItem('theme'));
+
         localStorage.setItem('theme', newTheme)
+
+        var body = document.body;
+        body.classList.add(localStorage.getItem('theme'));
+        
         this.setState({
             theme: newTheme,
           }, () => ShowNotification(NOTIFY.CHANGE_THEME, this.state.theme)

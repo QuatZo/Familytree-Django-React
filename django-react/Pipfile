@@ -17,6 +17,8 @@ mock = "*"
 gunicorn = "*"
 python-dotenv = "*"
 waitress = "*"
+django-heroku = "*"
+dj-database-url = "*"
 
 [requires]
 python_version = "3.6"
