@@ -52,6 +52,14 @@
     width: 100%;
 }
 
+.modal .form-control:focus,
+.modal .dropzone:focus,
+.modal button:focus
+{
+    outline: 0; 
+    box-shadow: 0 0 0 0.2rem rgba(130,138,145,.5);
+}
+
 /* Horizontal line */
 .hr-body{
     border: 0;
