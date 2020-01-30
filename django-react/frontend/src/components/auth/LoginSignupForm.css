@@ -52,6 +52,19 @@
   color:inherit;
 }
 
+.login-dark form .form-control:focus,
+.login-light form .form-control:focus,
+.signup-dark form .form-control:focus,
+.signup-light form .form-control:focus,
+.login-dark form .btn-primary:focus,
+.login-light form .btn-primary:focus,
+.signup-dark form .btn-primary:focus,
+.signup-light form .btn-primary:focus
+{
+  outline: 0; 
+  box-shadow: 0 0 0 0.2rem rgba(130,138,145,.5);
+}
+
 /* Form buttons */
 .login-dark form .btn-primary,
 .login-light form .btn-primary,

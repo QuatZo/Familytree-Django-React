@@ -175,6 +175,14 @@
   color: var(--main-on-secondary-dark);
 }
 
+.btn.famtree:focus,
+.operating-buttons .floating-btn:focus,
+.operating-buttons .menu-item:focus
+{
+  outline: 0; 
+  box-shadow: 0 0 0 0.2rem rgba(130,138,145,.5);
+}
+
 /* Operating buttons Buttons */
 .operating-buttons.dark .floating-btn {
   background: var(--main-background-dark);
