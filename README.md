@@ -5,6 +5,9 @@ This project represents a Familytree website built with Django, REST & React. It
 ## Live (demo)
 [Click here to check live demo deployed on Heroku](https://familytree-django-react.herokuapp.com/app/)
 
+## Video (demo)
+[![Familytree Video Example](http://img.youtube.com/vi/placeholder/0.jpg)](http://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID_HERE)
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
