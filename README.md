@@ -6,7 +6,7 @@ This project represents a Familytree website built with Django, REST & React. It
 [Click here to check live demo deployed on Heroku](https://familytree-django-react.herokuapp.com/app/)
 
 ## Video (demo)
-[![Familytree Video Example](http://img.youtube.com/vi/placeholder/0.jpg)](http://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID_HERE)
+[![Familytree Video Example](http://i3.ytimg.com/vi/mmFFwBC2R_4/maxresdefault.jpg)](https://www.youtube.com/watch?v=mmFFwBC2R_4)
 
 ## Getting Started
 
@@ -41,10 +41,6 @@ Connect this repository (or forked one) to ***Heroku*** (or any other ***Cloud P
 * [Django REST Framework](https://www.django-rest-framework.org/) - API
 * [React](https://reactjs.org/) - Frontend
 * [Heroku](https://www.heroku.com/) - Cloud Platform
-
-## Authors
-***IT Students*** at the ***Applied Mathematics Faculty***
-***Silesian University of Technology, Gliwice, Poland***
 
 ## License
 
