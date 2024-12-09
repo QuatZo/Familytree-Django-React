@@ -53,6 +53,7 @@
           
           displayed_form: localStorage.getItem('token') ? '' : 'login', // form to display
           theme: localStorage.getItem('theme') ?? 'dark',
+          showButtons: localStorage.getItem('showButtons') ?? true,
 
           logged_in: localStorage.getItem('token') ? true : false, // flag, if user is already logged in
           username: '',
@@ -63,6 +64,7 @@
 
       componentDidMount() {
         if(!localStorage.getItem('theme')){ localStorage.setItem('theme', 'dark'); }
+        if(localStorage.getItem('showButtons') && localStorage.getItem('showButtons') === "false"){ this.setState({showButtons: false}); }
         
         var body = document.body;
         body.classList.add(localStorage.getItem('theme'));
@@ -231,6 +233,13 @@
           }, () => ShowNotification(NOTIFY.CHANGE_THEME, this.state.theme)
         );
       }
+      changeShowButtons = () => {
+        localStorage.setItem('showButtons', !this.state.showButtons);
+        this.setState({
+            showButtons: !this.state.showButtons,
+          }, () => ShowNotification(NOTIFY.CHANGE_BUTTONS, this.state.theme)
+        );
+      }
       
       // render page (nav bar + login/signup form if not logged in; else Familytree.js)
       render() {
@@ -255,6 +264,8 @@
               username={this.state.username}
               theme={this.state.theme}
               changeThemeMode={this.changeThemeMode}
+              showButtons={this.state.showButtons}
+              changeShowButtons={this.changeShowButtons}
               />
             
             {form}
@@ -294,6 +305,8 @@
                         relationshipList = {this.state.relationshipList}
                         changeThemeMode = {this.changeThemeMode}
                         theme = {this.state.theme}
+                        changeShowButtons={this.changeShowButtons}
+                        showButtons={this.state.showButtons}
                       />
                     </React.Fragment>
                   )

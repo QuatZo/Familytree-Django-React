@@ -152,47 +152,15 @@
           })
           .then(res => {
             Array.from(res.data).map(item => {
-              var dateStr = item.begin_date.split("-");
-              var togetherWithNames = [];
-              var togetherWith = this.state.personList.filter(el => el.id !== this.props.activeItem.id && el.id === item.id_2);
-
-              togetherWith.map(person => {
-                togetherWithNames.push(person.first_name + " " + person.last_name);
-              })
-
-              data.push({
-                date: new Date(parseInt(dateStr[0]), parseInt(dateStr[1]) - 1, parseInt(dateStr[2])), // new Date uses months indexes, so 0-11 instead of 1-12; strange but true
-                text: item.description,
-                title: item.title,
-                buttonText: (this.state.deleteMode ? "Delete" : "Edit") + " Relationship",
-                imageUrl: "/media/milestones/default.jpg",
-                extras: {
-                  end_date: item.end_date,
-                  relationship: item.relationships,
-                  together_with: togetherWithNames,
-                  theme: this.props.theme,
-                },
-                onClick: () => { this.state.deleteMode ? this.props.toggleConfirmModal("Delete Relationship", "Are you sure you want to delete this relationship?", "Delete", "Cancel", () => this.handleDeleteRelationship(item)) : this.editRelationship(item)}
-              })
-            })
-          })
-          .then( () => {
-            // then, download remaining relationship for certain Person, where it's 2nd person in relationship
-            axios
-            .get("/api/familytreerelationship/", {
-              headers: { Authorization: `JWT ${localStorage.getItem('token')}`},
-              params: { id_2: this.props.activeItem.id }
-            })
-            .then(res => {
-              Array.from(res.data).map(item => {
+              if(item.begin_date){
                 var dateStr = item.begin_date.split("-");
                 var togetherWithNames = [];
-                var togetherWith = this.state.personList.filter(el => el.id !== this.props.activeItem.id && el.id === item.id_1);
-
+                var togetherWith = this.state.personList.filter(el => el.id !== this.props.activeItem.id && el.id === item.id_2);
+  
                 togetherWith.map(person => {
                   togetherWithNames.push(person.first_name + " " + person.last_name);
                 })
-
+  
                 data.push({
                   date: new Date(parseInt(dateStr[0]), parseInt(dateStr[1]) - 1, parseInt(dateStr[2])), // new Date uses months indexes, so 0-11 instead of 1-12; strange but true
                   text: item.description,
@@ -207,6 +175,43 @@
                   },
                   onClick: () => { this.state.deleteMode ? this.props.toggleConfirmModal("Delete Relationship", "Are you sure you want to delete this relationship?", "Delete", "Cancel", () => this.handleDeleteRelationship(item)) : this.editRelationship(item)}
                 })
+              }
+            })
+          })
+          .then( () => {
+            // then, download remaining relationship for certain Person, where it's 2nd person in relationship
+            axios
+            .get("/api/familytreerelationship/", {
+              headers: { Authorization: `JWT ${localStorage.getItem('token')}`},
+              params: { id_2: this.props.activeItem.id }
+            })
+            .then(res => {
+              Array.from(res.data).map(item => {
+                if(item.begin_date){
+                  var dateStr = item.begin_date.split("-");
+
+                  var togetherWithNames = [];
+                  var togetherWith = this.state.personList.filter(el => el.id !== this.props.activeItem.id && el.id === item.id_1);
+
+                  togetherWith.map(person => {
+                    togetherWithNames.push(person.first_name + " " + person.last_name);
+                  })
+
+                  data.push({
+                    date: new Date(parseInt(dateStr[0]), parseInt(dateStr[1]) - 1, parseInt(dateStr[2])), // new Date uses months indexes, so 0-11 instead of 1-12; strange but true
+                    text: item.description,
+                    title: item.title,
+                    buttonText: (this.state.deleteMode ? "Delete" : "Edit") + " Relationship",
+                    imageUrl: "/media/milestones/default.jpg",
+                    extras: {
+                      end_date: item.end_date,
+                      relationship: item.relationships,
+                      together_with: togetherWithNames,
+                      theme: this.props.theme,
+                    },
+                    onClick: () => { this.state.deleteMode ? this.props.toggleConfirmModal("Delete Relationship", "Are you sure you want to delete this relationship?", "Delete", "Cancel", () => this.handleDeleteRelationship(item)) : this.editRelationship(item)}
+                  })
+                }
               });
               this.setState({timelineData: data});
             })

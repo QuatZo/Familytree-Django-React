@@ -20,13 +20,7 @@
 
       // calculate side centers w/ direction for 2 given person containers
       calcSideCenters(first, second){
-        var nav;
-        if(document.getElementById("nav") !== null){
-          nav = document.getElementById("nav").getBoundingClientRect().height - 5; // get height of nav bar
-        }
-        else{
-          nav = 30;
-        }
+        var nav = -5;
 
         var relationshipPoints = { // contains side centers for 2 give person containers
           top: [

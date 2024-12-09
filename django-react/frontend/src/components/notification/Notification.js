@@ -22,6 +22,13 @@
                 progressClassName: 'progress',
             });
             break;
+            case NOTIFY.CHANGE_BUTTONS:
+              toast("Buttons visibility has been changed.", {
+                  className: 'custom-toast info ' + theme,
+                  bodyClassName: 'body',
+                  progressClassName: 'progress',
+              });
+              break;
 
           case NOTIFY.SUCCESS_LOGIN:
             toast("You logged in. Have a nice use!", {

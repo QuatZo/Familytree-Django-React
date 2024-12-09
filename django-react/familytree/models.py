@@ -38,10 +38,10 @@ class FamilytreeRelationship(models.Model):
     user_id = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE) # user ID, foreign key
     id_1 = models.ForeignKey(FamilytreePerson, on_delete=models.CASCADE, related_name="id_1") # 1st person ID
     id_2 = models.ForeignKey(FamilytreePerson, on_delete=models.CASCADE, related_name="id_2") # 2nd person ID
-    color = models.CharField(max_length = 7, default = '#ffffff') # color of relationship
-    title = models.CharField(max_length=64) # title
+    color = models.CharField(max_length = 7, default='#ffffff') # color of relationship
+    title = models.CharField(max_length=64, blank=True, null=True) # title
     description = models.CharField(max_length=512, blank=True) # description, can be blank
-    begin_date = models.DateField() # begin date
+    begin_date = models.DateField(default=None, blank=True, null=True) # begin date
     end_date = models.DateField(default=None, blank=True, null=True) # end date, can be blank & null, default = None(Null)
     descendant = models.BooleanField(default=False) # if it's a 2-level relationship
 

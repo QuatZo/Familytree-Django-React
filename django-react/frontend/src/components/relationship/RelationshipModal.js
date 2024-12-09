@@ -106,7 +106,7 @@
           dt = moment(date).format('YYYY-MM-DD');
         }
         catch(RangeError){
-          dt = "";
+          dt = null;
         }
         const activeItem = { ...this.state.activeItem, ["begin_date"]: dt};
         this.setState({activeItem});
@@ -119,7 +119,7 @@
           dt = moment(date).format('YYYY-MM-DD');
         }
         catch(RangeError){
-          dt = "";
+          dt = null;
         }
         const activeItem = { ...this.state.activeItem, ["end_date"]: dt};
         this.setState({activeItem});
@@ -128,10 +128,8 @@
       // error handling, validates fields
       validate(form){
         return{
-          title: form.title.trim().length === 0,
           title_too_long: form.title.trim().length > 64,
           description: form.description.trim().length > 512,
-          begin_date: form.begin_date.toString().trim().length === 0 || !(moment(form.begin_date.toString(), "YYYY-MM-DD").isValid()),
           end_date_earlier_than_begin: form.end_date !== null && form.end_date !== undefined && form.end_date !== "" && form.end_date.toString().trim() < form.begin_date.toString().trim(),
         }
       }
@@ -150,13 +148,12 @@
                   <Input
                     type="text"
                     name="title"
-                    className={this.props.theme + ((errors.title || errors.title_too_long) ? " error" : "")}
+                    className={this.props.theme + ((errors.title_too_long) ? " error" : "")}
                     onBlur={this.handleBlur('title')}
                     value={this.state.activeItem.title}
                     onChange={this.handleChange}
                     placeholder="Title"
                   />
-                  {errors.title ? (<small className={'errortext ' + this.props.theme}>Please insert title</small>) : null}
                   {errors.title_too_long ? (<small className={'errortext ' + this.props.theme}>This title is too long, max length is 64</small>) : null}
                 </FormGroup>
                 <FormGroup>
@@ -175,7 +172,7 @@
                   <Label for="begin_date">Begin Date</Label><br />
                   <DatePicker 
                     name="begin_date"
-                    className={"form-control " + this.props.theme + (errors.begin_date ? " error" : "")}
+                    className={"form-control " + this.props.theme}
                     value={this.state.activeItem.begin_date}
                     onChange={ this.handleChangeBeginDate} 
                     onBlur={this.handleBlur('begin_date')}
@@ -183,10 +180,9 @@
                     showMonthDropdown
                     showYearDropdown
                     dropdownMode="select"/>
-                  {errors.begin_date ? (<small className={'errortext ' + this.props.theme}>Please insert begin date</small>) : null}
                 </FormGroup>
                 <FormGroup>
-                  <Label for="end_date">End date (optional)</Label><br />
+                  <Label for="end_date">End date</Label><br />
                   <DatePicker 
                     name="end_date"
                     className={"form-control " + this.props.theme + (errors.end_date_earlier_than_begin ? " error" : "")}

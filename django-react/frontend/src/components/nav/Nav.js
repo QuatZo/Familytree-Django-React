@@ -130,6 +130,7 @@ function Nav(props) {
       <button onClick={() => "#"} className={"btn my-2 my-sm-0 nav_button " + props.theme}><span className="username">{props.username}&nbsp;</span> <i className="far fa-user"></i></button>
       {color_picker}
       <button onClick={props.changeThemeMode} className={"btn my-2 my-sm-0 nav_button " + props.theme}><i className={props.theme === "dark" ? "fas fa-sun" : "fa fa-moon"} /></button>
+      <button onClick={props.changeShowButtons} className={"btn my-2 my-sm-0 nav_button " + props.theme}><i className={props.showButtons ? "fas fa-eye-slash" : "fa fa-eye"} /></button>
       <button onClick={() => props.handle_logout('logout')} className={"btn my-2 my-sm-0 nav_button " + props.theme}><i className="fas fa-sign-out-alt"></i></button>
     </div>
   );

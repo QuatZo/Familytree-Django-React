@@ -1,6 +1,6 @@
 // frontend/src/Person.js
 
-    import React, { Component } from "react";
+    import React, { Component, createRef } from "react";
     import Draggable from 'react-draggable';
     import ModalPerson from "./PersonEditTimelineModal"
     import axios from "axios";
@@ -13,8 +13,45 @@
         super(props);
         this.state = {
           dragging: false, // flag, which says if user is draggin person or not
+          isOffScreen: {
+            top: false,
+            bottom: false,
+            left: false,
+            right: false,
+          }
          };
+         this.elementRef = createRef();
       }
+
+      componentDidMount() {
+        this.updateVisibility();
+        window.addEventListener("resize", this.updateVisibility);
+      }
+
+      componentWillUnmount() {
+        window.removeEventListener("resize", this.updateVisibility);
+      }
+
+      updateVisibility = () => {
+        const { parentRef } = this.props;
+
+        if (!this.elementRef.current || !parentRef.current) return;
+
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+        const parentCoords = parentRef.current.getBoundingClientRect();
+
+        var index = this.props.personCoordinates.findIndex(el => el.id === this.props.person.id);
+        const coords = this.props.personCoordinates[index];
+        const isOffScreen = {
+          top: coords.screen.y + parentCoords.y < 0,
+          bottom: coords.screen.y + parentCoords.y > viewportHeight,
+          left: coords.screen.x + parentCoords.x < 0,
+          right: coords.screen.x + parentCoords.x > viewportWidth,
+        };
+        this.setState({isOffScreen: isOffScreen});
+        return {id: this.props.person.id, isOffScreen: isOffScreen}
+      };
 
       // toggles the Edit Person Modal
       toggleEditPersonModal = () => {
@@ -113,8 +150,13 @@
               cancel="button" {...dragHandlers} 
               key={this.props.person.id}
               defaultPosition={{x: 0, y: 0}}
+              onStart={(e) => {
+                e.stopPropagation();
+              }}
+              onDrag={this.updateVisibility}
             >
-              <div 
+              <div
+              ref={this.elementRef}
               className="personcontainer"
               >
                 <div
@@ -133,9 +175,15 @@
                     className={`name`}
                     first_name={this.props.person.first_name}
                   >
-                    {this.props.person.first_name + ' ' + this.props.person.last_name}
+                    {this.props.person.first_name}
                   </div>
-                  {this.props.printable ? null :(
+                  <div
+                    className={`name`}
+                    first_name={this.props.person.last_name}
+                  >
+                    {this.props.person.last_name}
+                  </div>
+                  {this.props.showButtons && !this.props.printable ? (
                   <div>
                     <button
                       onClick={() => this.toggleEditPersonModal()}
@@ -150,7 +198,7 @@
                       <i className="fas fa-user-minus"></i>
                     </button>
                   </div>
-                  )} 
+                  ): null} 
                 </div>
               </div>
             </Draggable>
