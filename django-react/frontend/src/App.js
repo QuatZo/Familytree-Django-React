@@ -222,10 +222,7 @@
         var newTheme = this.state.theme === "dark" ? "light" : "dark"
         var body = document.body;
         body.classList.remove(localStorage.getItem('theme'));
-
         localStorage.setItem('theme', newTheme)
-
-        var body = document.body;
         body.classList.add(localStorage.getItem('theme'));
         
         this.setState({
@@ -275,7 +272,7 @@
                   <FadeIn>
                     <div className={"loading-" + this.state.theme}>
                       <div className={"loadingPart-" + this.state.theme}>
-                        <h4 className={"loadingText-" + this.state.theme}>Fetching Persons</h4>
+                        <h4 className={"loadingText-" + this.state.theme}>Pobieranie Osób</h4>
                         <div className={"loadingAnimation-" + this.state.theme}>
                           {!this.state.loadingPersonList ? (
                               <Lottie options={defaultOptionsLoading} height={100} width={200}/>
@@ -285,7 +282,7 @@
                         </div>
                       </div>
                       <div className={"loadingPart-" + this.state.theme}>
-                        <h4 className={"loadingText-" + this.state.theme}>Fetching Relationships</h4>
+                        <h4 className={"loadingText-" + this.state.theme}>Pobieranie Relacji</h4>
                         <div className={"loadingAnimation-" + this.state.theme}>
                           {!this.state.loadingRelationshipList ? (
                             <Lottie options={defaultOptionsLoading} height={100} width={200}/>

@@ -7,6 +7,7 @@
     import './Person.css';
     import {NOTIFY} from '../Enums.ts';
     import ShowNotification from '../notification/Notification';
+    import moment from 'moment';
 
     class Person extends Component {
       constructor(props) {
@@ -26,6 +27,7 @@
       componentDidMount() {
         this.updateVisibility();
         window.addEventListener("resize", this.updateVisibility);
+        console.log(this.props.person);
       }
 
       componentWillUnmount() {
@@ -44,10 +46,10 @@
         var index = this.props.personCoordinates.findIndex(el => el.id === this.props.person.id);
         const coords = this.props.personCoordinates[index];
         const isOffScreen = {
-          top: coords.screen.y + parentCoords.y < 0,
-          bottom: coords.screen.y + parentCoords.y > viewportHeight,
-          left: coords.screen.x + parentCoords.x < 0,
-          right: coords.screen.x + parentCoords.x > viewportWidth,
+          top: (coords ? coords.screen.y : 0) + parentCoords.y < 0,
+          bottom: (coords ? coords.screen.y : 0) + parentCoords.y > viewportHeight,
+          left: (coords ? coords.screen.x : 0) + parentCoords.x < 0,
+          right: (coords ? coords.screen.x : 0) + parentCoords.x > viewportWidth,
         };
         this.setState({isOffScreen: isOffScreen});
         return {id: this.props.person.id, isOffScreen: isOffScreen}
@@ -72,6 +74,7 @@
           if(oldItem.first_name !== item.first_name) data.append('first_name', item.first_name);
           if(oldItem.last_name !== item.last_name) data.append('last_name', item.last_name);
           if(oldItem.birth_date !== item.birth_date) data.append('birth_date', item.birth_date);
+          if(oldItem.death_date !== item.death_date) data.append('death_date', item.death_date);
           if(oldItem.status_choices !== item.status_choices) data.append('status_choices', item.status_choices);
           if(oldItem.sex_choices !== item.sex_choices) data.append('sex_choices', item.sex_choices);
           if(oldItem.birth_place !== item.birth_place) data.append('birth_place', item.birth_place);
@@ -171,6 +174,10 @@
                   draggable="false"
                   className = "img-thumbnail"
                   alt = "Error: not found"/>
+                  <div className='person-dates'>
+                    {this.props.person.birth_date ? (<div className='person-birth-date'><i className="fa fa-cake-candles"></i> {moment(this.props.person.birth_date).format('DD-MM-YYYY')}</div>) : null}
+                    {this.props.person.death_date ? (<div className='person-death-date'><i className="fa fa-cross"></i> {moment(this.props.person.death_date).format('DD-MM-YYYY')}</div>) : null}
+                  </div>
                   <div
                     className={`name`}
                     first_name={this.props.person.first_name}
@@ -192,7 +199,7 @@
                       <i className="fas fa-user-edit"></i>
                     </button>
                     <button
-                      onClick={() => this.props.toggleConfirmModal("Delete Person", "Are you sure you want to delete " + this.props.person.first_name + " " + this.props.person.last_name + " with connected relationships from Familytree?", "Delete", "Cancel", () => this.handleDelete(this.props.person))}
+                      onClick={() => this.props.toggleConfirmModal("Delete Person", "Are you sure you want to delete " + this.props.person.first_name + " " + this.props.person.last_name + " with connected relationships from Familytree?", "Usuń", "Anuluj", () => this.handleDelete(this.props.person))}
                       className={"btn " + (this.props.theme === 'dark' ? 'dark btn-outline-' : 'light btn-') + "primary btn-xl personbutton"}
                     >
                       <i className="fas fa-user-minus"></i>

@@ -7,6 +7,7 @@ const EMPTY_PERSON_DATA = {
   first_name: "", 
   last_name: "", 
   birth_date: "", 
+  death_date: "", 
   status_choices: 'living', 
   sex_choices: 'male', 
   birth_place: "", 

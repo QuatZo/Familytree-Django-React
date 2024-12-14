@@ -39,7 +39,7 @@ class FamilytreePersonView(viewsets.ModelViewSet):
 
     def get(self, request, *args, **kwargs):
         persons = FamilytreePerson.objects.all()
-        serializer = FamilytreePersonSerializer(posts, many=True)
+        serializer = FamilytreePersonSerializer(persons, many=True)
         return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
@@ -77,7 +77,7 @@ class FamilytreeMilestoneView(viewsets.ModelViewSet):
 
     def get(self, request, *args, **kwargs):
         milestones = FamilytreeMilestone.objects.all()
-        serializer = FamilytreeMilestoneSerializer(posts, many=True)
+        serializer = FamilytreeMilestoneSerializer(milestones, many=True)
         return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):

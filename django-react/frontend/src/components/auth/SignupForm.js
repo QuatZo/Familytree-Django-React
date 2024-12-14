@@ -33,7 +33,7 @@ class SignupForm extends React.Component {
     return (
       <div className={"signup-"+this.props.theme}>
         <form  method="post" onSubmit={e => this.props.handle_signup(e, this.state)}>
-            <h2 className="sr-only">Register Form</h2>
+            <h2 className="sr-only">Formularz rejestracji</h2>
             <div className="illustration"><i className="far fa-user"></i></div>
             <div className="form-group">
               <input 
@@ -60,15 +60,15 @@ class SignupForm extends React.Component {
             </div>
             <div className={"form-group password-req " + this.props.theme}>
               <ul>
-                <span className={((errors.password_number || errors.password_uppercase || errors.password_lowercase || errors.password_nonalpha || errors.password_length) ? 'errortext ' : '') + this.props.theme}>Password must contain at least:</span>
-                <li className={(errors.password_number ? "errortext " : " ") + this.props.theme}> 1 number (0-9) </li>
-                <li className={(errors.password_uppercase ? "errortext " : " ") + this.props.theme}> 1 uppercase letters </li>
-                <li className={(errors.password_lowercase ? "errortext " : " ") + this.props.theme}> 1 lowercase letters </li>
-                <li className={(errors.password_nonalpha ? "errortext " : " ") + this.props.theme}> 1 non-alpha numeric number </li>
-                <li className={(errors.password_length ? "errortext " : " ") + this.props.theme}> 8 characters with no space </li>
+                <span className={((errors.password_number || errors.password_uppercase || errors.password_lowercase || errors.password_nonalpha || errors.password_length) ? 'errortext ' : '') + this.props.theme}>Hasło musi posiadać przynajmniej:</span>
+                <li className={(errors.password_number ? "errortext " : " ") + this.props.theme}> 1 cyfra (0-9) </li>
+                <li className={(errors.password_uppercase ? "errortext " : " ") + this.props.theme}> 1 duża litera </li>
+                <li className={(errors.password_lowercase ? "errortext " : " ") + this.props.theme}> 1 mała litera </li>
+                <li className={(errors.password_nonalpha ? "errortext " : " ") + this.props.theme}> 1 znak specjalny </li>
+                <li className={(errors.password_length ? "errortext " : " ") + this.props.theme}> 8 znaków bez spacji </li>
               </ul>
             </div>
-            <div className="form-group"><button disabled={!isEnabled} className="btn btn-primary btn-block" type="submit">Register</button></div>
+            <div className="form-group"><button disabled={!isEnabled} className="btn btn-primary btn-block" type="submit">Zarejestruj</button></div>
           </form>
       </div>
     );

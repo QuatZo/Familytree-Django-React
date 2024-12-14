@@ -13,6 +13,7 @@ const PERSON_DATA = {
   "first_name": "Quat",
   "last_name": "Zo",
   "birth_date": "1000-01-01",
+  "death_date": "2000-01-01",
   "birth_place": "Earth",
   "avatar": "/media/avatars/somesha256encryptedname.png",
   "status_choices": "living",

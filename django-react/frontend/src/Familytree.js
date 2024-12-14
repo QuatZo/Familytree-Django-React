@@ -159,6 +159,7 @@ class Familytree extends Component {
     data.append('first_name', item.first_name);
     data.append('last_name', item.last_name);
     data.append('birth_date', item.birth_date);
+    data.append('death_date', item.death_date);
     data.append('status_choices', item.status_choices);
     data.append('sex_choices', item.sex_choices);
     data.append('birth_place', item.birth_place);
@@ -204,6 +205,7 @@ class Familytree extends Component {
       first_name: "", 
       last_name: "", 
       birth_date: "", 
+      death_date: "", 
       status_choices: 'living', 
       sex_choices: 'male', 
       birth_place: "", 
@@ -410,11 +412,21 @@ class Familytree extends Component {
   };
 
   renderArrows = () => {
-    return this.state.personIsOffScreen.map((person) => {
-      return Object.entries(person.isOffScreen).filter(([_, isOff]) => isOff === true).map(([direction]) => 
-       <div key={direction} className={`arrow ${direction}`}>&uarr;</div>
-      )
-    })
+    var offScreenCounter = {
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
+    }
+    this.state.personIsOffScreen.map((person) => {
+      Object.entries(person.isOffScreen).filter(([_, isOff]) => isOff === true).map(([direction]) => 
+      offScreenCounter[direction] = offScreenCounter[direction] + 1
+     )
+    });
+  
+    return Object.entries(offScreenCounter).filter(([_, isOff]) => isOff > 0).map(([direction]) => 
+      <div key={direction} className={`arrow ${direction}`}>x{offScreenCounter[direction]}</div>
+    )
   }
 
   // render Relationships by using Relationship component
@@ -546,11 +558,11 @@ class Familytree extends Component {
         </React.Fragment>
         {this.state.printable ? null :(
         <div className="buttons">
-          <div className="download-buttons">
+          {/* <div className="download-buttons">
             <button onClick={() => this.downloadPDF()} className={"btn " + (this.props.theme === 'dark' ? 'dark btn-outline-' : 'light btn-') + "primary btn-circle btn-xl famtree"}>
               <i className="fas fa-download"></i>
             </button>
-          </div>
+          </div> */}
           <div className={"operating-buttons " + this.props.theme} id="operating-buttons">
             <button className="floating-btn" onClick={() => document.getElementById('operating-buttons').classList.toggle('active')}>
               <i className="fa fa-bars"></i>
@@ -558,9 +570,9 @@ class Familytree extends Component {
 
             <menu className="items-wrapper">
               <button className="menu-item fas fa-plus" onClick={this.createPerson}></button>
-              <button href="#" className="menu-item far fa-save" onClick={() => this.toggleConfirmModal("Save coords", "Are you sure you want to save coords for every person in Familytree?", "Save", "Cancel", () => this.saveCoords())}></button>
+              <button href="#" className="menu-item far fa-save" onClick={() => this.toggleConfirmModal("Zapisz współrzędne", "Czy jesteś pewien?", "Zapisz", "Anuluj", () => this.saveCoords())}></button>
               <button href="#" className="menu-item fas fa-redo" onClick={this.resetCoords.bind(this)}></button>
-              <button href="#" className="menu-item fas fa-times" onClick={() => this.toggleConfirmModal("Delete Familytree", "Are you sure you want to delete WHOLE familytree?", "Delete", "Cancel", () => this.deleteEverything())}></button>
+              <button href="#" className="menu-item fas fa-times" onClick={() => this.toggleConfirmModal("Usuń drzewo genealogiczne", "Czy jesteś pewien?", "Usuń", "Anuluj", () => this.deleteEverything())}></button>
               </menu>
           </div>
         </div>

@@ -122,33 +122,44 @@
 
 .arrow {
   position: absolute;
-  width: 20px;
-  height: 20px;
-  background-color: red;
-  color: white;
+  width: 35px;
+  height: 35px;
+  background-color: var(--main-primary-dark);
+  color: var(--main-on-primary-dark);
   text-align: center;
-  line-height: 20px;
-  font-size: 12px;
+  line-height: 35px;
+  font-size: 16px;
   font-weight: bold;
   border-radius: 50%;
 }
 
 .arrow.top {
-  top: -25px;
+  top: 60px;
   left: calc(50% - 10px);
 }
 
 .arrow.bottom {
-  bottom: -25px;
+  bottom: 5px;
   left: calc(50% - 10px);
 }
 
 .arrow.left {
   top: calc(50% - 10px);
-  left: -25px;
+  left: 5px;
 }
 
 .arrow.right {
   top: calc(50% - 10px);
-  right: -25px;
+  right: 5px;
+}
+
+.person-dates {
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  font-size: 10px;
+  background-color: var(--main-surface-dark);
+  color: var(--main-on-surface-dark);
+  padding: 2px;
+  border-radius: .15rem;
 }

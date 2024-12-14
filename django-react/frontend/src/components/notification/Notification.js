@@ -9,21 +9,21 @@
      function ShowNotification(notifyEnum, theme) {
         switch(notifyEnum){
           case NOTIFY.CHANGE_THEME:
-            toast("Theme has been changed and saved.", {
+            toast("Zmieniono motyw", {
                 className: 'custom-toast info ' + theme,
                 bodyClassName: 'body',
                 progressClassName: 'progress',
             });
             break;
           case NOTIFY.CHANGE_COLOR:
-            toast("Color has been changed and saved.", {
+            toast("Zmieniono kolor motywu", {
                 className: 'custom-toast info ' + theme,
                 bodyClassName: 'body',
                 progressClassName: 'progress',
             });
             break;
             case NOTIFY.CHANGE_BUTTONS:
-              toast("Buttons visibility has been changed.", {
+              toast("Zmieniono widoczność przycisków", {
                   className: 'custom-toast info ' + theme,
                   bodyClassName: 'body',
                   progressClassName: 'progress',
@@ -31,21 +31,21 @@
               break;
 
           case NOTIFY.SUCCESS_LOGIN:
-            toast("You logged in. Have a nice use!", {
+            toast("Zalogowano!", {
                 className: 'custom-toast success ' + theme,
                 bodyClassName: 'body',
                 progressClassName: 'progress',
             });
             break;
           case NOTIFY.SUCCESS_REGISTER:
-            toast("You registered a new account and will be redirected to login page. Log in to use this website!", {
+            toast("Założono nowe konto. Za chwilę nastąpi przekierowanie. Zaloguj się aby korzystać z witryny!", {
                 className: 'custom-toast success ' + theme,
                 bodyClassName: 'body',
                 progressClassName: 'progress',
             });
             break;
           case NOTIFY.SUCCESS_LOGOUT:
-            toast("You logged out, have a nice day!", {
+            toast("Wylogowano!", {
                 className: 'custom-toast success ' + theme,
                 bodyClassName: 'body',
                 progressClassName: 'progress',
@@ -53,28 +53,28 @@
             break;
 
           case NOTIFY.ERROR:
-              toast("Something went wrong! Refresh page or try again later! If it doesn't help, contact administrator.", {
+              toast("Oops, coś poszło nie tak! Odśwież stronę i spróbuj ponownie. Jeśli to nie pomoże, skontaktuj się z administratorem", {
                 className: 'custom-toast error ' + theme,
                 bodyClassName: 'body',
                 progressClassName: 'progress',
             });
               break;
           case NOTIFY.ERROR_LOGIN:
-              toast("Incorrect username and/or password!", {
+              toast("Niepoprawne dane logowania!", {
                 className: 'custom-toast error ' + theme,
                 bodyClassName: 'body',
                 progressClassName: 'progress',
             });
               break;
           case NOTIFY.ERROR_REGISTER:
-              toast("This username is already taken!", {
+              toast("Nazwa użytkownika zajęta!", {
                 className: 'custom-toast error ' + theme,
                 bodyClassName: 'body',
                 progressClassName: 'progress',
             });
               break;
           case NOTIFY.ERROR_TIMEOUT:
-              toast("Your session has expired. Please, log in!", {
+              toast("Sesja wygasła. Zaloguj się ponownie!", {
                 className: 'custom-toast error ' + theme,
                 bodyClassName: 'body',
                 progressClassName: 'progress',
@@ -82,7 +82,7 @@
               break;
 
           case NOTIFY.RESET:
-              toast("The position of all persons has been set to the initial values!", {
+              toast("Zresetowano położenie wszystkich osób!", {
                 className: 'custom-toast info ' + theme,
                 bodyClassName: 'body',
                 progressClassName: 'progress',
@@ -98,35 +98,35 @@
               break;
 
           case NOTIFY.SAVE_PERSON:
-              toast("New data of the person has been saved!", {
+              toast("Zapisano osobę!", {
                 className: 'custom-toast success ' + theme,
                 bodyClassName: 'body',
                 progressClassName: 'progress',
             });
               break;
           case NOTIFY.SAVE_RELATIONSHIP:
-              toast("New data of the relationship has been saved!", {
+              toast("Zapisano relację!", {
                 className: 'custom-toast success ' + theme,
                 bodyClassName: 'body',
                 progressClassName: 'progress',
             });
               break;
           case NOTIFY.SAVE_COORDS:
-              toast("New coords have been saved!", {
+              toast("Zapisano współrzędne osób!", {
                 className: 'custom-toast success ' + theme,
                 bodyClassName: 'body',
                 progressClassName: 'progress',
             });
               break;
           case NOTIFY.SAVE_MILESTONE:
-              toast("New milestone have been saved!", {
+              toast("Zapisano kamień milowy!", {
                 className: 'custom-toast success ' + theme,
                 bodyClassName: 'body',
                 progressClassName: 'progress',
             });
               break;
           case NOTIFY.SAVING:
-              toast("Saving coordinates... Do not leave the page until the saving process is finished!", {
+              toast("Zapisywanie współrzędnych... Nie wychodź z witryny póki trwa zapisywanie!", {
                 className: 'custom-toast info ' + theme,
                 bodyClassName: 'body',
                 progressClassName: 'progress',
@@ -134,21 +134,21 @@
               break;
 
           case NOTIFY.ADD_PERSON:
-              toast("New person has been added, it should be at the top-left corner of the page!", {
+              toast("Dodano nową osobę!", {
                 className: 'custom-toast success ' + theme,
                 bodyClassName: 'body',
                 progressClassName: 'progress',
             });
               break;
           case NOTIFY.ADD_RELATIONSHIP:
-              toast("New relationship has been added, it should be visible. If not, try to move something around!", {
+              toast("Dodano nową relację!", {
                 className: 'custom-toast success ' + theme,
                 bodyClassName: 'body',
                 progressClassName: 'progress',
             });
               break;
           case NOTIFY.ADD_MILESTONE:
-              toast("New milestone has been added, it should be visible. If not, try to reopen Edit Person modal!", {
+              toast("Dodano nowy kamień milowy!", {
                 className: 'custom-toast success ' + theme,
                 bodyClassName: 'body',
                 progressClassName: 'progress',
@@ -156,35 +156,35 @@
               break;
 
           case NOTIFY.DELETE:
-              toast("Everything has been deleted! Now you can start from scratch.", {
+              toast("USUNIĘTO CAŁĄ BAZĘ!!!", {
                 className: 'custom-toast warn ' + theme,
                 bodyClassName: 'body',
                 progressClassName: 'progress',
             });
               break;
           case NOTIFY.DELETE_PERSON:
-              toast("Person has been deleted!", {
+              toast("Usunięto osobę!", {
                 className: 'custom-toast warn ' + theme,
                 bodyClassName: 'body',
                 progressClassName: 'progress',
             });
               break;
           case NOTIFY.DELETE_RELATIONSHIP:
-              toast("Relationship has been deleted!", {
+              toast("Usunięto relację!", {
                 className: 'custom-toast warn ' + theme,
                 bodyClassName: 'body',
                 progressClassName: 'progress',
             });
               break;
           case NOTIFY.DELETE_MILESTONE:
-              toast("Milestone has been deleted!", {
+              toast("Usunięto kamień milowy!", {
                 className: 'custom-toast warn ' + theme,
                 bodyClassName: 'body',
                 progressClassName: 'progress',
             });
               break;
           default:
-            toast("Why is it empty? Contact administrator, please.", {
+            toast("Błąd, skontaktuj się z administratorem", {
                 className: 'custom-toast error ' + theme,
                 bodyClassName: 'body',
                 progressClassName: 'progress',

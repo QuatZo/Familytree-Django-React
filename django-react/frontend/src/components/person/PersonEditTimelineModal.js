@@ -133,13 +133,13 @@
               date: new Date(parseInt(dateStr[0]), parseInt(dateStr[1]) - 1, parseInt(dateStr[2])), // new Date uses months indexes, so 0-11 instead of 1-12; strange but true
               text: item.text,
               title: item.title,
-              buttonText: (this.state.deleteMode ? "Delete" : "Edit") + " Milestone",
+              buttonText: (this.state.deleteMode ? "Usuń" : "Edit") + " Milestone",
               imageUrl: item.image,
               extras: {
                 together_with: togetherWithNames,
                 theme: this.props.theme,
               },
-              onClick: () => { this.state.deleteMode ? this.props.toggleConfirmModal("Delete Milestone", "Are you sure you want to delete this milestone?", "Delete", "Cancel", () => this.handleDeleteMilestone(item)) : this.editMilestone(item) }
+              onClick: () => { this.state.deleteMode ? this.props.toggleConfirmModal("Delete Milestone", "Are you sure you want to delete this milestone?", "Usuń", "Anuluj", () => this.handleDeleteMilestone(item)) : this.editMilestone(item) }
             });
           });
         })
@@ -165,7 +165,7 @@
                   date: new Date(parseInt(dateStr[0]), parseInt(dateStr[1]) - 1, parseInt(dateStr[2])), // new Date uses months indexes, so 0-11 instead of 1-12; strange but true
                   text: item.description,
                   title: item.title,
-                  buttonText: (this.state.deleteMode ? "Delete" : "Edit") + " Relationship",
+                  buttonText: (this.state.deleteMode ? "Usuń" : "Edit") + " Relationship",
                   imageUrl: "/media/milestones/default.jpg",
                   extras: {
                     end_date: item.end_date,
@@ -173,7 +173,7 @@
                     together_with: togetherWithNames,
                     theme: this.props.theme,
                   },
-                  onClick: () => { this.state.deleteMode ? this.props.toggleConfirmModal("Delete Relationship", "Are you sure you want to delete this relationship?", "Delete", "Cancel", () => this.handleDeleteRelationship(item)) : this.editRelationship(item)}
+                  onClick: () => { this.state.deleteMode ? this.props.toggleConfirmModal("Delete Relationship", "Are you sure you want to delete this relationship?", "Usuń", "Anuluj", () => this.handleDeleteRelationship(item)) : this.editRelationship(item)}
                 })
               }
             })
@@ -201,7 +201,7 @@
                     date: new Date(parseInt(dateStr[0]), parseInt(dateStr[1]) - 1, parseInt(dateStr[2])), // new Date uses months indexes, so 0-11 instead of 1-12; strange but true
                     text: item.description,
                     title: item.title,
-                    buttonText: (this.state.deleteMode ? "Delete" : "Edit") + " Relationship",
+                    buttonText: (this.state.deleteMode ? "Usuń" : "Edit") + " Relationship",
                     imageUrl: "/media/milestones/default.jpg",
                     extras: {
                       end_date: item.end_date,
@@ -209,7 +209,7 @@
                       together_with: togetherWithNames,
                       theme: this.props.theme,
                     },
-                    onClick: () => { this.state.deleteMode ? this.props.toggleConfirmModal("Delete Relationship", "Are you sure you want to delete this relationship?", "Delete", "Cancel", () => this.handleDeleteRelationship(item)) : this.editRelationship(item)}
+                    onClick: () => { this.state.deleteMode ? this.props.toggleConfirmModal("Delete Relationship", "Are you sure you want to delete this relationship?", "Usuń", "Anuluj", () => this.handleDeleteRelationship(item)) : this.editRelationship(item)}
                   })
                 }
               });
@@ -380,6 +380,10 @@
         const activeItem = { ...this.state.activeItem, ["birth_date"]: moment(date).format('YYYY-MM-DD')};
         this.setState({activeItem});
       };
+      handleChangeDateDeath = date => {
+        const activeItem = { ...this.state.activeItem, ["death_date"]: moment(date).format('YYYY-MM-DD')};
+        this.setState({activeItem});
+      };
 
       // handles change of file (upload)
       handleChangeFile = (file) => {
@@ -507,7 +511,7 @@
                     </Col>
                   </Row>
                   <Row form>
-                    <Col md={4}>
+                    <Col md={3}>
                       <FormGroup>
                         <Label for="status_choices">Status of life</Label>
                         <CustomInput 
@@ -524,7 +528,7 @@
                         </CustomInput>
                       </FormGroup>
                     </Col>
-                    <Col md={4}>
+                    <Col md={3}>
                       <FormGroup>
                         <Label for="birth_date">Birth Date</Label><br />
                         <DatePicker 
@@ -539,7 +543,7 @@
                         />
                       </FormGroup>
                     </Col>
-                    <Col md={4}>
+                    <Col md={3}>
                       <FormGroup>
                         <Label for="birth_place">Birthplace</Label>
                         <Input
@@ -551,6 +555,21 @@
                           placeholder="Place of birth"
                         />
                         {errors.birth_place ? (<small className={'errortext ' + this.props.theme}>This birth place is too long, max length is 50</small>) : null}
+                      </FormGroup>
+                    </Col>
+                    <Col md={3}>
+                      <FormGroup>
+                        <Label for="death_date">Death Date</Label><br />
+                        <DatePicker 
+                          className={"form-control " + this.props.theme}
+                          name="death_date"
+                          value={this.state.activeItem.death_date}
+                          onChange={ this.handleChangeDateDeath} 
+                          peekNextMonth
+                          showMonthDropdown
+                          showYearDropdown
+                          dropdownMode="select"
+                        />
                       </FormGroup>
                     </Col>
                   </Row>

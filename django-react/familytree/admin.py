@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import FamilytreePerson, FamilytreeRelationship, FamilytreeMilestone
 	
 class FamilytreePersonAdmin(admin.ModelAdmin):
-	list_display = ('id', 'first_name', 'last_name', 'birth_date', 'status_choices', 'sex_choices', 'birth_place') # fields in Admin Page
+	list_display = ('id', 'first_name', 'last_name', 'birth_date', 'death_date', 'status_choices', 'sex_choices', 'birth_place') # fields in Admin Page
 	
 class FamilytreeRelationshipAdmin(admin.ModelAdmin):
 	list_display = ('id', 'id_1', 'id_2', 'relationships', 'color', 'title', 'description', 'begin_date', 'end_date', 'descendant') # fields in Admin Page

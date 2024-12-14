@@ -124,3 +124,7 @@ dmypy.json
 # Custom
 media/
 node_modules/
+
+db.sqlite3*
+build/
+staticfiles/

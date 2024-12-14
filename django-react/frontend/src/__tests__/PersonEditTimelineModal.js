@@ -8,6 +8,7 @@ const PERSON_DATA = {
   first_name: "Quat", 
   last_name: "Zo", 
   birth_date: "1000-01-01", 
+  death_date: "2000-01-01", 
   status_choices: 'living', 
   sex_choices: 'male', 
   birth_place: "Earth", 

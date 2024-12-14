@@ -207,7 +207,7 @@
             </ModalBody>
             <ModalFooter className={"modal-footer-"+this.props.theme}>
               <Button disabled={!isEnabled} className="confirm" onClick={() => onSave(this.state.activeItem)}>
-                Save
+                Zapisz
               </Button>
             </ModalFooter>
           </Modal>

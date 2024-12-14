@@ -43,6 +43,10 @@
         const activeItem = { ...this.state.activeItem, ["birth_date"]: moment(date).format('YYYY-MM-DD')};
         this.setState({activeItem});
       };
+      handleChangeDateDeath = date => {
+        const activeItem = { ...this.state.activeItem, ["death_date"]: moment(date).format('YYYY-MM-DD')};
+        this.setState({activeItem});
+      };
 
       // handles change of File Field (upload)
       handleChangeFile = (file) => {
@@ -122,6 +126,18 @@
                     name="birth_date"
                     value={this.state.activeItem.birth_date}
                     onChange={ this.handleChangeDate} 
+                    peekNextMonth
+                    showMonthDropdown
+                    showYearDropdown
+                    dropdownMode="select"/>
+                </FormGroup>
+                <FormGroup>
+                  <Label for="death_date">Death Date</Label><br />
+                  <DatePicker 
+                    className={"form-control " + this.props.theme}
+                    name="death_date"
+                    value={this.state.activeItem.death_date}
+                    onChange={ this.handleChangeDateDeath} 
                     peekNextMonth
                     showMonthDropdown
                     showYearDropdown
